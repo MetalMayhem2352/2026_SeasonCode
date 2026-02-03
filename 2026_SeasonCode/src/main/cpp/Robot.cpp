@@ -53,6 +53,7 @@ void Robot::AutonomousPeriodic() {
   } else {
     // Default Auto goes here
   }
+  
 }
 
 void Robot::TeleopInit() {}
