@@ -1,0 +1,106 @@
+#include "SwerveDrive/SwervePod.h"
+#include <iostream>
+
+namespace SwerveDrive
+{
+    SwervePod::SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
+    {
+        encoder = new SwerveEncoder(encoderId);
+        driveMotor = new rev::spark::SparkMax(driveMotorId, rev::spark::SparkMax::MotorType::kBrushless);
+        turnMotor = new rev::spark::SparkMax(turnMotorId, rev::spark::SparkMax::MotorType::kBrushless);
+
+        driveEncoder = &driveMotor->GetEncoder();
+
+        encoder->SetOffsert(encoderOffset);
+        encoder->SetInverted(true);
+        
+        turnPIDController = new Core::PIDController(turnPIDConfig);
+        turnPIDController->SetLoop(true, 0, 360);
+
+        timer = new Core::Timer();
+    }
+
+    SwervePod::~SwervePod()
+    {
+        delete(encoder);
+        delete(driveMotor);
+        delete(turnMotor);
+
+        delete(turnPIDController);
+
+        delete(timer);
+    }
+
+    void SwervePod::RverseMotors(bool isDriveMotorInverted, bool isTurnMotorInverted)
+    {
+        driveMotor->SetInverted(isDriveMotorInverted);
+        turnMotor->SetInverted(isTurnMotorInverted);
+    }
+
+
+    double SwervePod::GetAngle()
+    {
+        return encoder->GetAngle();
+    }
+    double SwervePod::GetMovementDelta()
+    {
+        return driveEncoder->GetPosition() - lastDrivePosition;
+    }
+
+
+    void SwervePod::Turn(double targetAngle)
+    {
+        turnMotor->Set(turnPIDController->Calculate(encoder->GetAngle(), targetAngle, timer->GetDeltaTime()));
+    }
+    void SwervePod::Move(double angle, double power)
+    {
+        if (power < 0.1 && power > -0.1)
+        {
+            Turn(targetAngle);
+            driveMotor->Set(0);
+            return;
+        }
+
+        bool dirrect = true;
+        double currentAngle = GetAngle();
+        if (currentAngle > 180)
+            currentAngle = -180 - (180 - currentAngle);
+        
+        if (angle > 180)
+            angle = -180 - (180 - angle);
+
+        double reverseTarget = angle < 0 ? angle + 180 : angle - 180;
+
+        double dirrectAngle = std::abs(angle - currentAngle);
+        double reverseAngle = std::abs(reverseTarget - currentAngle);
+
+        if (reverseAngle < dirrectAngle)
+        {
+            dirrect = false;
+        }
+        else
+        {
+            dirrect = true;
+        }
+
+        
+        if (dirrect)
+        {
+            
+            targetAngle = angle;
+            driveMotor->Set(power);
+        }
+        else
+        {
+            targetAngle = angle - 180;
+            driveMotor->Set(-power);
+        }
+        
+        Turn(targetAngle);
+    }
+    void SwervePod::Update()
+    {
+        std::cout << "driveMotor: " << driveEncoder->GetPosition() << '\n';
+        timer->Update();
+    }
+}
