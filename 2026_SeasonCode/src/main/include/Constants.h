@@ -4,6 +4,8 @@
 #include "Core/Vector2.h"
 #include "math.h"
 
+#include <cmath>
+
 namespace Constants
 {
     static constexpr double RADIANS_TO_DEGREES = 180.0 / std::numbers::pi;
@@ -35,8 +37,10 @@ namespace Constants
             inline constexpr double encoderOffset = 5.977;
             inline constexpr char driveMotorId = 2;
             inline constexpr char turnMotorId = 1;
-
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(315, 1);
+            
+            inline constexpr double MODULE_X_POSITION = 9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
+            inline constexpr double MODULE_Y_POSITION = 12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 315
         }
         namespace FrontLeftPod
         {
@@ -45,7 +49,9 @@ namespace Constants
             inline constexpr char driveMotorId = 4;
             inline constexpr char turnMotorId = 3;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(45, 1);
+            inline constexpr double MODULE_X_POSITION = -9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
+            inline constexpr double MODULE_Y_POSITION = 12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 45
         }
         namespace BackLeftPod
         {
@@ -54,7 +60,9 @@ namespace Constants
             inline constexpr char driveMotorId = 6;
             inline constexpr char turnMotorId = 5;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(135, 1);
+            inline constexpr double MODULE_X_POSITION = -9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
+            inline constexpr double MODULE_Y_POSITION = -12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 135
         }
         namespace BackRightPod
         {
@@ -63,7 +71,9 @@ namespace Constants
             inline constexpr char driveMotorId = 8;
             inline constexpr char turnMotorId = 7;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(225, 1);
+            inline constexpr double MODULE_X_POSITION = 9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
+            inline constexpr double MODULE_Y_POSITION = -12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 225
         }
     }
 
