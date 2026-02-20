@@ -2,16 +2,21 @@
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Timer.h>
+#include "Core/Timer.h"
+#include "Core/PIDController.h"
 
 class Turret_Tracking {
     
   frc::Timer timer;
 
+  Core::Timer* PIDTimer;
+  Core::PIDController* PIDController;
+
   double tx;
 
   double forward = 0;
   double backward = 0;
-
+  double currentpos;
   double motorangle;
 
   double maxRotation;
@@ -22,10 +27,12 @@ class Turret_Tracking {
 
   public:
   Turret_Tracking();
+  ~Turret_Tracking();
 
    int Calibrate();
-   int find_april();
-   int track();
+   int Find_april();
+   int Track();
+   void Update();
    
 
 };

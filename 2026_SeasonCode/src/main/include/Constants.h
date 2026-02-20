@@ -81,5 +81,10 @@ namespace Constants
         }
     }
 
+    namespace Turret{
+        static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
+    }
+
+
     static constexpr char* CANIVOUR_NAME = "CANivour";
 }

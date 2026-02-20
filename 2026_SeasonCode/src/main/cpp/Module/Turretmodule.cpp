@@ -2,6 +2,7 @@
 #include <core/LimelightHelpers.h>
 #include <frc/Timer.h>
 #include "Modules/TurretModule.h"
+#include "Constants.h"
 
 
     
@@ -10,6 +11,10 @@
   
   //calibrate function is to determine what way the turret is rotating
   Turret_Tracking::Turret_Tracking(){
+
+  PIDTimer = new Core::Timer();
+  PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
+
   LimelightHelpers::setPipelineIndex("",0);
 
   tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
@@ -25,15 +30,20 @@
   maxRotation = 180;
   minRotation = -180;
 
-  double currentpos = 0; // Motors Encoder Value
+  currentpos = 0; // Motors Encoder Value
   double angleoffset = 0; // Calibrate the motor encoder value per degree
   motorangle = currentpos / angleoffset; // Output
 
   }
+  Turret_Tracking::~Turret_Tracking(){
+    delete(PIDTimer);
+    delete(PIDController);
+  };
 
   void Turret_Tracking::Update(){
-     tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
+      tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
       hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
+      PIDTimer->Update();
   }
 
   int Turret_Tracking::Calibrate(){
@@ -60,19 +70,11 @@
     else if(hasTarget == false && motorangle < minRotation){
       turret_motor.Set(forward);
     }
-    
   }
-
   // tracks april tag for turret tracking
   int Turret_Tracking::Track(){
     if (hasTarget == true){
-      //PID used for tracking dont have access to ATM
-      if(tx > 0){
-        turret_motor.Set(forward);
-      }
-      if(tx < 0){
-        turret_motor.Set(backward);
-      }
+        turret_motor.Set(PIDController->Calculate(currentpos,tx,PIDTimer->GetDeltaTime()));
     }
   }
 
