@@ -1,81 +1,78 @@
 
-#include <LimelightHelpers.h>
-#include <ctre/Phoenix.h>
+#include <core/LimelightHelpers.h>
 #include <frc/Timer.h>
+#include "Modules/TurretModule.h"
 
-public class Turret_Tracking {
+
     
-  frc::Timer timer;
+ 
 
-  double forward = 0
-  double backwards = 0
+  
+  //calibrate function is to determine what way the turret is rotating
+  Turret_Tracking::Turret_Tracking(){
+  LimelightHelpers::setPipelineIndex("",0);
 
-  WPI_TalonFX turret_motor{1};
-
-  limelight = LimelightHelpers::SetupPortForwardingUSB(0);
-  LimelightHelpers::setPipelineIndex("",0)
-
-  double tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
+  tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
   double ty = LimelightHelpers::getTY("");  // Vertical offset from crosshair to target in degrees
   double ta = LimelightHelpers::getTA("");  // Target area (0% to 100% of image)
-  bool hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
+  hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
 
   double txnc = LimelightHelpers::getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
   double tync = LimelightHelpers::getTYNC("");  // Vertical offset from principal pixel/point to target in degrees
 
   bool looking = false;
 
-  double maxrotation = 180;
-  double minrotation = -180;
+  maxRotation = 180;
+  minRotation = -180;
 
   double currentpos = 0; // Motors Encoder Value
-  double angleoffset = 256; // Calibrate the motor encoder value per degree
-  double motorangle = currentpos / angleoffset; // Output
+  double angleoffset = 0; // Calibrate the motor encoder value per degree
+  motorangle = currentpos / angleoffset; // Output
 
-  //calibrate function is to determine what way the turret is rotating
-  public int Calibrate(){
-    timer.start();
-    turret_motor.set(ControlMode::PercentOutput, 0,1)
-    if (timer.HasElapsed(1.0)){
+  }
+
+  void Turret_Tracking::Update(){
+     tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
+      hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
+  }
+
+  int Turret_Tracking::Calibrate(){
+    timer.Start();
+    turret_motor.Set(0.1);
+    if (timer.HasElapsed(units::time::second_t(1.0))){
       if (motorangle > 0){
-        forward = 1
-        backward = -1
+        forward = 1;
+        backward = -1;
       }
       else if (motorangle < 0) {
-        forward = -1
-        backward = 1
+        forward = -1;
+        backward = 1;
       }
-      timer.reset();
+      timer.Reset();
     }
     
   }
   //find april is for looking for the april tag if it cant find it
-  public int find_april(){
-    if(hasTarget == false && motorangle > maxrotation){
-      turret_motor.set(ControlMode::PercentOutput, backward)
+  int Turret_Tracking::Find_april(){
+    if(hasTarget == false && motorangle > maxRotation){
+      turret_motor.Set(backward);
     }
-    else if(hasTarget == false && motorangle < minrotation){
-      turret_motor.set(ControlMode::PercentOutput, forward)
+    else if(hasTarget == false && motorangle < minRotation){
+      turret_motor.Set(forward);
     }
     
   }
 
   // tracks april tag for turret tracking
-  int track(){
+  int Turret_Tracking::Track(){
     if (hasTarget == true){
       //PID used for tracking dont have access to ATM
       if(tx > 0){
-        turret_motor.set(ControlMode::PercentOutput, forward)
+        turret_motor.Set(forward);
       }
       if(tx < 0){
-        turret_motor.set(ControlMode::PercentOutput, backward)
+        turret_motor.Set(backward);
       }
     }
   }
-  
-  //on start
-  if (){
-    calibrate();
-  }
 
-}
