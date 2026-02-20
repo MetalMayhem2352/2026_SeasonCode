@@ -12,7 +12,7 @@ namespace Core
         Vector2();
         Vector2(double x, double y);
         ~Vector2();
-        static Vector2 CreateAngluarVector(double angle, double magnitude);
+        static Vector2 CreateAngularVector(double angle, double magnitude);
 
         double GetX() const;
         double GetY() const;

@@ -33,5 +33,11 @@ namespace SwerveDrive
         void ResetPosition();
 
         DriveBase::RobotPosition GetRobotPosition();
+
+    private:
+        Core::Vector2 GetMovementDelta(double headingDelta);
+        static double NormalizeDeg0360(double deg);
+
+
     };
 }

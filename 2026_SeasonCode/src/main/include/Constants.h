@@ -40,7 +40,8 @@ namespace Constants
             
             inline constexpr double MODULE_X_POSITION = 9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
             inline constexpr double MODULE_Y_POSITION = 12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 315
+            static inline double MODULE_DISTANCE_FROM_PIVOT = std::sqrt((MODULE_X_POSITION * MODULE_X_POSITION) + (MODULE_Y_POSITION * MODULE_Y_POSITION)) ;
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(90 + (std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION) * RADIANS_TO_DEGREES), 1); // 315
         }
         namespace FrontLeftPod
         {
@@ -51,7 +52,8 @@ namespace Constants
 
             inline constexpr double MODULE_X_POSITION = -9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
             inline constexpr double MODULE_Y_POSITION = 12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 45
+            static inline double MODULE_DISTANCE_FROM_PIVOT = std::sqrt((MODULE_X_POSITION * MODULE_X_POSITION) + (MODULE_Y_POSITION * MODULE_Y_POSITION)) ;
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 45
         }
         namespace BackLeftPod
         {
@@ -62,7 +64,8 @@ namespace Constants
 
             inline constexpr double MODULE_X_POSITION = -9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
             inline constexpr double MODULE_Y_POSITION = -12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 135
+            static inline double MODULE_DISTANCE_FROM_PIVOT = std::sqrt((MODULE_X_POSITION * MODULE_X_POSITION) + (MODULE_Y_POSITION * MODULE_Y_POSITION)) ;
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 135
         }
         namespace BackRightPod
         {
@@ -73,31 +76,10 @@ namespace Constants
 
             inline constexpr double MODULE_X_POSITION = 9.875 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the x axis (units are in CM)
             inline constexpr double MODULE_Y_POSITION = -12.375 * 25.4; // DIstance from the center of the robot to the middle of the swerve modle on the y axis (units are in CM)
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngluarVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 225
+            static inline double MODULE_DISTANCE_FROM_PIVOT = std::sqrt((MODULE_X_POSITION * MODULE_X_POSITION) + (MODULE_Y_POSITION * MODULE_Y_POSITION)) ;
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 225
         }
     }
 
-    namespace Pivot
-    {
-        inline constexpr char LEFT_PIVOT_MOTOR_ID = 9;
-        inline constexpr char RIGHT_PIVOT_MOTOR_ID = 10;
-
-        inline Core::PIDConfig pivotPIDConfig(0.8f, 0.2f, 0, 0, 0.01);
-        inline constexpr double PICKUP_POSITION = 0.42f;
-        inline constexpr double BACK_POSITION = 0.125f;
-        inline constexpr double LOB_POSITION = 0.2f;
-        inline constexpr double LAZER_POSITION = 0.35f;
-    }
-
-    namespace Shooter
-    {
-        inline constexpr char SHOOTER_FEEDER_MOTOR_ID = 11;
-        inline constexpr char SHOOTER_BOTTOM_MOTOR_ID = 12;
-        inline constexpr char SHOOTER_TOP_MOTOR_ID = 13;
-
-        inline constexpr char LASER_CAN_ID = 0;
-
-        inline constexpr char LIGHT_ID = 0;
-    }
-
+    static constexpr char* CANIVOUR_NAME = "CANivour";
 }

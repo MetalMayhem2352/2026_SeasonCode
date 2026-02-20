@@ -5,6 +5,7 @@
 #include "Core/Vector2.h"
 #include "Core/Timer.h"
 
+#include <ctre/phoenix6/TalonFX.hpp>
 #include <rev/SparkMax.h>
 
 namespace SwerveDrive
@@ -15,8 +16,10 @@ namespace SwerveDrive
         Core::PIDController* turnPIDController;
         Core::Timer* timer;
 
+        ctre::phoenix6::hardware::TalonFX* turnMotor2;
         rev::spark::SparkMax* turnMotor;
         SwerveEncoder* encoder;
+        ctre::phoenix6::hardware::TalonFX* driveMotor2;
         rev::spark::SparkMax* driveMotor;
 
         double targetAngle = 0;

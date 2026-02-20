@@ -1,4 +1,6 @@
 #include "SwerveDrive/SwervePod.h"
+#include "Constants.h"
+
 #include <iostream>
 
 namespace SwerveDrive
@@ -7,7 +9,9 @@ namespace SwerveDrive
     {
         encoder = new SwerveEncoder(encoderId);
         driveMotor = new rev::spark::SparkMax(driveMotorId, rev::spark::SparkMax::MotorType::kBrushless);
+        driveMotor2 = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);
         turnMotor = new rev::spark::SparkMax(turnMotorId, rev::spark::SparkMax::MotorType::kBrushless);
+        turnMotor2 = new ctre::phoenix6::hardware::TalonFX(turnMotorId, Constants::CANIVOUR_NAME);
 
         driveEncoder = &driveMotor->GetEncoder();
 
