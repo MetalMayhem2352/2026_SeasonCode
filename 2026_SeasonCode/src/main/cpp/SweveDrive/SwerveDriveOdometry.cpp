@@ -20,7 +20,12 @@ namespace SwerveDrive
 
     void SwerveDriveOdometry::Update()
     {
+        bool canNormalize = false;
         double currentHeading = pigeon.GetYaw().GetValue().value();
+        if (currentHeading > 360 || currentHeading <= 0)
+        {
+
+        }
         currentHeading = NormalizeDeg0360(currentHeading);
         double headingDelta = currentHeading - lastHeading;
         

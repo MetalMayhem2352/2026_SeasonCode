@@ -24,7 +24,7 @@ namespace Core
     /// @param angle is the amount of degrees clockwise that the vector is rotated, 0 being north.
     /// @param magnitude the length of hte vecotr
     /// @return The created Vector
-    Vector2 Vector2::CreateAngluarVector(double angle, double magnitude)
+    Vector2 Vector2::CreateAngularVector(double angle, double magnitude)
     {
         double angleInRadians = Constants::DEGREES_TO_RADIANS * angle;
         
