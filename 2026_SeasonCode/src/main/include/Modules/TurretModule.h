@@ -18,6 +18,8 @@ class Turret_Tracking {
   double backward = 0;
   double currentpos;
   double motorangle;
+  double angleoffset;
+  double error;
 
   double maxRotation;
   double minRotation;
@@ -29,10 +31,9 @@ class Turret_Tracking {
   Turret_Tracking();
   ~Turret_Tracking();
 
-   int Calibrate();
-   int Find_april();
-   int Track();
-   void Update();
+  int Find_april();
+  int Track();
+  void Update();
    
 
 };

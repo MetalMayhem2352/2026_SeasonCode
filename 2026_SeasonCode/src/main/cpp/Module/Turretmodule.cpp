@@ -9,7 +9,6 @@
  
 
   
-  //calibrate function is to determine what way the turret is rotating
   Turret_Tracking::Turret_Tracking(){
 
   PIDTimer = new Core::Timer();
@@ -30,8 +29,9 @@
   maxRotation = 180;
   minRotation = -180;
 
-  currentpos = 0; // Motors Encoder Value
-  double angleoffset = 0; // Calibrate the motor encoder value per degree
+  currentpos = turret_motor.GetPosition().GetValue().value(); // Motors Encoder Value
+  angleoffset = 0; // Calibrate the motor encoder value per degree
+  error = tx * angleoffset;
   motorangle = currentpos / angleoffset; // Output
 
   }
@@ -41,40 +41,32 @@
   };
 
   void Turret_Tracking::Update(){
+      
       tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
       hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
       PIDTimer->Update();
-  }
-
-  int Turret_Tracking::Calibrate(){
-    timer.Start();
-    turret_motor.Set(0.1);
-    if (timer.HasElapsed(units::time::second_t(1.0))){
-      if (motorangle > 0){
-        forward = 1;
-        backward = -1;
+      if(error > maxRotation){
+        error = maxRotation;
       }
-      else if (motorangle < 0) {
-        forward = -1;
-        backward = 1;
+      if (error < minRotation){
+        error = minRotation;
       }
-      timer.Reset();
-    }
-    
   }
   //find april is for looking for the april tag if it cant find it
   int Turret_Tracking::Find_april(){
-    if(hasTarget == false && motorangle > maxRotation){
-      turret_motor.Set(backward);
+    if (hasTarget == false && motorangle > 170){
+      turret_motor.Set(PIDController->Calculate(currentpos,minRotation * angleoffset,PIDTimer->GetDeltaTime()));
     }
-    else if(hasTarget == false && motorangle < minRotation){
-      turret_motor.Set(forward);
+    if (hasTarget == false && motorangle < -170){
+      turret_motor.Set(PIDController->Calculate(currentpos,maxRotation * angleoffset,PIDTimer->GetDeltaTime()));
     }
   }
   // tracks april tag for turret tracking
   int Turret_Tracking::Track(){
     if (hasTarget == true){
-        turret_motor.Set(PIDController->Calculate(currentpos,tx,PIDTimer->GetDeltaTime()));
+        turret_motor.Set(PIDController->Calculate(currentpos,error,PIDTimer->GetDeltaTime()));
+    }
+    else {
+      Find_april();
     }
   }
-
