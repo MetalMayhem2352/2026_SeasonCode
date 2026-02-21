@@ -103,6 +103,7 @@ namespace Constants
 
     namespace Turret
     {
+        inline constexpr int turretID = 1; 
         static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
     }
 
