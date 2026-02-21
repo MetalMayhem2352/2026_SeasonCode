@@ -46,6 +46,10 @@ namespace SwerveDrive
     {
         return encoder->GetAngle();
     }
+    double SwervePod::GetAngleDelta()
+    {
+        return angleDelta;
+    }
     double SwervePod::GetMovementDelta()
     {
         return driveEncoder->GetPosition() - lastDrivePosition;
@@ -68,11 +72,13 @@ namespace SwerveDrive
         bool dirrect = true;
         double currentAngle = GetAngle();
         if (currentAngle > 180)
+        {
             currentAngle = -180 - (180 - currentAngle);
-        
+        }
         if (angle > 180)
+        { 
             angle = -180 - (180 - angle);
-
+        }
         double reverseTarget = angle < 0 ? angle + 180 : angle - 180;
 
         double dirrectAngle = std::abs(angle - currentAngle);
@@ -105,6 +111,12 @@ namespace SwerveDrive
     void SwervePod::Update()
     {
         std::cout << "driveMotor: " << driveEncoder->GetPosition() << '\n';
+        driveMotor2->GetPosition().GetValue().value();
+        
+        angleDelta = currentAngle; // Temporally changing value to be last angle
+        currentAngle = encoder->GetAngle();
+        angleDelta -= currentAngle; // Switching back to angle delta
+
         timer->Update();
     }
 }
