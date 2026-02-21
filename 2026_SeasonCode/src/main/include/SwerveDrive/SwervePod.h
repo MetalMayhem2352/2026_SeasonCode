@@ -24,6 +24,9 @@ namespace SwerveDrive
 
         double targetAngle = 0;
 
+        double angleDelta = 0;
+        double currentAngle = 0;
+
         double lastDrivePosition;
 
         void Turn(double angle);
@@ -38,6 +41,7 @@ namespace SwerveDrive
         void RverseMotors(bool driveMotor, bool turnMotor);
         
         double GetAngle();
+        double GetAngleDelta();
         double GetMovementDelta();
 
         void Move(double angle, double power);

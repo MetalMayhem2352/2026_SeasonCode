@@ -37,6 +37,7 @@ namespace SwerveDrive
     private:
         Core::Vector2 GetMovementDelta(double headingDelta);
         static double NormalizeDeg0360(double deg);
+        Core::Vector2 GetPodNonRotatedMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod& pod); 
 
 
     };
