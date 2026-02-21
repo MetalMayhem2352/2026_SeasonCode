@@ -16,11 +16,9 @@ namespace SwerveDrive
         Core::PIDController* turnPIDController;
         Core::Timer* timer;
 
-        ctre::phoenix6::hardware::TalonFX* turnMotor2;
-        rev::spark::SparkMax* turnMotor;
+        ctre::phoenix6::hardware::TalonFX* turnMotor;
         SwerveEncoder* encoder;
-        ctre::phoenix6::hardware::TalonFX* driveMotor2;
-        rev::spark::SparkMax* driveMotor;
+        ctre::phoenix6::hardware::TalonFX* driveMotor;
 
         double targetAngle = 0;
 
@@ -28,17 +26,15 @@ namespace SwerveDrive
         double currentAngle = 0;
 
         double lastDrivePosition;
+        double drivePosition;
 
         void Turn(double angle);
 
     public:
-        rev::spark::SparkRelativeEncoder* driveEncoder;
 
         SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig);
         ~SwervePod();
         
-        
-        void RverseMotors(bool driveMotor, bool turnMotor);
         
         double GetAngle();
         double GetAngleDelta();

@@ -32,7 +32,8 @@ namespace SwerveDrive
         
         Core::Vector2 robotMovementDelta = GetMovementDelta(headingDelta);
 
-        // ------------------ MIGHT not need to rotate movement delta to be field centric ----------------------------- 
+
+        
         double averageOrientation = (currentHeading - (headingDelta / 2));
         double averageOrientationRad = averageOrientation * Constants::DEGREES_TO_RADIANS;
 
@@ -63,15 +64,13 @@ namespace SwerveDrive
 
     Core::Vector2 SwerveDriveOdometry::GetMovementDelta(double headingDelta)
     {
-        Core::Vector2 fl_nonRotationMovementDelta = GetPodNonRotatedMovementDelta(headingDelta, Constants::Swerve::FrontRightPod::TURN_VECTOR, frontRightPod);
-        Core::Vector2 fr_nonRotationMovementDelta = GetPodNonRotatedMovementDelta(headingDelta, Constants::Swerve::FrontRightPod::TURN_VECTOR, frontRightPod);
-        Core::Vector2 br_nonRotationMovementDelta = GetPodNonRotatedMovementDelta(headingDelta, Constants::Swerve::BackRightPod::TURN_VECTOR, backRightPod);
-        Core::Vector2 bl_nonRotationMovementDelta = GetPodNonRotatedMovementDelta(headingDelta, Constants::Swerve::BackLeftPod::TURN_VECTOR, backLeftPod);
+        Core::Vector2 fl_nonRotationMovementDelta = GetPodMovementDelta(headingDelta, Constants::Swerve::FrontRightPod::TURN_VECTOR, frontRightPod);
+        Core::Vector2 fr_nonRotationMovementDelta = GetPodMovementDelta(headingDelta, Constants::Swerve::FrontRightPod::TURN_VECTOR, frontRightPod);
+        Core::Vector2 br_nonRotationMovementDelta = GetPodMovementDelta(headingDelta, Constants::Swerve::BackRightPod::TURN_VECTOR, backRightPod);
+        Core::Vector2 bl_nonRotationMovementDelta = GetPodMovementDelta(headingDelta, Constants::Swerve::BackLeftPod::TURN_VECTOR, backLeftPod);
 
         // Get average if the movement Vectors
         Core::Vector2 average = (fl_nonRotationMovementDelta + fr_nonRotationMovementDelta + br_nonRotationMovementDelta + bl_nonRotationMovementDelta) / 4;
-
-        // Convert average to M from encoder ticks
 
         return average;
     }
@@ -90,12 +89,12 @@ namespace SwerveDrive
         return deg;
     }
     
-    Core::Vector2 GetPodNonRotatedMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod& pod)
+    Core::Vector2 SwerveDriveOdometry::GetPodMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod& pod)
     {
         double rotaionDistanceDelta = (Constants::Swerve::DIAGONAL_MODULE_OFFSET * robotHeadingDelta * std::numbers::pi) / 180;
         Core::Vector2 rotaionDelta = turnVector * rotaionDistanceDelta;
         
-        Core::Vector2 podMovementDelta = Core::Vector2::CreateAngularVector(pod.GetAngle() - (pod.GetAngleDelta() / 2), pod.GetMovementDelta());
+        Core::Vector2 podMovementDelta = Core::Vector2::CreateAngularVector(pod.GetAngle() - (pod.GetAngleDelta() / 2), pod.GetMovementDelta() * Constants::Swerve::METERS_PER_TICK);
         return podMovementDelta - rotaionDelta;
     }
 

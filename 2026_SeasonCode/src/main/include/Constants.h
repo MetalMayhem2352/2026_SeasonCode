@@ -1,15 +1,32 @@
 #pragma once
 
+// Custom
 #include "Core/PIDConfig.h"
 #include "Core/Vector2.h"
-#include "math.h"
 
+// FRC
+#include <ctre/phoenix6/core/CoreTalonFX.hpp>
+
+// C++
+#include "math.h"
 #include <cmath>
 
 namespace Constants
 {
     static constexpr double RADIANS_TO_DEGREES = 180.0 / std::numbers::pi;
     static constexpr double DEGREES_TO_RADIANS = std::numbers::pi / 180.0;
+
+    static constexpr ctre::phoenix6::configs::TalonFXConfiguration commonConfigs =
+        ctre::phoenix6::configs::TalonFXConfiguration{}
+        .WithMotorOutput(
+            ctre::phoenix6::configs::MotorOutputConfigs{}
+            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+        )
+        .WithCurrentLimits(
+            ctre::phoenix6::configs::CurrentLimitsConfigs{}
+            .WithStatorCurrentLimit(120_A)
+            .WithStatorCurrentLimitEnable(true)
+        );
     
     namespace Swerve
     {
@@ -26,11 +43,26 @@ namespace Constants
             
         inline constexpr double WHEEL_CIRCUMFRANCE = 2 * (4 * 2.54 / 100) * std::numbers::pi; // 2r * pi
         inline constexpr double DRIVE_GEAR_RATIO = 63.0 / 109.0;
-        inline constexpr double MOTOR_TICKS_PER_REVOLUTION = 1;
+        inline constexpr double MOTOR_TICKS_PER_REVOLUTION = 360;
 
         inline constexpr double METERS_PER_TICK = WHEEL_CIRCUMFRANCE / (MOTOR_TICKS_PER_REVOLUTION * DRIVE_GEAR_RATIO);
-
         
+        
+
+
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration turnMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration driveMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+
         namespace FrontRightPod
         {
             inline constexpr char encoderID = 0;
@@ -69,7 +101,8 @@ namespace Constants
         }
     }
 
-    namespace Turret{
+    namespace Turret
+    {
         static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
     }
 

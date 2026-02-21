@@ -13,11 +13,6 @@ namespace SwerveDrive
 
         pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, "rio");
 
-        frontRightPod->RverseMotors(true, false);
-        frontLeftPod->RverseMotors(false, false);
-        backLeftPod->RverseMotors(false, false);
-        backRightPod->RverseMotors(false, false);
-
         turningPIDController = new Core::PIDController(Constants::Swerve::turnPIDConfig);
         turningPIDController->SetLoop(true, -std::numbers::pi, std::numbers::pi);
         

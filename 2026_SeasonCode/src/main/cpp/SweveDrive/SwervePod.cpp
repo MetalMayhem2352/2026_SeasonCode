@@ -8,12 +8,8 @@ namespace SwerveDrive
     SwervePod::SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
     {
         encoder = new SwerveEncoder(encoderId);
-        driveMotor = new rev::spark::SparkMax(driveMotorId, rev::spark::SparkMax::MotorType::kBrushless);
-        driveMotor2 = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);
-        turnMotor = new rev::spark::SparkMax(turnMotorId, rev::spark::SparkMax::MotorType::kBrushless);
-        turnMotor2 = new ctre::phoenix6::hardware::TalonFX(turnMotorId, Constants::CANIVOUR_NAME);
-
-        driveEncoder = &driveMotor->GetEncoder();
+        driveMotor = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);
+        turnMotor = new ctre::phoenix6::hardware::TalonFX(turnMotorId, Constants::CANIVOUR_NAME);
 
         encoder->SetOffsert(encoderOffset);
         encoder->SetInverted(true);
@@ -35,13 +31,6 @@ namespace SwerveDrive
         delete(timer);
     }
 
-    void SwervePod::RverseMotors(bool isDriveMotorInverted, bool isTurnMotorInverted)
-    {
-        driveMotor->SetInverted(isDriveMotorInverted);
-        turnMotor->SetInverted(isTurnMotorInverted);
-    }
-
-
     double SwervePod::GetAngle()
     {
         return encoder->GetAngle();
@@ -52,7 +41,7 @@ namespace SwerveDrive
     }
     double SwervePod::GetMovementDelta()
     {
-        return driveEncoder->GetPosition() - lastDrivePosition;
+        return drivePosition - lastDrivePosition;
     }
 
 
@@ -110,8 +99,10 @@ namespace SwerveDrive
     }
     void SwervePod::Update()
     {
-        std::cout << "driveMotor: " << driveEncoder->GetPosition() << '\n';
-        driveMotor2->GetPosition().GetValue().value();
+        std::cout << "driveMotor: " << driveMotor->GetPosition().GetValue().value() << '\n';
+        
+        lastDrivePosition = drivePosition;
+        drivePosition = driveMotor->GetPosition().GetValue().value();
         
         angleDelta = currentAngle; // Temporally changing value to be last angle
         currentAngle = encoder->GetAngle();
