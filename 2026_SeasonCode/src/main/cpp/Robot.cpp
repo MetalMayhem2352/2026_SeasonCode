@@ -11,8 +11,12 @@ Robot::Robot() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-}
 
+  testModule = new Modules::TestModule();
+}
+Robot::~Robot() {
+  delete(testModule);
+}
 /**
  * This function is called every 20 ms, no matter the mode. Use
  * this for items like diagnostics that you want ran during disabled,
@@ -56,11 +60,20 @@ void Robot::AutonomousPeriodic() {
   
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() 
+{
 
-void Robot::TeleopPeriodic() {}
+}
 
-void Robot::DisabledInit() {}
+void Robot::TeleopPeriodic() 
+{
+  testModule->Shoot();
+}
+
+void Robot::DisabledInit() 
+{
+  testModule->Stop();
+}
 
 void Robot::DisabledPeriodic() {}
 

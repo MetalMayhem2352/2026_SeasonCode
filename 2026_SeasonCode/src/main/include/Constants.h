@@ -105,6 +105,13 @@ namespace Constants
     {
         inline constexpr int turretID = 1; 
         static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
+
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotor2 =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        );
     }
 
 
