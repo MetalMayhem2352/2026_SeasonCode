@@ -120,6 +120,19 @@ namespace Constants
         );
     }
 
+    namespace Inake
+    {
+        inline Core::PIDConfig pivotPIDConfig(0.1, 65, 0, 0, 0); // Ground
 
-    static constexpr char* CANIVOUR_NAME = "CANivour";
+        inline constexpr int TOP_INTAKE_ID = 18; 
+        inline constexpr int BASKET_INTAKE_ID = 11; 
+        inline constexpr int GROUND_INTAKE_ID = -1; 
+        inline constexpr int PIVOT_ID = -1; 
+    
+        
+        inline constexpr double GROUND_PIVOT_POSITION = 0;
+        inline constexpr double SHOOT_PIVOT_POSITION = 66; 
+    }
+
+    static constexpr char* CANIVOUR_NAME = "Default Name";
 }

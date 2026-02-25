@@ -12,18 +12,29 @@ namespace Modules
 {
     class IntakeModule 
     {
-    private:
-        ctre::phoenix6::hardware::TalonFX* topIntakeMotor;
-        ctre::phoenix6::hardware::TalonFX* basketIntakeMotor;
-        ctre::phoenix6::hardware::TalonFX* groundIntakeMotor;
-
     public:
         enum State
         {
-            Intaking = 0,
-            Outaking = 1,
-            Shooting = 2,
+            Idle = 0,
+            Intaking = 1,
+            Outaking = 2,
+            Shooting = 3,
         };  
+    private:
+        State currentState;
+        
+        double targetPivotPos;
+
+        Core::Timer* pivotPIDTimer;
+        Core::PIDController* pivotPIDController;
+
+        ctre::phoenix6::hardware::TalonFX* topIntakeMotor;
+        ctre::phoenix6::hardware::TalonFX* basketIntakeMotor;
+        ctre::phoenix6::hardware::TalonFX* groundIntakeMotor;
+        ctre::phoenix6::hardware::TalonFX* intakePivot;
+
+    public:
+        
 
         IntakeModule();
         ~IntakeModule();

@@ -99,8 +99,6 @@ namespace SwerveDrive
     }
     void SwervePod::Update()
     {
-        std::cout << "driveMotor: " << driveMotor->GetPosition().GetValue().value() << '\n';
-        
         lastDrivePosition = drivePosition;
         drivePosition = driveMotor->GetPosition().GetValue().value();
         
