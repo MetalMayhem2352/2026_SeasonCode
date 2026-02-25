@@ -10,7 +10,7 @@
 
 namespace Modules
 {
-    class Basket
+    class BasketModule
     {
         public:
             enum State
@@ -28,8 +28,8 @@ namespace Modules
             ctre::phoenix6::hardware::TalonFX* leftBasketMotor;
             ctre::phoenix6::hardware::TalonFX* rightBasketMotor;
         public:
-            Basket();
-            ~Basket();
+            BasketModule();
+            ~BasketModule();
 
             void Update();
             void UpdateState(State newState);

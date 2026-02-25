@@ -8,8 +8,11 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Joystick.h>
 
 #include "Modules/IntakeModule.h"
+#include "Modules/BasketModule.h"
+#include "Modules/TurretModule.h"
 
 class Robot : public frc::TimedRobot 
 {
@@ -36,4 +39,10 @@ class Robot : public frc::TimedRobot
 		int varName = 0;
 
 		Modules::IntakeModule* intakeModule;
+		Modules::BasketModule* basketModule;
+		Turret_Tracking* turretModule;
+
+		frc::Joystick asherController{0};
+		frc::Joystick bryceController{1};
+		frc::Joystick testController{1};
 };

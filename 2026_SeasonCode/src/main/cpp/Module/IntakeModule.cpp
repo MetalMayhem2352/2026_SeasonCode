@@ -9,6 +9,12 @@ namespace Modules
         groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
         intakePivot = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
 
+        topIntakeMotor->GetConfigurator().Apply(Constants::Inake::topIntakeMotorConfig);
+        basketIntakeMotor->GetConfigurator().Apply(Constants::Inake::basketIntakeMotorConfig);
+        groundIntakeMotor->GetConfigurator().Apply(Constants::Inake::groundIntakeMotorConfig);
+        intakePivot->GetConfigurator().Apply(Constants::Inake::intakePivotMotorConfig);
+
+
         pivotPIDTimer = new Core::Timer();
         pivotPIDController = new Core::PIDController(Constants::Inake::pivotPIDConfig);
         

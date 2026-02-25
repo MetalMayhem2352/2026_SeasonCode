@@ -1,5 +1,5 @@
 
-#include "Modules/Basket.h"
+#include "Modules/BasketModule.h"
 #include "Core/Timer.h"
 #include "Core/PIDController.h"
 #include "Constants.h"
@@ -10,7 +10,7 @@
 
 namespace Modules
 {
-    Basket::Basket()
+    BasketModule::BasketModule()
     {
         leftBasketMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Basket::LEFT_BASKET_ID, Constants::CANIVOUR_NAME);
         rightBasketMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Basket::RIGHT_BASKET_ID, Constants::CANIVOUR_NAME);
@@ -23,7 +23,7 @@ namespace Modules
         rightPIDController = new Core::PIDController(Constants::Basket::basketPIDConfig);
     }
 
-    Basket::~Basket()
+    BasketModule::~BasketModule()
     {
         delete(leftBasketMotor);
         delete(rightBasketMotor);
@@ -33,14 +33,14 @@ namespace Modules
         delete(rightPIDController);
     }
 
-    void Basket::Update()
+    void BasketModule::Update()
     {
         pidTimer->Update();
         leftBasketMotor->Set(leftPIDController->Calculate(leftBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
         rightBasketMotor->Set(rightPIDController->Calculate(rightBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
     }
     
-    void Basket::UpdateState(State newState)
+    void BasketModule::UpdateState(State newState)
     {
         switch (newState)
         {

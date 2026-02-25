@@ -14,6 +14,8 @@ Robot::Robot()
   	frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   	intakeModule = new Modules::IntakeModule();
+  	basketModule = new Modules::BasketModule();
+  	turretModule = new Turret_Tracking();
 }
 
 Robot::~Robot() 
@@ -61,12 +63,41 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-  	intakeModule->UpdateState(Modules::IntakeModule::State::Intaking);
+	// Intake
+	if (testController.GetRawButton(-1))
+	{
+		intakeModule->UpdateState(Modules::IntakeModule::Intaking);
+	}
+	
+	// ground outake
+	if (testController.GetRawButton(-1))
+	{
+		intakeModule->UpdateState(Modules::IntakeModule::Outaking);
+	}
+
+	// shoot
+	if (testController.GetRawButton(-1))
+	{
+		intakeModule->UpdateState(Modules::IntakeModule::Shooting);
+	}
+
+	// Dpad Up
+	if (testController.GetRawButton(-1))
+	{
+		basketModule->UpdateState(Modules::BasketModule::High);
+	}
+	// Dpad Down 
+	else if (testController.GetRawButton(-1))
+	{
+		basketModule->UpdateState(Modules::BasketModule::Low);
+	}
+
+	
+
 }
 
 void Robot::DisabledInit() 
 {
-  	intakeModule->UpdateState(Modules::IntakeModule::State::Shooting);
 }
 
 void Robot::DisabledPeriodic() {}

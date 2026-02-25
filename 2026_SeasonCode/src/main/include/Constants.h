@@ -124,6 +124,31 @@ namespace Constants
     {
         inline Core::PIDConfig pivotPIDConfig(0.1, 65, 0, 0, 0);
 
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration topIntakeMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration basketIntakeMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration groundIntakeMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration intakePivotMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+
         inline constexpr int TOP_INTAKE_ID = 18; 
         inline constexpr int BASKET_INTAKE_ID = 11; 
         inline constexpr int GROUND_INTAKE_ID = -1; 
