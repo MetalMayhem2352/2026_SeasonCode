@@ -9,7 +9,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
-#include "Modules/TestModule.h"
+#include "Modules/IntakeModule.h"
 
 class Robot : public frc::TimedRobot 
 {
@@ -35,5 +35,5 @@ class Robot : public frc::TimedRobot
 		std::string m_autoSelected;
 		int varName = 0;
 
-		Modules::TestModule* testModule;
+		Modules::IntakeModule* intakeModule;
 };

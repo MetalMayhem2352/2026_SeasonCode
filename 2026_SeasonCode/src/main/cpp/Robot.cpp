@@ -12,10 +12,10 @@ Robot::Robot() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  testModule = new Modules::TestModule();
+  intakeModule = new Modules::IntakeModule();
 }
 Robot::~Robot() {
-  delete(testModule);
+  delete(intakeModule);
 }
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -67,12 +67,12 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-  testModule->Shoot();
+  intakeModule->UpdateState(Modules::IntakeModule::State::Intaking);
 }
 
 void Robot::DisabledInit() 
 {
-  testModule->Stop();
+  intakeModule->UpdateState(Modules::IntakeModule::State::Shooting);
 }
 
 void Robot::DisabledPeriodic() {}
