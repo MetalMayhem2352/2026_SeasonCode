@@ -10,9 +10,12 @@ LidarLitev3Sensor::LidarLitev3Sensor(int lidarID)
 }
 
 void LidarLitev3Sensor::Update() {
-    if (lidar.Get() < 1) {
+    if (lidar.Get() < 1) 
+    {
         distance = 0.0;
-    } else {
+    } 
+    else
+     {
         // Convert to cm: 10 microseconds per cm
         distance = (lidar.GetPeriod().value() * 1'000'000.0 / 10.0);
     }

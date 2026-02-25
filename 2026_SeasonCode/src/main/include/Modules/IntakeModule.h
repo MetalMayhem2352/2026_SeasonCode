@@ -21,8 +21,6 @@ namespace Modules
             Shooting = 3,
         };  
     private:
-        State currentState;
-        
         double targetPivotPos;
 
         Core::Timer* pivotPIDTimer;

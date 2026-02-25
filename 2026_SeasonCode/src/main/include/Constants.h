@@ -122,7 +122,7 @@ namespace Constants
 
     namespace Inake
     {
-        inline Core::PIDConfig pivotPIDConfig(0.1, 65, 0, 0, 0); // Ground
+        inline Core::PIDConfig pivotPIDConfig(0.1, 65, 0, 0, 0);
 
         inline constexpr int TOP_INTAKE_ID = 18; 
         inline constexpr int BASKET_INTAKE_ID = 11; 
@@ -132,6 +132,30 @@ namespace Constants
         
         inline constexpr double GROUND_PIVOT_POSITION = 0;
         inline constexpr double SHOOT_PIVOT_POSITION = 66; 
+    }
+
+    namespace Basket
+    {
+        inline Core::PIDConfig basketPIDConfig(0.5, 360, 0, 0, 0);
+        
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftBasketMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightBasketMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+
+        inline constexpr int LEFT_BASKET_ID = -1; 
+        inline constexpr int RIGHT_BASKET_ID = -1; 
+
+        inline constexpr int UP_POSITION = 0; 
+        inline constexpr int DOWN_POSITON = -1800; 
     }
 
     static constexpr char* CANIVOUR_NAME = "Default Name";

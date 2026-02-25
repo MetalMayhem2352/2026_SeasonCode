@@ -4,10 +4,10 @@ namespace Modules
 {
     IntakeModule::IntakeModule()
     {
-        topIntakeMotor = new ctre::phoenix6::hardware::TalonFX(18, "Default Name");
-        basketIntakeMotor = new ctre::phoenix6::hardware::TalonFX(11, "Default Name");
-        groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(-1, "Default Name");
-        intakePivot = new ctre::phoenix6::hardware::TalonFX(-1, "Default Name");
+        topIntakeMotor = new ctre::phoenix6::hardware::TalonFX(18, Constants::CANIVOUR_NAME);
+        basketIntakeMotor = new ctre::phoenix6::hardware::TalonFX(11, Constants::CANIVOUR_NAME);
+        groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
+        intakePivot = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
 
         pivotPIDTimer = new Core::Timer();
         pivotPIDController = new Core::PIDController(Constants::Inake::pivotPIDConfig);
@@ -37,8 +37,7 @@ namespace Modules
 
     void IntakeModule::UpdateState(State newState)
     {
-        currentState = newState;
-        switch (currentState)
+        switch (newState)
         {
         case State::Idle:
         {

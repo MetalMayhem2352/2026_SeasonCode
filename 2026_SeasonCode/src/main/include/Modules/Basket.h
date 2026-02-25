@@ -1,4 +1,5 @@
-/*
+#pragma once
+
 #include "Core/Timer.h"
 #include "Core/PIDController.h"
 #include "Constants.h"
@@ -7,14 +8,30 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Timer.h>
 
-class Basket{
-    private:
+namespace Modules
+{
+    class Basket
+    {
+        public:
+            enum State
+            {
+                Low = 0,
+                High = 1
+            };
+        private:
+            Core::Timer* pidTimer;
+            Core::PIDController* leftPIDController;
+            Core::PIDController* rightPIDController;
+        
+            double targetPosition;
 
-    
-    ctre::phoenix6::hardware::TalonFX Basket_motor_1{Constants::Basket::Basket_motor_1};
-    ctre::phoenix6::hardware::TalonFX Basket_motor_2{Constants::Basket::Basket_motor_2};
-    public:
-    Basket();
-    
-};
-*/
+            ctre::phoenix6::hardware::TalonFX* leftBasketMotor;
+            ctre::phoenix6::hardware::TalonFX* rightBasketMotor;
+        public:
+            Basket();
+            ~Basket();
+
+            void Update();
+            void UpdateState(State newState);
+    };
+}
