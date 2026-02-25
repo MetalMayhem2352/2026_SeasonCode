@@ -42,6 +42,7 @@ namespace Modules
     
     void BasketModule::UpdateState(State newState)
     {
+        currentState = newState;
         switch (newState)
         {
         case State::High:
@@ -53,5 +54,10 @@ namespace Modules
         default:
             break;
         }
+    }
+
+    BasketModule::State BasketModule::GetState()
+    {
+        return currentState;
     }
 }

@@ -43,6 +43,7 @@ namespace Modules
 
     void IntakeModule::UpdateState(State newState)
     {
+        currentState = newState;
         switch (newState)
         {
         case State::Idle:
@@ -82,5 +83,10 @@ namespace Modules
         default:
             break;
         }   
+    }
+
+    IntakeModule::State IntakeModule::GetState()
+    {
+        return currentState;
     }
 }

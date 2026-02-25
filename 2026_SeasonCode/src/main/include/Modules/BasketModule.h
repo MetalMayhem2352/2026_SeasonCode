@@ -23,6 +23,8 @@ namespace Modules
             Core::PIDController* leftPIDController;
             Core::PIDController* rightPIDController;
         
+            State currentState;
+
             double targetPosition;
 
             ctre::phoenix6::hardware::TalonFX* leftBasketMotor;
@@ -33,5 +35,6 @@ namespace Modules
 
             void Update();
             void UpdateState(State newState);
+            State GetState();
     };
 }

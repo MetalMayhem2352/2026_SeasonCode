@@ -64,30 +64,51 @@ void Robot::TeleopInit()
 void Robot::TeleopPeriodic() 
 {
 	// Intake
-	if (testController.GetRawButton(-1))
+	if (testController.GetRawButtonPressed(-1))
 	{
-		intakeModule->UpdateState(Modules::IntakeModule::Intaking);
+		if (intakeModule->GetState() == Modules::IntakeModule::Intaking)
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Idle);
+		}
+		else
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Intaking);
+		}
 	}
 	
 	// ground outake
-	if (testController.GetRawButton(-1))
+	if (testController.GetRawButtonPressed(-1))
 	{
-		intakeModule->UpdateState(Modules::IntakeModule::Outaking);
+		if (intakeModule->GetState() == Modules::IntakeModule::Outaking)
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Idle);
+		}
+		else
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Outaking);
+		}
 	}
 
 	// shoot
-	if (testController.GetRawButton(-1))
+	if (testController.GetRawButtonPressed(-1))
 	{
-		intakeModule->UpdateState(Modules::IntakeModule::Shooting);
+		if (intakeModule->GetState() == Modules::IntakeModule::Shooting)
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Idle);
+		}
+		else
+		{
+			intakeModule->UpdateState(Modules::IntakeModule::Shooting);
+		}
 	}
 
 	// Dpad Up
-	if (testController.GetRawButton(-1))
+	if (testController.GetRawButtonPressed(-1))
 	{
 		basketModule->UpdateState(Modules::BasketModule::High);
 	}
 	// Dpad Down 
-	else if (testController.GetRawButton(-1))
+	else if (testController.GetRawButtonPressed(-1))
 	{
 		basketModule->UpdateState(Modules::BasketModule::Low);
 	}
