@@ -4,24 +4,24 @@ namespace Modules
 {
     IntakeModule::IntakeModule()
     {
-        topIntakeMotor = new ctre::phoenix6::hardware::TalonFX(18, Constants::CANIVOUR_NAME);
-        basketIntakeMotor = new ctre::phoenix6::hardware::TalonFX(11, Constants::CANIVOUR_NAME);
-        groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
-        intakePivot = new ctre::phoenix6::hardware::TalonFX(-1, Constants::CANIVOUR_NAME);
+        topIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::TOP_INTAKE_ID, Constants::CANIVOUR_NAME);
+        basketIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::BASKET_INTAKE_ID, Constants::CANIVOUR_NAME);
+        groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::GROUND_INTAKE_ID, Constants::CANIVOUR_NAME);
+        intakePivot = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::PIVOT_ID, Constants::CANIVOUR_NAME);
 
-        topIntakeMotor->GetConfigurator().Apply(Constants::Inake::topIntakeMotorConfig);
-        basketIntakeMotor->GetConfigurator().Apply(Constants::Inake::basketIntakeMotorConfig);
-        groundIntakeMotor->GetConfigurator().Apply(Constants::Inake::groundIntakeMotorConfig);
-        intakePivot->GetConfigurator().Apply(Constants::Inake::intakePivotMotorConfig);
+        topIntakeMotor->GetConfigurator().Apply(Constants::Intake::topIntakeMotorConfig);
+        basketIntakeMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
+        groundIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
+        intakePivot->GetConfigurator().Apply(Constants::Intake::intakePivotMotorConfig);
 
 
         pivotPIDTimer = new Core::Timer();
-        pivotPIDController = new Core::PIDController(Constants::Inake::pivotPIDConfig);
+        pivotPIDController = new Core::PIDController(Constants::Intake::pivotPIDConfig);
         
-        topIntakeMotor->GetConfigurator().Apply(Constants::Turret::shooterMotor1);
-        basketIntakeMotor->GetConfigurator().Apply(Constants::Turret::shooterMotor2);
-        groundIntakeMotor->GetConfigurator().Apply(Constants::Turret::shooterMotor2);
-        intakePivot->GetConfigurator().Apply(Constants::Turret::shooterMotor2);
+        topIntakeMotor->GetConfigurator().Apply(Constants::Intake::topIntakeMotorConfig);
+        basketIntakeMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
+        groundIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
+        intakePivot->GetConfigurator().Apply(Constants::Intake::intakePivotMotorConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -37,8 +37,8 @@ namespace Modules
 
     void IntakeModule::Update()
     {
-        pivotPIDTimer->Update();
-        intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        //pivotPIDTimer->Update();
+        //intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -59,7 +59,7 @@ namespace Modules
             basketIntakeMotor->Set(.5);
             groundIntakeMotor->Set(.5);
 
-            targetPivotPos = Constants::Inake::GROUND_PIVOT_POSITION;
+            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
             break;
         }
         case State::Outaking:
@@ -68,7 +68,7 @@ namespace Modules
             basketIntakeMotor->Set(-0.5);
             groundIntakeMotor->Set(-0.5);
 
-            targetPivotPos = Constants::Inake::GROUND_PIVOT_POSITION;
+            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
             break;
         }
         case State::Shooting:
@@ -77,7 +77,7 @@ namespace Modules
             basketIntakeMotor->Set(-.5);
             groundIntakeMotor->Set(-.5);
             
-            targetPivotPos = Constants::Inake::SHOOT_PIVOT_POSITION;
+            targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
             break;
         }
         default:

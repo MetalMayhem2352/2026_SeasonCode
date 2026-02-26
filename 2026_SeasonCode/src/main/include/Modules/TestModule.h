@@ -12,25 +12,17 @@ namespace Modules
 {
     class TestModule 
     {
-    private:
+        private:
 
-        ctre::phoenix6::hardware::TalonFX* flywheelMotor1;
-        ctre::phoenix6::hardware::TalonFX* flywheelMotor2;
+            ctre::phoenix6::hardware::TalonFX* flywheelMotor1;
 
-    public:
-        enum State
-        {
-            Intaking = 0,
-            Outaking = 1,
-            Shooting = 2,
-        };  
+        public:
 
-        TestModule();
-        ~TestModule();
+            TestModule();
+            ~TestModule();
 
-        void Shoot();
-
-        void Stop();
+            void Shoot();
+            void Stop();
         
     };
 }
