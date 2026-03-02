@@ -7,7 +7,7 @@
 
 #include <ctre/phoenix6/Pigeon2.hpp>
 
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
     class SwerveDriveModule
     {

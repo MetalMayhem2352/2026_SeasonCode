@@ -1,11 +1,11 @@
-#include "SwerveDrive/SwerveDriveOdometry.h"
+#include "CustomSwerveDrive/SwerveDriveOdometry.h"
 #include "Constants.h"
 
 // TODO: Make Base Odometry Class to inherite from
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
-    SwerveDriveOdometry::SwerveDriveOdometry(   SwerveDrive::SwervePod& frontRight, SwerveDrive::SwervePod& frontLeft, 
-                                                SwerveDrive::SwervePod& backRight, SwerveDrive::SwervePod& backLeft, 
+    SwerveDriveOdometry::SwerveDriveOdometry(   SwervePod& frontRight, SwervePod& frontLeft, 
+                                                SwervePod& backRight, SwervePod& backLeft, 
                                                 ctre::phoenix6::hardware::Pigeon2& pigeon)
         : frontRightPod(frontRight), frontLeftPod(frontLeft), backRightPod(backRight), backLeftPod(backLeft), pigeon(pigeon)
     {
@@ -46,7 +46,7 @@ namespace SwerveDrive
         lastHeading = currentHeading;
     }   
 
-    void SwerveDriveOdometry::SetStartPosition(DriveBase::RobotPosition startPosition)
+    void SwerveDriveOdometry::SetStartPosition(CustomDriveBase::RobotPosition startPosition)
     {
         offsetPosition = startPosition;
     }
@@ -56,7 +56,7 @@ namespace SwerveDrive
         currentRobotPosition = offsetPosition;
     }
 
-    DriveBase::RobotPosition SwerveDriveOdometry::GetRobotPosition()
+    CustomDriveBase::RobotPosition SwerveDriveOdometry::GetRobotPosition()
     {
         return currentRobotPosition;
     }

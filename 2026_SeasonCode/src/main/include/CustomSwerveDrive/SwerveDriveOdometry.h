@@ -6,33 +6,33 @@
 #include <ctre/phoenix6/Pigeon2.hpp>
 
 
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
     // TODO: Make Base Odometry Class to inherite from
     class SwerveDriveOdometry 
     {
     private:
-        SwerveDrive::SwervePod& frontRightPod;
-        SwerveDrive::SwervePod& frontLeftPod;
-        SwerveDrive::SwervePod& backRightPod;
-        SwerveDrive::SwervePod& backLeftPod;
+        SwervePod& frontRightPod;
+        SwervePod& frontLeftPod;
+        SwervePod& backRightPod;
+        SwervePod& backLeftPod;
         ctre::phoenix6::hardware::Pigeon2& pigeon;
 
         double lastHeading;
 
-        DriveBase::RobotPosition currentRobotPosition;
-        DriveBase::RobotPosition offsetPosition;
+        CustomDriveBase::RobotPosition currentRobotPosition;
+        CustomDriveBase::RobotPosition offsetPosition;
         
     public:
-        SwerveDriveOdometry(SwerveDrive::SwervePod& frontRight, SwerveDrive::SwervePod& frontLeft, SwerveDrive::SwervePod& backRight, SwerveDrive::SwervePod& backLeft, ctre::phoenix6::hardware::Pigeon2& pigeon);
+        SwerveDriveOdometry(SwervePod& frontRight, SwervePod& frontLeft, SwervePod& backRight, SwervePod& backLeft, ctre::phoenix6::hardware::Pigeon2& pigeon);
         ~SwerveDriveOdometry();
 
         void Update();
 
-        void SetStartPosition(DriveBase::RobotPosition startPosition);
+        void SetStartPosition(CustomDriveBase::RobotPosition startPosition);
         void ResetPosition();
 
-        DriveBase::RobotPosition GetRobotPosition();
+        CustomDriveBase::RobotPosition GetRobotPosition();
 
     private:
         Core::Vector2 GetMovementDelta(double headingDelta);

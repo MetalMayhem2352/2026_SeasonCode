@@ -8,9 +8,9 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Timer.h>
 
-namespace Modules
+namespace Pathing
 {
-    class TestModule 
+    class SwerveDrive 
     {
         private:
 
@@ -18,11 +18,11 @@ namespace Modules
 
         public:
 
-            TestModule();
-            ~TestModule();
+            SwerveDrive();
+            ~SwerveDrive();
 
-            void Shoot();
-            void Stop();
+            void Update();
+            void Move(double x, double z, double rotation);
         
     };
 }

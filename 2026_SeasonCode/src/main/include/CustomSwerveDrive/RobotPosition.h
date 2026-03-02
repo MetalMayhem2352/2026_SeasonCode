@@ -1,6 +1,6 @@
 #include "Core/Vector2.h"
 
-namespace DriveBase
+namespace CustomDriveBase
 {
     // Robot Position on the field in Meters
     class RobotPosition

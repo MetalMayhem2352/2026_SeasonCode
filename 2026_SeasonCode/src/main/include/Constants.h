@@ -105,14 +105,30 @@ namespace Constants
     {
         inline constexpr int turretID = 14; 
         static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
-
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotor2 =
+        
+        
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration turretMotor =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotor1 =
+        
+    }
+
+    namespace Shooter
+    {
+        inline constexpr int shooterID = 15; 
+        inline constexpr int hoodID = 16; 
+
+
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotorCondiguration =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration hoodMotorCongiuration =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
@@ -183,5 +199,5 @@ namespace Constants
         inline constexpr int DOWN_POSITON = -1800; 
     }
 
-    static constexpr char* CANIVOUR_NAME = "Default Name";
+    static std::string CANIVOUR_NAME = "Default Name";
 }

@@ -8,7 +8,7 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <rev/SparkMax.h>
 
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
     class SwervePod
     {

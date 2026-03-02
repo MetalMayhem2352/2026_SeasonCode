@@ -4,23 +4,23 @@ namespace Modules
 {
     TestModule::TestModule()
     {
-        flywheelMotor1 = new ctre::phoenix6::hardware::TalonFX(15, "Default Name");
+        motor1 = new ctre::phoenix6::hardware::TalonFX(Constants::Shooter::shooterID, "Default Name");
 
-        flywheelMotor1->GetConfigurator().Apply(Constants::Turret::shooterMotor1);
+        motor1->GetConfigurator().Apply(Constants::Shooter::shooterMotorCondiguration);
     }
 
     TestModule::~TestModule()
     {
-        delete(flywheelMotor1);
+        delete(motor1);
     }
 
     void TestModule::Shoot()
     {
-        flywheelMotor1->Set(1);
+        motor1->Set(1);
     }
 
     void TestModule::Stop()
     {
-        flywheelMotor1->Set(0);
+        motor1->Set(0);
     }
 }

@@ -1,9 +1,9 @@
-#include "SwerveDrive/SwervePod.h"
+#include "CustomSwerveDrive/SwervePod.h"
 #include "Constants.h"
 
 #include <iostream>
 
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
     SwervePod::SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
     {

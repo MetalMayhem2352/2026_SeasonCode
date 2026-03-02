@@ -17,11 +17,6 @@ namespace Modules
 
         pivotPIDTimer = new Core::Timer();
         pivotPIDController = new Core::PIDController(Constants::Intake::pivotPIDConfig);
-        
-        topIntakeMotor->GetConfigurator().Apply(Constants::Intake::topIntakeMotorConfig);
-        basketIntakeMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
-        groundIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
-        intakePivot->GetConfigurator().Apply(Constants::Intake::intakePivotMotorConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -56,8 +51,8 @@ namespace Modules
         case State::Intaking:
         {
             topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(.5);
-            groundIntakeMotor->Set(.5);
+            basketIntakeMotor->Set(0.5);
+            // groundIntakeMotor->Set(0.5);
 
             targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
             break;
@@ -74,8 +69,8 @@ namespace Modules
         case State::Shooting:
         {
             topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(-.5);
-            groundIntakeMotor->Set(-.5);
+            basketIntakeMotor->Set(-0.5);
+            //groundIntakeMotor->Set(-0.5);
             
             targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
             break;

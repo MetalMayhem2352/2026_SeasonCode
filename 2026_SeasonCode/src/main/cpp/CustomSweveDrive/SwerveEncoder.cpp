@@ -1,7 +1,7 @@
-#include "SwerveDrive/SwerveEncoder.h"
+#include "CustomSwerveDrive/SwerveEncoder.h"
 
 
-namespace SwerveDrive
+namespace CustomSwerveDrive
 {
     SwerveEncoder::SwerveEncoder(char enocderIndex)
         : encoder{enocderIndex}
