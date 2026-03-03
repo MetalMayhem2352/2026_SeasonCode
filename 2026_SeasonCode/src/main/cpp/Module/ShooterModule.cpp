@@ -15,10 +15,10 @@ namespace Modules
 
     void ShooterModule::Shoot(Pathing::RobotPosition* const position)
     {
-        
+        hoodMotor->Set(-0.05);
     }
     void ShooterModule::Stop()
     {
-        
+        hoodMotor->Set(0);
     }
 }

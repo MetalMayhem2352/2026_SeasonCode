@@ -1,5 +1,7 @@
 #include "Modules/TestModule.h"
 
+#include "Constants.h"
+
 namespace Modules
 {
     TestModule::TestModule()

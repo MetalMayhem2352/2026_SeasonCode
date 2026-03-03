@@ -14,9 +14,11 @@ namespace Modules
         groundIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
         intakePivot->GetConfigurator().Apply(Constants::Intake::intakePivotMotorConfig);
 
+        intakePivot->SetPosition(units::angle::turn_t(0));
+
 
         pivotPIDTimer = new Core::Timer();
-        pivotPIDController = new Core::PIDController(Constants::Intake::pivotPIDConfig);
+        pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -32,8 +34,14 @@ namespace Modules
 
     void IntakeModule::Update()
     {
-        //pivotPIDTimer->Update();
-        //intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
+        std::cout << "Pivot Pos: " << -intakePivot->GetPosition().GetValue().value() << "\n";
+        std::cout << "Target Pos: " << targetPivotPos << "\n";
+        pivotPIDTimer->Update();
+        std::cout << "Pivot Pwer: " << -(pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime())) << "\n";
+
+
+        intakePivot->Set(-pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -46,13 +54,14 @@ namespace Modules
             topIntakeMotor->Set(0);
             basketIntakeMotor->Set(0);
             groundIntakeMotor->Set(0);
+
             break;
         }
         case State::Intaking:
         {
             topIntakeMotor->Set(0.5);
             basketIntakeMotor->Set(0.5);
-            // groundIntakeMotor->Set(0.5);
+            groundIntakeMotor->Set(0.5);
 
             targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
             break;
@@ -70,7 +79,7 @@ namespace Modules
         {
             topIntakeMotor->Set(0.5);
             basketIntakeMotor->Set(-0.5);
-            //groundIntakeMotor->Set(-0.5);
+            groundIntakeMotor->Set(-0.5);
             
             targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
             break;

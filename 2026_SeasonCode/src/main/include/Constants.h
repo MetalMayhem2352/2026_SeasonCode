@@ -20,11 +20,11 @@ namespace Constants
         ctre::phoenix6::configs::TalonFXConfiguration{}
         .WithMotorOutput(
             ctre::phoenix6::configs::MotorOutputConfigs{}
-            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast)
         )
         .WithCurrentLimits(
             ctre::phoenix6::configs::CurrentLimitsConfigs{}
-            .WithStatorCurrentLimit(120_A)
+            .WithStatorCurrentLimit(40_A)
             .WithStatorCurrentLimitEnable(true)
         );
     
@@ -104,7 +104,7 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(1,360,0.2,5,0.4);
+        static inline Core::PIDConfig TurretPIDConfig(1,90,0,0,0);
         
         
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration turretMotor =
@@ -132,14 +132,12 @@ namespace Constants
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
     }
 
     namespace Intake
     {
-        inline Core::PIDConfig pivotPIDConfig(0.1, 65, 0, 0, 0);
-
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration topIntakeMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
@@ -162,7 +160,7 @@ namespace Constants
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
 
         inline constexpr int TOP_INTAKE_ID = 8; 
@@ -171,8 +169,10 @@ namespace Constants
         inline constexpr int PIVOT_ID = 11; 
     
         
+        static inline Core::PIDConfig PivotPIDConfig(1  , 0.2, 0, 0.2, 0);
+        
         inline constexpr double GROUND_PIVOT_POSITION = 0;
-        inline constexpr double SHOOT_PIVOT_POSITION = 66; 
+        inline constexpr double SHOOT_PIVOT_POSITION = 0.225; 
     }
 
     namespace Basket

@@ -31,15 +31,16 @@ class Turret_Tracking
 		double minRotation;
 		bool hasTarget;
 
-		ctre::phoenix6::hardware::TalonFX turret_motor{Constants::Turret::turretID};
+		ctre::phoenix6::hardware::TalonFX* turret_motor;
 
 	public:
 		Turret_Tracking();
 		~Turret_Tracking();
 
-		int Find_april();
-		int Track();
+		void Find_april();
+		void Track();
 		void Update();
+		void turretIdle();
 	
 
 };

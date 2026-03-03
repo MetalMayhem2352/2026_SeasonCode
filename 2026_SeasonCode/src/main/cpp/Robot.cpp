@@ -16,6 +16,7 @@ Robot::Robot()
   	intakeModule = new Modules::IntakeModule();
   	basketModule = new Modules::BasketModule();
   	turretModule = new Turret_Tracking();
+  	shooterModule = new Modules::ShooterModule();
   	testModule = new Modules::TestModule();
 }
 
@@ -24,6 +25,7 @@ Robot::~Robot()
   	delete(intakeModule);
   	delete(basketModule);
   	delete(turretModule);
+  	delete(shooterModule);
   	delete(testModule);
 }
 
@@ -123,16 +125,21 @@ void Robot::TeleopPeriodic()
 
 void Robot::DisabledInit() 
 {
-	testModule->Stop();
+	turretModule->turretIdle();
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() 
+{
+	
+}
 
-void Robot::TestInit() {}
+void Robot::TestInit() 
+{
+}
 
 void Robot::TestPeriodic() 
 {
-	testModule->Shoot();
+	turretModule->Track();
 }
 
 void Robot::SimulationInit() {}

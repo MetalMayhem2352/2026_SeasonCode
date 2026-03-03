@@ -5,34 +5,42 @@
 #include "Constants.h"
 
 
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTableEntry.h"
     
- 
 
-  
+
+
 Turret_Tracking::Turret_Tracking()
 {
+	turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
+
   	PIDTimer = new Core::Timer();
   	PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
 
-  	LimelightHelpers::setPipelineIndex("",0);
+  	LimelightHelpers::setPipelineIndex("limelight",0);
 
-  	tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
-  	double ty = LimelightHelpers::getTY("");  // Vertical offset from crosshair to target in degrees
-  	double ta = LimelightHelpers::getTA("");  // Target area (0% to 100% of image)
-  	hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
+	LimelightHelpers::SetupPortForwardingUSB(0);
 
-  	double txnc = LimelightHelpers::getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
-  	double tync = LimelightHelpers::getTYNC("");  // Vertical offset from principal pixel/point to target in degrees
+	std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
+  	double ty = LimelightHelpers::getTY("limelight");  // Vertical offset from crosshair to target in degrees
+  	double ta = LimelightHelpers::getTA("limelight");  // Target area (0% to 100% of image)
+  	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
+
+  	double txnc = LimelightHelpers::getTXNC("limelight");  // Horizontal offset from principal pixel/point to target in degrees
+  	double tync = LimelightHelpers::getTYNC("limelight");  // Vertical offset from principal pixel/point to target in degrees
 
   	bool looking = false;
 
   	maxRotation = 180;
   	minRotation = -180;
 
-  	
-  	angleoffset = 0.18; // Calibrate the motor encoder value per degree
-  	
-  	
+  	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
+  	angleoffset = 1; // Calibrate the motor encoder value per degree
+  	error = tx * angleoffset;
+  	motorangle = currentpos / angleoffset; // Output
 
 }
 
@@ -44,16 +52,21 @@ Turret_Tracking::~Turret_Tracking()
 
 void Turret_Tracking::Update()
 {      
-	tx = LimelightHelpers::getTX("");  // Horizontal offset from crosshair to target in degrees
-	hasTarget = LimelightHelpers::getTV(""); // Do you have a valid target?
-	tx;
-	hasTarget;
-	currentpos = turret_motor.GetPosition().GetValue().value(); // Motors Encoder Value 
-	motorangle = currentpos / angleoffset; // Output
-	desiredEncoderPosition = currentpos + (tx * angleoffset);
-	
+	std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
+
+	std::cout << "tx: " <<  tx << '\n';
+
+	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	PIDTimer->Update();
-	if(desiredEncoderPosition > maxRotation * angleoffset)
+
+	
+	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
+  	angleoffset = 1; // Calibrate the motor encoder value per degree
+  	error = tx * angleoffset;
+  	motorangle = currentpos / angleoffset; // Output
+
+	if(error > maxRotation)
 	{
 		desiredEncoderPosition = maxRotation * angleoffset;
 	}
@@ -61,42 +74,37 @@ void Turret_Tracking::Update()
 	{
 		desiredEncoderPosition = minRotation * angleoffset;
 	}
+
 }
 
 //find april is for looking for the april tag if it cant find it
-int Turret_Tracking::Find_april()
+void Turret_Tracking::Find_april()
 {
-	sweepingRight = true;
-    if (!hasTarget)
-{
-    if (motorangle >= maxRotation)
-        sweepingRight = false;
-
-    if (motorangle <= minRotation)
-        sweepingRight = true;
-
-    double sweepTarget = sweepingRight ? 
-        maxRotation * angleoffset :
-        minRotation * angleoffset;
-
-    turret_motor.Set(
-        PIDController->Calculate(
-            currentpos,
-            sweepTarget,
-            PIDTimer->GetDeltaTime()
-        )
-    );
-}
-}
-
-// tracks april tag for turret tracking
-int Turret_Tracking::Track()
-{
-	Turret_Tracking::Update();
-    if (hasTarget == true){
-        turret_motor.Set(PIDController->Calculate(currentpos,desiredEncoderPosition,PIDTimer->GetDeltaTime()));
+    if (hasTarget == false && motorangle < 170)
+	{
+		turret_motor->Set(PIDController->Calculate(currentpos,minRotation * angleoffset,PIDTimer->GetDeltaTime()));
     }
-    else {
-      	//Find_april();
+    if (hasTarget == false && motorangle > -170)
+	{
+		turret_motor->Set(PIDController->Calculate(currentpos,maxRotation * angleoffset,PIDTimer->GetDeltaTime()));
+    }
+}
+void Turret_Tracking::turretIdle(){
+	turret_motor->Set(0);
+}
+// tracks april tag for turret tracking
+void Turret_Tracking::Track()
+{
+	std::cout << "error :" << error << "\n";
+	std::cout << "error :" << currentpos << "\n";
+	Update();
+    if (hasTarget == true)
+	{
+		
+        turret_motor->Set(PIDController->Calculate(currentpos,error,PIDTimer->GetDeltaTime()));
+    }
+    else 
+	{
+      	// Find_april();
     }
 }

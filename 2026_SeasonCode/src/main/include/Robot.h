@@ -12,6 +12,7 @@
 
 #include "Modules/IntakeModule.h"
 #include "Modules/BasketModule.h"
+#include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
 #include "Modules/TestModule.h"
 
@@ -41,6 +42,7 @@ class Robot : public frc::TimedRobot
 
 		Modules::IntakeModule* intakeModule;
 		Modules::BasketModule* basketModule;
+		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
 		Modules::TestModule* testModule;
 
