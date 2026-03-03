@@ -30,7 +30,7 @@ Turret_Tracking::Turret_Tracking()
   	minRotation = -180;
 
   	currentpos = turret_motor.GetPosition().GetValue().value(); // Motors Encoder Value
-  	angleoffset = 0; // Calibrate the motor encoder value per degree
+  	angleoffset = 0.18; // Calibrate the motor encoder value per degree
   	error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
@@ -77,6 +77,6 @@ int Turret_Tracking::Track()
         turret_motor.Set(PIDController->Calculate(currentpos,error,PIDTimer->GetDeltaTime()));
     }
     else {
-      	Find_april();
+      	//Find_april();
     }
 }
