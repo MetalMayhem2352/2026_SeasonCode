@@ -24,6 +24,8 @@ class Turret_Tracking
 		double motorangle;
 		double angleoffset;
 		double error;
+		double desiredEncoderPosition;
+		static bool sweepingRight;
 
 		double maxRotation;
 		double minRotation;
