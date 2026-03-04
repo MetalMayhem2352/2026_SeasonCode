@@ -38,10 +38,11 @@ namespace Modules
         std::cout << "Pivot Pos: " << -intakePivot->GetPosition().GetValue().value() << "\n";
         std::cout << "Target Pos: " << targetPivotPos << "\n";
         pivotPIDTimer->Update();
-        std::cout << "Pivot Pwer: " << -(pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime())) << "\n";
+        std::cout << "Pivot Pwer: " << (pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime())) << "\n";
 
 
-        intakePivot->Set(-pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        // intakePivot->Set(0.1);
+        // intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
     }
 
     void IntakeModule::UpdateState(State newState)

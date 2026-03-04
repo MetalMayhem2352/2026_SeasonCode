@@ -15,15 +15,10 @@ namespace Pathing
     {
         private:
 
-            ctre::phoenix6::hardware::TalonFX* motor1;
-            ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder>* swerveDrive;
-
-            /*
+            ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, 
+                ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder>* swerveDrive;
             
-        swerveDrive = new ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder>
-            (TunerConstants::DrivetrainConstants, TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackLeft, TunerConstants::BackRight);
-            */
-
+                
         public:
 
             SwerveDrive();

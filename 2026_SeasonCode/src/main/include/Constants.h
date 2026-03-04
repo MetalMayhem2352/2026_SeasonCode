@@ -104,7 +104,7 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(1,90,0,0,0);
+        static inline Core::PIDConfig TurretPIDConfig(0.12, 25, 0.01, 15, 0.00001);
         
         
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration turretMotor =
@@ -160,7 +160,7 @@ namespace Constants
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
 
         inline constexpr int TOP_INTAKE_ID = 8; 
@@ -169,10 +169,10 @@ namespace Constants
         inline constexpr int PIVOT_ID = 11; 
     
         
-        static inline Core::PIDConfig PivotPIDConfig(1  , 0.2, 0, 0.2, 0);
+        static inline Core::PIDConfig PivotPIDConfig(0.175, 0.2, 0.5, 0.2, 0);
         
-        inline constexpr double GROUND_PIVOT_POSITION = 0;
-        inline constexpr double SHOOT_PIVOT_POSITION = 0.225; 
+        inline constexpr double GROUND_PIVOT_POSITION = 0.0;
+        inline constexpr double SHOOT_PIVOT_POSITION = -0.22; 
     }
 
     namespace Basket

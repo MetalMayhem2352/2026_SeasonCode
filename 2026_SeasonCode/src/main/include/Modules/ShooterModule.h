@@ -12,18 +12,28 @@ namespace Modules
 {
     class ShooterModule
     {
+        public:
+            enum State
+            {
+                Idle = 0,
+                Shoot = 1,
+            };
         private:
 
             ctre::phoenix6::hardware::TalonFX* shooterMotor;
             ctre::phoenix6::hardware::TalonFX* hoodMotor;
+
+            State currentState;
 
         public:
 
             ShooterModule();
             ~ShooterModule();
 
-            void Shoot(Pathing::RobotPosition* const position);
+            void ShootAtDistance(double distance);
             void Stop();
+
+            State GetState();
         
     };
 }

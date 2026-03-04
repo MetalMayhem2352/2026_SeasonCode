@@ -13,12 +13,19 @@ namespace Modules
         
     }
 
-    void ShooterModule::Shoot(Pathing::RobotPosition* const position)
+    void ShooterModule::ShootAtDistance(double distance)
     {
+        currentState = State::Shoot;
         hoodMotor->Set(-0.05);
     }
     void ShooterModule::Stop()
     {
+        currentState = Idle;
         hoodMotor->Set(0);
+    }
+
+    ShooterModule::State ShooterModule::GetState()
+    {
+        return currentState;
     }
 }

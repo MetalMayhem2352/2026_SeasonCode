@@ -37,6 +37,10 @@ Turret_Tracking::Turret_Tracking()
   	maxRotation = 180;
   	minRotation = -180;
 
+	camera_height = 113.0;
+	target_height = 128.0;
+	camera_angle = 0;
+
   	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
   	angleoffset = 1; // Calibrate the motor encoder value per degree
   	error = tx * angleoffset;
@@ -55,13 +59,17 @@ void Turret_Tracking::Update()
 	std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
 
-	std::cout << "tx: " <<  tx << '\n';
+	
+	std::cout << "tx: " << tx << '\n';
+	std::cout << "tx2 : " << table.get()->GetNumber("tx", 0.0) << '\n';
 
 	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	PIDTimer->Update();
 
 	
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
+
+	std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
   	angleoffset = 1; // Calibrate the motor encoder value per degree
   	error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
@@ -96,15 +104,45 @@ void Turret_Tracking::turretIdle(){
 void Turret_Tracking::Track()
 {
 	std::cout << "error :" << error << "\n";
-	std::cout << "error :" << currentpos << "\n";
+	std::cout << "pos :" << currentpos << "\n";
+	std::cout << "power :" << -PIDController->Calculate(0, error, PIDTimer->GetDeltaTime()) << "\n";
+	
 	Update();
-    if (hasTarget == true)
+    
+	if (hasTarget == true)
 	{
-		
-        turret_motor->Set(PIDController->Calculate(currentpos,error,PIDTimer->GetDeltaTime()));
+        turret_motor->Set(PIDController->Calculate(0, error, PIDTimer->GetDeltaTime()));
     }
     else 
 	{
       	// Find_april();
     }
+}
+double Turret_Tracking::limelight_Distance()
+{
+	bool hasTarget = LimelightHelpers::getTV("limelight"); // 1 if target detected, 0 if not
+	double ty = LimelightHelpers::getTY("limelight");      // Vertical offset in degrees
+
+    if (hasTarget) {
+        // Convert angles to radians for trig functions
+        double angleToTargetRad = (camera_angle + ty) * M_PI / 180.0;
+
+        // Distance formula: (targetHeight - cameraHeight) / tan(angle)
+        distance = (target_height - camera_height) / std::tan(angleToTargetRad);
+
+        std::cout << "Target detected!\n";
+        std::cout << "Vertical angle (ty): " << ty << " degrees\n";
+        std::cout << "Distance: " << distance << " meters\n";
+    } 
+	else {
+        distance = 0.0;
+        std::cout << "distance : " << distance << "\n";
+    }
+
+		//TA = LimelightHelpers::getTA("limelight");
+		//std::cout << "Target_Area : " << TA << "\n";
+
+		//scale = 11672.17;
+		//distance = (scale * std::pow(TA, 1.9));
+		//std::cout << "distance : " << distance << "\n";
 }

@@ -25,6 +25,13 @@ class Turret_Tracking
 		double angleoffset;
 		double error;
 		double desiredEncoderPosition;
+		double TA;
+		double scale;
+		double distance;
+		double camera_height;
+		double target_height;
+		double camera_angle;
+
 		static bool sweepingRight;
 
 		double maxRotation;
@@ -41,6 +48,7 @@ class Turret_Tracking
 		void Track();
 		void Update();
 		void turretIdle();
+		double limelight_Distance();
 	
 
 };

@@ -14,6 +14,7 @@
 #include "Modules/BasketModule.h"
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
+#include "Pathing/SwerveDrive.h"
 #include "Modules/TestModule.h"
 
 class Robot : public frc::TimedRobot 
@@ -45,6 +46,7 @@ class Robot : public frc::TimedRobot
 		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
 		Modules::TestModule* testModule;
+		Pathing::SwerveDrive swerveDrive;
 
 		frc::Joystick asherController{0};
 		frc::Joystick bryceController{1};

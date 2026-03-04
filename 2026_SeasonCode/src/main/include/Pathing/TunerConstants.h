@@ -3,6 +3,7 @@
 #include "ctre/phoenix6/swerve/SwerveDrivetrain.hpp"
 #include "ctre/phoenix6/CANcoder.hpp"
 #include "ctre/phoenix6/TalonFX.hpp"
+#include <units/angular_velocity.h>
 
 using namespace ctre::phoenix6;
 
@@ -100,6 +101,9 @@ public:
             .WithCANBusName(kCANBusName)
             .WithPigeon2Id(kPigeonId)
             .WithPigeon2Configs(pigeonConfigs);
+
+    static inline units::meters_per_second_t kMaxSpeed = 3.0_mps;
+    static inline units::radians_per_second_t kMaxAngularSpeed = 6.0_rad_per_s;
 
 private:
     static constexpr swerve::SwerveModuleConstantsFactory ConstantCreator =
