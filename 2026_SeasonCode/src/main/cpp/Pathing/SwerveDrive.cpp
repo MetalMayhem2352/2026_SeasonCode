@@ -28,11 +28,11 @@ namespace Pathing
             swerveDrive->GetRotation3d().ToRotation2d()
         );
 
-        ctre::phoenix6::swerve::requests::FieldCentric fieldCentric;
+        // ctre::phoenix6::swerve::requests::FieldCentric fieldCentric();
         
-        fieldCentric.WithVelocityX(speeds.vx).WithVelocityY(speeds.vy).WithRotationalRate(speeds.omega);
+        // fieldCentric.WithVelocityX(speeds.vx).WithVelocityY(speeds.vy).WithRotationalRate(speeds.omega);
 
 
-        swerveDrive->SetControl(fieldCentric);
+        // swerveDrive->SetControl(fieldCentric);
     }
 }
