@@ -64,7 +64,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-
+	swerveDrive.~SwerveDrive();
 }
 
 void Robot::TeleopPeriodic() 
@@ -125,7 +125,10 @@ void Robot::TeleopPeriodic()
 	double y = testController.GetRawAxis(1);
 	double rotation = testController.GetRawAxis(4);
 
-	swerveDrive.Move(x, y, rotation);
+	swerveDrive.Move(x,y,rotation);
+	
+
+	
 }
 
 void Robot::DisabledInit() 
@@ -136,15 +139,15 @@ void Robot::DisabledInit()
 void Robot::DisabledPeriodic() 
 {
 	turretModule->turretIdle();
+	shooterModule->~ShooterModule();
 }
-
 void Robot::TestInit() 
 {
 }
 
 void Robot::TestPeriodic() 
 {
-	turretModule->Track();
+	
 }
 
 void Robot::SimulationInit() {}
