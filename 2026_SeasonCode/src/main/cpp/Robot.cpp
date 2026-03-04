@@ -69,7 +69,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-	std::cout << "TELEOP!";
+	std::cout << "TELEOP!" << '\n';
 
 	// swerveDrive->Move(0,0,0.5);
 	
@@ -81,7 +81,7 @@ void Robot::DisabledInit()
 
 void Robot::DisabledPeriodic() 
 {
-	turretModule->turretIdle();
+	std::cout << "DISABLED!" << '\n';
 }
 void Robot::TestInit() 
 {
