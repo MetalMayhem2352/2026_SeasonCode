@@ -18,6 +18,7 @@ Robot::Robot()
   	turretModule = new Turret_Tracking();
   	shooterModule = new Modules::ShooterModule();
   	testModule = new Modules::TestModule();
+  	swerveDrive = new Pathing::SwerveDrive();
 }
 
 Robot::~Robot() 
@@ -27,6 +28,7 @@ Robot::~Robot()
   	delete(turretModule);
   	delete(shooterModule);
   	delete(testModule);
+  	delete(swerveDrive);
 }
 
 
@@ -64,7 +66,6 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-	swerveDrive.~SwerveDrive();
 }
 
 void Robot::TeleopPeriodic() 
@@ -125,7 +126,7 @@ void Robot::TeleopPeriodic()
 	double y = testController.GetRawAxis(1);
 	double rotation = testController.GetRawAxis(4);
 
-	swerveDrive.Move(x,y,rotation);
+	swerveDrive->Move(x,y,rotation);
 	
 
 	

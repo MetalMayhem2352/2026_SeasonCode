@@ -46,7 +46,7 @@ class Robot : public frc::TimedRobot
 		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
 		Modules::TestModule* testModule;
-		Pathing::SwerveDrive swerveDrive;
+		Pathing::SwerveDrive* swerveDrive;
 
 		frc::Joystick asherController{0};
 		frc::Joystick bryceController{1};
