@@ -43,7 +43,7 @@ Turret_Tracking::Turret_Tracking()
 
   	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
   	angleoffset = 1; // Calibrate the motor encoder value per degree
-  	error = tx * angleoffset;
+  	limelight_Error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
 }
@@ -58,7 +58,12 @@ void Turret_Tracking::Update()
 {      
 	std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
 	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
-
+	
+	limelight_Error = tx * angleoffset;
+	angleoffset = 1; // Calibrate the motor encoder value per degree
+	motorangle = currentpos / angleoffset; // Output
+  	
+	
 	
 	std::cout << "tx: " << tx << '\n';
 	std::cout << "tx2 : " << table.get()->GetNumber("tx", 0.0) << '\n';
@@ -71,10 +76,10 @@ void Turret_Tracking::Update()
 
 	std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
   	angleoffset = 1; // Calibrate the motor encoder value per degree
-  	error = tx * angleoffset;
+  	
   	motorangle = currentpos / angleoffset; // Output
 
-	if(error > maxRotation)
+	if(limelight_Error > maxRotation)
 	{
 		desiredEncoderPosition = maxRotation * angleoffset;
 	}
@@ -103,15 +108,17 @@ void Turret_Tracking::turretIdle(){
 // tracks april tag for turret tracking
 void Turret_Tracking::Track()
 {
-	std::cout << "error :" << error << "\n";
-	std::cout << "pos :" << currentpos << "\n";
-	std::cout << "power :" << -PIDController->Calculate(0, error, PIDTimer->GetDeltaTime()) << "\n";
-	
 	Update();
+
+	std::cout << "error :" << limelight_Error << "\n";
+	std::cout << "pos :" << currentpos << "\n";
+	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()) << "\n";
+	
+	
     
 	if (hasTarget == true)
 	{
-        turret_motor->Set(PIDController->Calculate(0, error, PIDTimer->GetDeltaTime()));
+        turret_motor->Set(PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()));
     }
     else 
 	{

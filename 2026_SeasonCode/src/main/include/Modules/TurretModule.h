@@ -23,7 +23,7 @@ class Turret_Tracking
 		double currentpos;
 		double motorangle;
 		double angleoffset;
-		double error;
+		double limelight_Error;
 		double desiredEncoderPosition;
 		double TA;
 		double scale;
