@@ -5,8 +5,7 @@ namespace Pathing
 {
     SwerveDrive::SwerveDrive()
     {
-        swerveDrive = new ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder>
-                (TunerConstants::DrivetrainConstants, TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackLeft, TunerConstants::BackRight);
+        
     }
     
     SwerveDrive::~SwerveDrive()
@@ -25,7 +24,7 @@ namespace Pathing
             x * TunerConstants::kMaxSpeed,
             z * TunerConstants::kMaxSpeed,
             rotation * TunerConstants::kMaxAngularSpeed,
-            swerveDrive->GetRotation3d().ToRotation2d()
+            swerveDrive.GetRotation3d().ToRotation2d()
         );
 
         ctre::phoenix6::swerve::requests::FieldCentric fieldCentric{};
@@ -34,8 +33,8 @@ namespace Pathing
 
         std::cout << "swerve drive : " << fieldCentric.RotationalRate.value() << "\n";
          
-        std::cout << "swerveDrive->GteModules : " << swerveDrive->GetModules()[0] << "\n";
-        swerveDrive->SetControl(fieldCentric);
+        std::cout << "swerveDrive->GteModules : " << swerveDrive.GetModules()[0] << "\n";
+        swerveDrive.SetControl(fieldCentric);
 
     }
 }

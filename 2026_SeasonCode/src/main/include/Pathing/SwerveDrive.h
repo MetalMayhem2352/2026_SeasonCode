@@ -15,9 +15,8 @@ namespace Pathing
     {
         private:
 
-            ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, 
-                ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder>* swerveDrive;
-            
+            ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder> 
+                swerveDrive{TunerConstants::DrivetrainConstants, TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackRight, TunerConstants::BackLeft};
                 
         public:
 
