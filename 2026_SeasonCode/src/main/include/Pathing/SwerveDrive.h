@@ -3,6 +3,7 @@
 #include "Core/Timer.h"
 #include "Core/PIDController.h"
 #include "Constants.h"
+#include "Pathing/TunerConstants.h"
 
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
