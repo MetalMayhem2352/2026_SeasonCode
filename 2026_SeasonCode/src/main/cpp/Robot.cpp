@@ -70,14 +70,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-
-
-	
-
 	swerveDrive->Move(0,0,0.5);
-	
-	
-
 	
 }
 
@@ -89,7 +82,6 @@ void Robot::DisabledInit()
 void Robot::DisabledPeriodic() 
 {
 	turretModule->turretIdle();
-	shooterModule->~ShooterModule();
 }
 void Robot::TestInit() 
 {
