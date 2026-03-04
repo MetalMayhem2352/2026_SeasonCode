@@ -62,11 +62,6 @@ void Turret_Tracking::Update()
 	limelight_Error = tx * angleoffset;
 	angleoffset = 1; // Calibrate the motor encoder value per degree
 	motorangle = currentpos / angleoffset; // Output
-  	
-	
-	
-	std::cout << "tx: " << tx << '\n';
-	std::cout << "tx2 : " << table.get()->GetNumber("tx", 0.0) << '\n';
 
 	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	PIDTimer->Update();
@@ -74,7 +69,6 @@ void Turret_Tracking::Update()
 	
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
 
-	std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
   	angleoffset = 1; // Calibrate the motor encoder value per degree
   	
   	motorangle = currentpos / angleoffset; // Output
@@ -110,12 +104,6 @@ void Turret_Tracking::Track()
 {
 	Update();
 
-	std::cout << "error :" << limelight_Error << "\n";
-	std::cout << "pos :" << currentpos << "\n";
-	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()) << "\n";
-	
-	
-    
 	if (hasTarget == true)
 	{
         turret_motor->Set(PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()));
@@ -152,4 +140,9 @@ double Turret_Tracking::limelight_Distance()
 		//scale = 11672.17;
 		//distance = (scale * std::pow(TA, 1.9));
 		//std::cout << "distance : " << distance << "\n";
+}
+
+bool Turret_Tracking::CanShoot()
+{
+	return tx < 2;
 }

@@ -49,6 +49,6 @@ class Turret_Tracking
 		void Update();
 		void turretIdle();
 		double limelight_Distance();
-	
+		bool CanShoot();
 
 };

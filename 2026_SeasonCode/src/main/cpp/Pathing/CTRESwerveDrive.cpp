@@ -1,24 +1,24 @@
-#include "Pathing/SwerveDrive.h"
+#include "Pathing/CTRESwerveDrive.h"
 #include "Pathing/TunerConstants.h"
 
 namespace Pathing
 {
-    SwerveDrive::SwerveDrive()
+    CTRESwerveDrive::CTRESwerveDrive()
     {
         
     }
     
-    SwerveDrive::~SwerveDrive()
+    CTRESwerveDrive::~CTRESwerveDrive()
     {
         
     }
     
-    void SwerveDrive::Update()
+    void CTRESwerveDrive::Update()
     {
         
     }
     
-    void SwerveDrive::Move(double x, double z, double rotation)
+    void CTRESwerveDrive::Move(double x, double z, double rotation)
     {
         frc::ChassisSpeeds speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
             x * TunerConstants::kMaxSpeed,

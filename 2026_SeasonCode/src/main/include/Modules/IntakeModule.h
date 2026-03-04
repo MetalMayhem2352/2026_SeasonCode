@@ -17,8 +17,7 @@ namespace Modules
             {
                 Idle = 0,
                 Intaking = 1,
-                Outaking = 2,
-                Shooting = 3,
+                Shooting = 2,
             };  
         private:
             double targetPivotPos;

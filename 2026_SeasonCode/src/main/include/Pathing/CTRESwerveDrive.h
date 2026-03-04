@@ -12,7 +12,7 @@
 
 namespace Pathing
 {
-    class SwerveDrive 
+    class CTRESwerveDrive 
     {
         private:
 
@@ -21,8 +21,8 @@ namespace Pathing
                 
         public:
 
-            SwerveDrive();
-            ~SwerveDrive();
+            CTRESwerveDrive();
+            ~CTRESwerveDrive();
 
             void Update();
             void Move(double x, double z, double rotation);

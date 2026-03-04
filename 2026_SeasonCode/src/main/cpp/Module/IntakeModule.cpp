@@ -35,14 +35,16 @@ namespace Modules
     void IntakeModule::Update()
     {
         targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
-        std::cout << "Pivot Pos: " << -intakePivot->GetPosition().GetValue().value() << "\n";
-        std::cout << "Target Pos: " << targetPivotPos << "\n";
         pivotPIDTimer->Update();
-        std::cout << "Pivot Pwer: " << (pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime())) << "\n";
 
-
-        // intakePivot->Set(0.1);
-        // intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        if (currentState != Idle)
+        {
+            intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        }
+        else
+        {
+            intakePivot->Set(0);
+        }
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -63,15 +65,6 @@ namespace Modules
             topIntakeMotor->Set(0.5);
             basketIntakeMotor->Set(0.5);
             groundIntakeMotor->Set(0.5);
-
-            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
-            break;
-        }
-        case State::Outaking:
-        {
-            topIntakeMotor->Set(-0.5);
-            basketIntakeMotor->Set(-0.5);
-            groundIntakeMotor->Set(-0.5);
 
             targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
             break;
