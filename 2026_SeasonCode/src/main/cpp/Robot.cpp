@@ -61,7 +61,6 @@ void Robot::AutonomousPeriodic()
 	{
     	// Default Auto goes here
   	}
-  
 }
 
 void Robot::TeleopInit() 
@@ -70,13 +69,14 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-	swerveDrive->Move(0,0,0.5);
+	std::cout << "TELEOP!";
+
+	// swerveDrive->Move(0,0,0.5);
 	
 }
 
 void Robot::DisabledInit() 
 {
-	intakeModule->UpdateState(Modules::IntakeModule::Idle);
 }
 
 void Robot::DisabledPeriodic() 
