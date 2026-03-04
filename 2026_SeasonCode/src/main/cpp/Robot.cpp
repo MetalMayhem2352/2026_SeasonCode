@@ -70,63 +70,12 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-	// Intake
-	if (testController.GetRawButtonPressed(-1))
-	{
-		if (intakeModule->GetState() != Modules::IntakeModule::Idle && shooterModule->GetState() != Modules::ShooterModule::Shoot)
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Idle);
-		}
-		else
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Intaking);
-		}
-	}
+
+
 	
-	// ground outake
-	if (testController.GetRawButtonPressed(-1))
-	{
-		if (intakeModule->GetState() != Modules::IntakeModule::Idle)
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Idle);
-		}
-		else
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Outaking);
-		}
-	}
 
-	// shoot
-	if (testController.GetRawButtonPressed(-1))
-	{
-		if (intakeModule->GetState() == Modules::IntakeModule::Shooting)
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Idle);
-			shooterModule->Stop();
-		}
-		else
-		{
-			intakeModule->UpdateState(Modules::IntakeModule::Shooting);
-			shooterModule->ShootAtDistance(turretModule->limelight_Distance());
-		}
-	}
-
-	// Dpad Up
-	if (testController.GetRawButtonPressed(-1))
-	{
-		basketModule->UpdateState(Modules::BasketModule::High);
-	}
-	// Dpad Down 
-	else if (testController.GetRawButtonPressed(-1))
-	{
-		basketModule->UpdateState(Modules::BasketModule::Low);
-	}
-
-	double x = testController.GetRawAxis(0);
-	double y = testController.GetRawAxis(1);
-	double rotation = testController.GetRawAxis(4);
-
-	swerveDrive->Move(x,y,rotation);
+	swerveDrive->Move(0,0,0.5);
+	
 	
 
 	
