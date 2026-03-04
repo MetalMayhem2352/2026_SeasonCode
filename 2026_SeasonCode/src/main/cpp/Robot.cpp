@@ -69,11 +69,11 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-	std::cout << "TELEOP!" << '\n';
+	
 	
 	swerveDrive->Move(0,0,0.5);
 	
-	std::cout << "TELEOP2!" << '\n';
+	
 }
 
 void Robot::DisabledInit() 
