@@ -40,6 +40,8 @@ namespace CustomSwerveDrive
         void MoveFieldCentric1(double x, double z, double yRotation);
         void MoveFieldCentric2(double xMovement, double zMovement, double headingDegrees);
         void Update();
+
+        SwerveDriveOdometry* CreateSwerveDriveOdometery();
     };
     
 }

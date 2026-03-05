@@ -124,4 +124,10 @@ namespace CustomSwerveDrive
         return std::fmod(yaw, 360.0);
     }
 
+    
+    SwerveDriveOdometry* SwerveDriveModule::CreateSwerveDriveOdometery()
+    {
+        return new SwerveDriveOdometry(frontRightPod, frontLeftPod, backRightPod, backLeftPod, pigeon);
+    }
+
 }
