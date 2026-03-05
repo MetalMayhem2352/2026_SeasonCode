@@ -13,7 +13,7 @@ namespace CustomSwerveDrive
 
         void SetInverted(bool isInverted);
         void ResetAngle();
-        void SetOffsert(double offset);
+        void SetOffset(double offset);
         double GetAngle();
     private:
         ctre::phoenix6::hardware::CANcoder encoder;

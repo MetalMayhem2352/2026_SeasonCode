@@ -1,10 +1,11 @@
 #include "CustomSwerveDrive/SwerveEncoder.h"
 
+#include "Constants.h"
 
 namespace CustomSwerveDrive
 {
     SwerveEncoder::SwerveEncoder(char enocderIndex)
-        : encoder{enocderIndex}
+        : encoder{enocderIndex, Constants::CANIVOUR_NAME}
     {
     }
 
@@ -19,7 +20,7 @@ namespace CustomSwerveDrive
         this->isInverted = isInverted;
     }
 
-    void SwerveEncoder::SetOffsert(double offset)
+    void SwerveEncoder::SetOffset(double offset)
     {
         positionOffset = offset / 360;
     }

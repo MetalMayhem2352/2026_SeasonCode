@@ -11,7 +11,7 @@ namespace CustomSwerveDrive
         driveMotor = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);
         turnMotor = new ctre::phoenix6::hardware::TalonFX(turnMotorId, Constants::CANIVOUR_NAME);
 
-        //encoder->SetOffsert(encoderOffset);
+        // encoder->SetOffset(encoderOffset);
         encoder->SetInverted(true);
         
         turnPIDController = new Core::PIDController(turnPIDConfig);

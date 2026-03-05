@@ -92,7 +92,7 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic() 
 {
-	std::cout << "Encoder Position "<< encoder.GetAbsolutePosition() << '\n';
+	std::cout << "Encoder Position: " << encoder.IsConnected() << '\n';
 }
 
 void Robot::SimulationInit() {}	
