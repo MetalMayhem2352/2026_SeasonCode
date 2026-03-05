@@ -95,7 +95,7 @@ void Robot::TestPeriodic()
 	std::cout << "Encoder Position "<< encoder.GetAbsolutePosition() << '\n';
 }
 
-void Robot::SimulationInit() {}
+void Robot::SimulationInit() {}	
 
 void Robot::SimulationPeriodic() {}
 
