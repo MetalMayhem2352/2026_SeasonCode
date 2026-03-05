@@ -8,7 +8,7 @@
 namespace CustomSwerveDrive
 {
     SwerveEncoder::SwerveEncoder(char enocderIndex)
-        : encoder{enocderIndex, Constants::CANIVOUR_NAME}
+        : encoder{20, Constants::CANIVOUR_NAME}
     {
     }
 
@@ -35,7 +35,6 @@ namespace CustomSwerveDrive
 
     double SwerveEncoder::GetAngle()
     {
-        std::cout << "POSITION: " << encoder.GetAbsolutePosition().GetValueAsDouble() << '\n';
         position = (encoder.GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
         
         
