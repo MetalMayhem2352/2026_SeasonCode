@@ -2,6 +2,9 @@
 
 #include "Constants.h"
 
+// TEMP!
+#include <iostream>>
+
 namespace CustomSwerveDrive
 {
     SwerveEncoder::SwerveEncoder(char enocderIndex)
@@ -32,6 +35,7 @@ namespace CustomSwerveDrive
 
     double SwerveEncoder::GetAngle()
     {
+        std::cout << "POSITION: " << encoder.GetAbsolutePosition().GetValueAsDouble() << '\n';
         position = (encoder.GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
         
         

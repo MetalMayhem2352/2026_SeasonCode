@@ -47,7 +47,7 @@ namespace CustomSwerveDrive
 
     void SwervePod::Turn(double targetAngle)
     {
-        std::cout << "POSITION: " << encoder->GetAngle() << '\n';
+        encoder->GetAngle();
         // turnMotor->Set(turnPIDController->Calculate(encoder->GetAngle(), targetAngle, timer->GetDeltaTime()));
     }
     void SwervePod::Move(double angle, double power)
