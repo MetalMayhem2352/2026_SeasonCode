@@ -50,10 +50,10 @@ namespace CustomSwerveDrive
         double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});
 
         // frontRightPod->Move(0, 0);
-        //frontRightPod->Move(frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator);
-        frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
-        // backLeftPod->Move(backLeftPower.GetAngle(), backLeftPower.GetMagnitude() / denominator);
-        // backRightPod->Move(backRightPower.GetAngle(), backRightPower.GetMagnitude() / denominator);
+        frontRightPod->Move(frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator);
+//        frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
+//        backLeftPod->Move(backLeftPower.GetAngle(), backLeftPower.GetMagnitude() / denominator);
+//        backRightPod->Move(backRightPower.GetAngle(), backRightPower.GetMagnitude() / denominator);
     }
 
     void SwerveDriveModule::MoveRobotCentric(double x, double z, double yRotation)

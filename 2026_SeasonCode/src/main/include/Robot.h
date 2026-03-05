@@ -52,6 +52,4 @@ class Robot : public frc::TimedRobot
 
 		frc::Joystick driver1{0};
 		frc::Joystick driver2{1};
-
-		ctre::phoenix6::hardware::CANcoder encoder{20, "Defualt Name"};
 };
