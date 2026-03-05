@@ -69,13 +69,13 @@ void Robot::TeleopPeriodic()
 {
 
 	
-	int x = driver1.GetRawAxis(0);
-	int z = driver1.GetRawAxis(1);
-	int rotation = driver1.GetRawAxis(4);
+	// int x = driver1.GetRawAxis(0);
+	// int z = driver1.GetRawAxis(1);
+	// int rotation = driver1.GetRawAxis(4);
 
-	swerveDrive->MoveFieldCentric1(x, z, rotation);
+	swerveDrive->MoveRobotCentric(0, 0, 0);
 	
-	intakeModule->Update();	
+	// intakeModule->Update();	
 }
 
 void Robot::DisabledInit() 
