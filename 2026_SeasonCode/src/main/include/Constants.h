@@ -34,7 +34,7 @@ namespace Constants
         inline Core::PIDConfig turnPIDConfig(1, 1, 0, 0, 0); // Ground
         inline Core::PIDConfig turningWhileMovingPIDConfig(1, 0.9, 0, 0, 0.2); // Ground
         inline Core::PIDConfig moduleTurnPIDConfig(1, 120, 0.01, 3, 0.05); // Ground
-        inline constexpr char pigeonID = 0;
+        inline constexpr char pigeonID = 24;
 
         // Meters
         inline constexpr double MODULE_X_POSITION = 9.875 * 2.54 / 100; // Distance from the center of the robot to the middle of the swerve modle on the x axis
