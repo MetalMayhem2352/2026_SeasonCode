@@ -65,7 +65,7 @@ namespace Constants
 
         namespace FrontLeftPod
         {
-            inline constexpr char encoderID = 20;
+            inline constexpr int encoderID = 20;
             inline constexpr double encoderOffset = 292.324;
             inline constexpr char driveMotorId = 1;
             inline constexpr char turnMotorId = 0;
@@ -74,7 +74,7 @@ namespace Constants
         }
         namespace FrontRightPod
         {
-            inline constexpr char encoderID = 21;
+            inline constexpr int encoderID = 21;
             inline constexpr double encoderOffset = 5.977;
             inline constexpr char driveMotorId = 2;
             inline constexpr char turnMotorId = 1;
@@ -83,7 +83,7 @@ namespace Constants
         }
         namespace BackRightPod
         {
-            inline constexpr char encoderID = 22;
+            inline constexpr int encoderID = 22;
             inline constexpr double encoderOffset = 118.213;
             inline constexpr char driveMotorId = 5;
             inline constexpr char turnMotorId = 4;
@@ -92,7 +92,7 @@ namespace Constants
         }
         namespace BackLeftPod
         {
-            inline constexpr char encoderID = 23;
+            inline constexpr int encoderID = 23;
             inline constexpr double encoderOffset = 219.8145;
             inline constexpr char driveMotorId = 7;
             inline constexpr char turnMotorId = 6;

@@ -5,7 +5,7 @@
 
 namespace CustomSwerveDrive
 {
-    SwervePod::SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
+    SwervePod::SwervePod(int encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
     {
         encoder = new SwerveEncoder(encoderId);
         driveMotor = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);

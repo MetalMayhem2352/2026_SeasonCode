@@ -8,7 +8,7 @@ namespace CustomSwerveDrive
     class SwerveEncoder
     {
     public:
-        SwerveEncoder(char enocderIndex);
+        SwerveEncoder(int enocderIndex);
         ~SwerveEncoder();
 
         void SetInverted(bool isInverted);

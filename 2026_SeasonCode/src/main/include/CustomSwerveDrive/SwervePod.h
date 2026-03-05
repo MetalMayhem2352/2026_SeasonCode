@@ -32,7 +32,7 @@ namespace CustomSwerveDrive
 
     public:
 
-        SwervePod(char encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig);
+        SwervePod(int encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig);
         ~SwervePod();
         
         
