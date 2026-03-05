@@ -8,9 +8,9 @@
 namespace CustomSwerveDrive
 {
     SwerveEncoder::SwerveEncoder(int encoderIndex)
-        : encoder{encoderIndex, Constants::CANIVOUR_NAME}
     {
-        std::cout << "Encoder ID: " << 20 << "\n"; 
+        encoder = new ctre::phoenix6::hardware::CANcoder(encoderIndex, Constants::CANIVOUR_NAME);
+        std::cout << "Encoder ID: " << encoderIndex << "\n"; 
     }
 
     SwerveEncoder::~SwerveEncoder()
@@ -31,12 +31,12 @@ namespace CustomSwerveDrive
 
     void SwerveEncoder::ResetAngle()
     {
-        positionOffset = encoder.GetAbsolutePosition().GetValueAsDouble();
+        positionOffset = encoder->GetAbsolutePosition().GetValueAsDouble();
     }
 
     double SwerveEncoder::GetAngle()
     {
-        position = (encoder.GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
+        position = (encoder->GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
         
         
         // normallizing Point to 0-360;

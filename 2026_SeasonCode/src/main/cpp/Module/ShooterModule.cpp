@@ -10,17 +10,18 @@ namespace Modules
     }
     ShooterModule::~ShooterModule()
     {
-        shooterMotor->Set(0.8);
     }
 
     void ShooterModule::ShootAtDistance(double distance)
     {
+        shooterMotor->Set(1);
         currentState = State::Shoot;
-        hoodMotor->Set(-0.05);
+        // hoodMotor->Set(-0.05);
     }
     void ShooterModule::Stop()
     {
         currentState = Idle;
+        shooterMotor->Set(0);
         hoodMotor->Set(0);
     }
 
