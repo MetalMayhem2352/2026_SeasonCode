@@ -7,9 +7,10 @@
 
 namespace CustomSwerveDrive
 {
-    SwerveEncoder::SwerveEncoder(char enocderIndex)
+    SwerveEncoder::SwerveEncoder(char encoderIndex)
         : encoder{20, Constants::CANIVOUR_NAME}
     {
+        std::cout << "Encoder ID: " << 20 << "\n"; 
     }
 
     SwerveEncoder::~SwerveEncoder()

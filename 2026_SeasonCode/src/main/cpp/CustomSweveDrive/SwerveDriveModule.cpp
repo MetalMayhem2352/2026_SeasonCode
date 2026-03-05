@@ -11,7 +11,7 @@ namespace CustomSwerveDrive
         backLeftPod = new SwervePod(Constants::Swerve::BackLeftPod::encoderID, Constants::Swerve::BackLeftPod::encoderOffset, Constants::Swerve::BackLeftPod::driveMotorId, Constants::Swerve::BackLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
         backRightPod = new SwervePod(Constants::Swerve::BackRightPod::encoderID, Constants::Swerve::BackRightPod::encoderOffset, Constants::Swerve::BackRightPod::driveMotorId, Constants::Swerve::BackRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
 
-        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, "rio");
+        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, Constants::CANIVOUR_NAME);
 
         turningPIDController = new Core::PIDController(Constants::Swerve::turnPIDConfig);
         turningPIDController->SetLoop(true, -std::numbers::pi, std::numbers::pi);
