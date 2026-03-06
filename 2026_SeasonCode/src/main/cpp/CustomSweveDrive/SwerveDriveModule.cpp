@@ -42,9 +42,9 @@ namespace CustomSwerveDrive
 
     void SwerveDriveModule::Move(double x, double z, double yRotation)
     {
-        Core::Vector2 frontRightPower = (Constants::Swerve::FrontRightPod::TURN_VECTOR * -yRotation) + Core::Vector2(x, z);
+        Core::Vector2 frontRightPower = (Constants::Swerve::FrontRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
         Core::Vector2 frontLeftPower = (Constants::Swerve::FrontLeftPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
-        Core::Vector2 backLeftPower = (Constants::Swerve::BackLeftPod::TURN_VECTOR * -yRotation) + Core::Vector2(x, z);
+        Core::Vector2 backLeftPower = (Constants::Swerve::BackLeftPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
         Core::Vector2 backRightPower = (Constants::Swerve::BackRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
 
         double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});

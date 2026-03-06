@@ -85,7 +85,7 @@ namespace Constants
             inline constexpr char driveMotorId = 3;
             inline constexpr char turnMotorId = 2;
             
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(141.411, 1); // 315
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(141.411 + 180, 1); // 315
         }
         namespace BackRightPod
         {
@@ -103,7 +103,7 @@ namespace Constants
             inline constexpr char driveMotorId = 7;
             inline constexpr char turnMotorId = 6;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(321.411, 1); // 135
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(321.411 - 180, 1); // 135
         }
     }
 

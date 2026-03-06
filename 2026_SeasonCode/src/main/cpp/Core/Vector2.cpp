@@ -48,19 +48,11 @@ namespace Core
     [[nondiscard]] double Vector2::GetAngle() const
     {
         double angle = (std::atan2(y, x) * Constants::RADIANS_TO_DEGREES);
-        while (angle < 360)
+        while (angle < 0)
         {
             angle += 360;
         }
-
-        /*
-        // Might work?
-        if (y == 0)
-        {
-            angle = 90;
-        }
-        */
-
+        
         return angle;
     }
     [[nondiscard]] double Vector2::GetMagnitude() const
