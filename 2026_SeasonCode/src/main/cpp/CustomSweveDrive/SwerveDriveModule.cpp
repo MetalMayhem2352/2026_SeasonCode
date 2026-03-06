@@ -6,10 +6,10 @@ namespace CustomSwerveDrive
 {
     SwerveDriveModule::SwerveDriveModule()
     {
-        frontRightPod = new SwervePod(Constants::Swerve::FrontRightPod::encoderID, Constants::Swerve::FrontRightPod::encoderOffset, Constants::Swerve::FrontRightPod::driveMotorId, Constants::Swerve::FrontRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        frontLeftPod = new SwervePod(Constants::Swerve::FrontLeftPod::encoderID, Constants::Swerve::FrontLeftPod::encoderOffset, Constants::Swerve::FrontLeftPod::driveMotorId, Constants::Swerve::FrontLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        backLeftPod = new SwervePod(Constants::Swerve::BackLeftPod::encoderID, Constants::Swerve::BackLeftPod::encoderOffset, Constants::Swerve::BackLeftPod::driveMotorId, Constants::Swerve::BackLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        backRightPod = new SwervePod(Constants::Swerve::BackRightPod::encoderID, Constants::Swerve::BackRightPod::encoderOffset, Constants::Swerve::BackRightPod::driveMotorId, Constants::Swerve::BackRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        frontRightPod = new SwervePod(Constants::Swerve::FrontRightPod::encoderID, Constants::Swerve::FrontRightPod::encoderOffset, Constants::Swerve::FrontRightPod::driveMotorId, Constants::Swerve::rightDriveMotorConfig, Constants::Swerve::FrontRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        frontLeftPod = new SwervePod(Constants::Swerve::FrontLeftPod::encoderID, Constants::Swerve::FrontLeftPod::encoderOffset, Constants::Swerve::FrontLeftPod::driveMotorId, Constants::Swerve::leftDriveMotorConfig, Constants::Swerve::FrontLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        backLeftPod = new SwervePod(Constants::Swerve::BackLeftPod::encoderID, Constants::Swerve::BackLeftPod::encoderOffset, Constants::Swerve::BackLeftPod::driveMotorId, Constants::Swerve::leftDriveMotorConfig, Constants::Swerve::BackLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        backRightPod = new SwervePod(Constants::Swerve::BackRightPod::encoderID, Constants::Swerve::BackRightPod::encoderOffset, Constants::Swerve::BackRightPod::driveMotorId, Constants::Swerve::rightDriveMotorConfig, Constants::Swerve::BackRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
 
         pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, Constants::CANIVOUR_NAME);
 
@@ -42,18 +42,23 @@ namespace CustomSwerveDrive
 
     void SwerveDriveModule::Move(double x, double z, double yRotation)
     {
-//         Core::Vector2 frontRightPower = (Constants::Swerve::FrontRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
-//         Core::Vector2 frontLeftPower = (Constants::Swerve::FrontLeftPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
-//         Core::Vector2 backLeftPower = (Constants::Swerve::BackLeftPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
-//         Core::Vector2 backRightPower = (Constants::Swerve::BackRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
+        Core::Vector2 frontRightPower = (Constants::Swerve::FrontRightPod::TURN_VECTOR * -yRotation) + Core::Vector2(x, z);
+        Core::Vector2 frontLeftPower = (Constants::Swerve::FrontLeftPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
+        Core::Vector2 backLeftPower = (Constants::Swerve::BackLeftPod::TURN_VECTOR * -yRotation) + Core::Vector2(x, z);
+        Core::Vector2 backRightPower = (Constants::Swerve::BackRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
 
-//         double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});
+        double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});
 
-        // frontRightPod->Move(0, 0);
-        frontRightPod->Move(0,0/*frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator*/);
-//        frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
-//        backLeftPod->Move(backLeftPower.GetAngle(), backLeftPower.GetMagnitude() / denominator);
-//        backRightPod->Move(backRightPower.GetAngle(), backRightPower.GetMagnitude() / denominator);
+        std::cout << "Front Right X: " << frontRightPower.GetX() << ", Y: " << frontRightPower.GetY() << '\n';
+        std::cout << "Front Left X: " << frontLeftPower.GetX() << ", Y: " << frontLeftPower.GetY() << '\n';
+        std::cout << "Back Left: " << backLeftPower.GetX() << ", Y: " << backLeftPower.GetY() << '\n';
+        std::cout << "Back Right: " << backRightPower.GetX() << ", Y: " << backRightPower.GetY() << '\n';
+        
+        frontRightPod->Move(frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator);
+        frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
+        backLeftPod->Move(backLeftPower.GetAngle(), backLeftPower.GetMagnitude() / denominator);
+        backRightPod->Move(backRightPower.GetAngle(), backRightPower.GetMagnitude() / denominator);
+    
     }
 
     void SwerveDriveModule::MoveRobotCentric(double x, double z, double yRotation)

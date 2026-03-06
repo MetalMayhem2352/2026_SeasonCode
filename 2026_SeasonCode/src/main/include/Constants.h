@@ -32,8 +32,8 @@ namespace Constants
     {
         // inline Core::PIDConfig turnPIDConfig(1, 120, 5, 3, 0.05); // Air
         inline Core::PIDConfig turnPIDConfig(1, 1, 0, 0, 0); // Ground
-        inline Core::PIDConfig turningWhileMovingPIDConfig(1, 0.9, 0, 0, 0.2); // Ground
-        inline Core::PIDConfig moduleTurnPIDConfig(1, 120, 0.01, 3, 0.05); // Ground
+        inline Core::PIDConfig turningWhileMovingPIDConfig(1, 120, 0, 0, 0); // Ground
+        inline Core::PIDConfig moduleTurnPIDConfig(1, 120, 0, 0, 0.0); // Ground
         inline constexpr char pigeonID = 24;
 
         // Meters
@@ -56,7 +56,13 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration driveMotorConfig =
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftDriveMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightDriveMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
@@ -66,38 +72,38 @@ namespace Constants
         namespace FrontLeftPod
         {
             inline constexpr int encoderID = 20;
-            inline constexpr double encoderOffset = 292.324;
+            inline constexpr double encoderOffset = 359.736;
             inline constexpr char driveMotorId = 1;
             inline constexpr char turnMotorId = 0;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(-MODULE_X_POSITION, MODULE_Y_POSITION), 1); // 45
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(38.5892, 1); // 45
         }
         namespace FrontRightPod
         {
             inline constexpr int encoderID = 21;
-            inline constexpr double encoderOffset = 5.977;
-            inline constexpr char driveMotorId = 2;
-            inline constexpr char turnMotorId = 1;
+            inline constexpr double encoderOffset = 357.891;
+            inline constexpr char driveMotorId = 3;
+            inline constexpr char turnMotorId = 2;
             
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(90 + (std::atan2(MODULE_X_POSITION, MODULE_Y_POSITION) * RADIANS_TO_DEGREES), 1); // 315
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(141.411, 1); // 315
         }
         namespace BackRightPod
         {
             inline constexpr int encoderID = 22;
-            inline constexpr double encoderOffset = 118.213;
+            inline constexpr double encoderOffset = 359.824;
             inline constexpr char driveMotorId = 5;
             inline constexpr char turnMotorId = 4;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(MODULE_X_POSITION, -MODULE_Y_POSITION), 1); // 225
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(218.589, 1); // 225
         }
         namespace BackLeftPod
         {
             inline constexpr int encoderID = 23;
-            inline constexpr double encoderOffset = 219.8145;
+            inline constexpr double encoderOffset = 0;
             inline constexpr char driveMotorId = 7;
             inline constexpr char turnMotorId = 6;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(std::atan2(-MODULE_X_POSITION, -MODULE_Y_POSITION), 1); // 135
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(321.411, 1); // 135
         }
     }
 
@@ -169,7 +175,7 @@ namespace Constants
         inline constexpr int PIVOT_ID = 11; 
     
         
-        static inline Core::PIDConfig PivotPIDConfig(0.175, 0.2, 0.5, 0.2, 0);
+        // static inline Core::PIDConfig PivotPIDConfig(1, 0.2, 0.5, 0.2, 0);
         
         inline constexpr double GROUND_PIVOT_POSITION = 0.0;
         inline constexpr double SHOOT_PIVOT_POSITION = -0.22; 

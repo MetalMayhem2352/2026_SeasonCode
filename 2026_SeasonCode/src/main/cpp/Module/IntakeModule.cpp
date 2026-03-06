@@ -18,7 +18,7 @@ namespace Modules
 
 
         pivotPIDTimer = new Core::Timer();
-        pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
+        // pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -29,17 +29,16 @@ namespace Modules
         delete(intakePivot);
         
         delete(pivotPIDTimer);
-        delete(pivotPIDController);
+        // delete(pivotPIDController);
     }
 
     void IntakeModule::Update()
     {
-        targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
         pivotPIDTimer->Update();
 
-        if (currentState != Idle)
+        if (targetPivotPos == 1)
         {
-            intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+            intakePivot->Set(-0.5);
         }
         else
         {
@@ -56,26 +55,45 @@ namespace Modules
         {
             topIntakeMotor->Set(0);
             basketIntakeMotor->Set(0);
-            groundIntakeMotor->Set(0);
+            // groundIntakeMotor->Set(0);
 
+            targetPivotPos = 0;
             break;
         }
         case State::Intaking:
         {
             topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(0.5);
-            groundIntakeMotor->Set(0.5);
+            basketIntakeMotor->Set(1);
+            // groundIntakeMotor->Set(0.5);
 
-            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
+            targetPivotPos = 0;
             break;
         }
         case State::Shooting:
         {
-            topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(-0.5);
-            groundIntakeMotor->Set(-0.5);
+            topIntakeMotor->Set(1);
+            basketIntakeMotor->Set(-1);
+            // groundIntakeMotor->Set(-1);
             
-            targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
+            targetPivotPos = 1;
+            break;
+        }
+        case State::Outaking:
+        {
+            topIntakeMotor->Set(-1);
+            basketIntakeMotor->Set(-1);
+            // groundIntakeMotor->Set(-1);
+            
+            targetPivotPos = 0;
+            break;
+        }
+        case State::Unjamming:
+        {
+            topIntakeMotor->Set(-1);
+            basketIntakeMotor->Set(1);
+            // groundIntakeMotor->Set(-1);
+            
+            targetPivotPos = 1;
             break;
         }
         default:

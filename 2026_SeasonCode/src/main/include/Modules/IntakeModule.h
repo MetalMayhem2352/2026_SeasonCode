@@ -18,6 +18,8 @@ namespace Modules
                 Idle = 0,
                 Intaking = 1,
                 Shooting = 2,
+                Outaking = 3,
+                Unjamming = 4,
             };  
         private:
             double targetPivotPos;
@@ -25,7 +27,7 @@ namespace Modules
             State currentState;
 
             Core::Timer* pivotPIDTimer;
-            Core::PIDController* pivotPIDController;
+            // Core::PIDController* pivotPIDController;
 
             ctre::phoenix6::hardware::TalonFX* topIntakeMotor;
             ctre::phoenix6::hardware::TalonFX* basketIntakeMotor;

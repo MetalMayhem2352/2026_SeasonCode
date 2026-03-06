@@ -31,8 +31,7 @@ namespace CustomSwerveDrive
         void Turn(double angle);
 
     public:
-
-        SwervePod(int encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig);
+        SwervePod(int encoderId, double encoderOffset, char driveMotorId, ctre::phoenix6::configs::TalonFXConfiguration driveMotorConfig, char turnMotorId, Core::PIDConfig turnPIDConfig);
         ~SwervePod();
         
         

@@ -46,12 +46,13 @@ class Robot : public frc::TimedRobot
 		Turret_Tracking* turretModule;
 		CustomSwerveDrive::SwerveDriveModule* swerveDrive;
 
-		bool isIntakePressed = false;
-		bool isShootPressed = false;
+		bool isIntaking = false;
 		bool isShooting = false;
 
 		frc::Joystick driver1{0};
 		frc::Joystick driver2{1};
+		
+		ctre::phoenix6::hardware::TalonFX* shooterMotor;
 
 		ctre::phoenix6::hardware::CANcoder encoder{20, Constants::CANIVOUR_NAME};
 };

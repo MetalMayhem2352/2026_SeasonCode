@@ -5,15 +5,18 @@
 
 namespace CustomSwerveDrive
 {
-    SwervePod::SwervePod(int encoderId, double encoderOffset, char driveMotorId, char turnMotorId, Core::PIDConfig turnPIDConfig)
+    SwervePod::SwervePod(int encoderId, double encoderOffset, char driveMotorId, ctre::phoenix6::configs::TalonFXConfiguration driveMotorConfig, char turnMotorId, Core::PIDConfig turnPIDConfig)
     {
         encoder = new SwerveEncoder(encoderId);
         driveMotor = new ctre::phoenix6::hardware::TalonFX(driveMotorId, Constants::CANIVOUR_NAME);
         turnMotor = new ctre::phoenix6::hardware::TalonFX(turnMotorId, Constants::CANIVOUR_NAME);
 
-        // encoder->SetOffset(encoderOffset);
+        encoder->SetOffset(encoderOffset);
         encoder->SetInverted(true);
         
+        turnMotor->GetConfigurator().Apply(Constants::Swerve::turnMotorConfig);
+        driveMotor->GetConfigurator().Apply(driveMotorConfig);
+
         turnPIDController = new Core::PIDController(turnPIDConfig);
         turnPIDController->SetLoop(true, 0, 360);
 
@@ -47,12 +50,11 @@ namespace CustomSwerveDrive
 
     void SwervePod::Turn(double targetAngle)
     {
-        std::cout << "POSITION: " << encoder->GetAngle() << '\n';
-        // turnMotor->Set(turnPIDController->Calculate(encoder->GetAngle(), targetAngle, timer->GetDeltaTime()));
+        turnMotor->Set(turnPIDController->Calculate(encoder->GetAngle(), targetAngle, timer->GetDeltaTime()));
     }
     void SwervePod::Move(double angle, double power)
     {
-        /*
+        
         if (power < 0.1 && power > -0.1)
         {
             Turn(targetAngle);
@@ -60,6 +62,7 @@ namespace CustomSwerveDrive
             return;
         }
 
+        /*
         bool dirrect = true;
         double currentAngle = GetAngle();
         if (currentAngle > 180)
@@ -70,7 +73,8 @@ namespace CustomSwerveDrive
         { 
             angle = -180 - (180 - angle);
         }
-        double reverseTarget = angle < 0 ? angle + 180 : angle - 180;
+        double reverseTarget = angle < 180 ? angle + 180 : angle - 180;
+
 
         double dirrectAngle = std::abs(angle - currentAngle);
         double reverseAngle = std::abs(reverseTarget - currentAngle);
@@ -84,12 +88,13 @@ namespace CustomSwerveDrive
             dirrect = true;
         }
 
-        
         if (dirrect)
         {
+            */
             
             targetAngle = angle;
             driveMotor->Set(power);
+        /*
         }
         else
         {

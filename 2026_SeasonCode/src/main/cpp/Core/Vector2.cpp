@@ -30,6 +30,7 @@ namespace Core
         
         double x = magnitude * std::sin(angleInRadians);
         double y = magnitude * std::cos(angleInRadians);
+        
         return Vector2(x, y);
     }
 
@@ -46,7 +47,21 @@ namespace Core
     /// @return rotation of the vector in Degrees
     [[nondiscard]] double Vector2::GetAngle() const
     {
-        return (std::atan2(y, x) * Constants::RADIANS_TO_DEGREES);
+        double angle = (std::atan2(y, x) * Constants::RADIANS_TO_DEGREES);
+        while (angle < 360)
+        {
+            angle += 360;
+        }
+
+        /*
+        // Might work?
+        if (y == 0)
+        {
+            angle = 90;
+        }
+        */
+
+        return angle;
     }
     [[nondiscard]] double Vector2::GetMagnitude() const
     {
