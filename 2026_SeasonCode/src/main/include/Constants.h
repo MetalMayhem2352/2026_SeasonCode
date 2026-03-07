@@ -85,7 +85,7 @@ namespace Constants
             inline constexpr char driveMotorId = 3;
             inline constexpr char turnMotorId = 2;
             
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(141.411 + 180, 1); // 315
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(141.411, 1); // 315
         }
         namespace BackRightPod
         {
@@ -103,15 +103,24 @@ namespace Constants
             inline constexpr char driveMotorId = 7;
             inline constexpr char turnMotorId = 6;
 
-            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(321.411 - 180, 1); // 135
+            static inline Core::Vector2 TURN_VECTOR = Core::Vector2::CreateAngularVector(321.411, 1); // 135
         }
     }
 
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(0.12, 25, 0.01, 15, 0.00001);
+        static inline Core::PIDConfig TurretPIDConfig(0.12, 25, 0, 0, 0);
         
+        inline constexpr double MAX_ROTATION = 90;
+        inline constexpr double MIN_ROTATION = -90;
+        inline constexpr double TOLERANCE = 5;
+        
+        inline constexpr double MAX_MOTOR_ENCODER_POSITION = 4.65;
+        inline constexpr double MIN_MOTOR_ENCODER_POSITION = -5.25;
+
+        inline constexpr double MOTOR_TICKS_PER_DEGREE = (MAX_ROTATION - MIN_ROTATION) / (MAX_MOTOR_ENCODER_POSITION - MIN_MOTOR_ENCODER_POSITION);
+
         
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration turretMotor =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
@@ -134,11 +143,18 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
+
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration hoodMotorCongiuration =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        ctre::phoenix6::configs::TalonFXConfiguration{}
+        .WithMotorOutput(
+            ctre::phoenix6::configs::MotorOutputConfigs{}
+            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+            .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        )
+        .WithCurrentLimits(
+            ctre::phoenix6::configs::CurrentLimitsConfigs{}
+            .WithStatorCurrentLimit(40_A)
+            .WithStatorCurrentLimitEnable(true)
         );
     }
 

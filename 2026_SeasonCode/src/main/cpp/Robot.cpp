@@ -36,26 +36,27 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() 
 {
-	m_autoSelected = m_chooser.GetSelected();
-	// m_autoSelected = SmartDashboard::GetString("Auto Selector",
-	//     kAutoNameDefault);
-	wpi::print("Auto selected: {}\n", m_autoSelected);
-
-  	if (m_autoSelected == kAutoNameCustom) 
-	{
-    	// Custom Auto goes here
-  	} 
-	else 
-	{
-    	// Default Auto goes here
-  	}
+	shooterTimer.Reset();
 }
 
 void Robot::AutonomousPeriodic() 
 {
-	shooterMotor->Set(0.8);
-	intakeModule->UpdateState(intakeModule->Shooting);
-	
+	shooterTimer.Update();
+
+	if (shooterTimer.GetStartTime() > 3 && shooterTimer.GetStartTime() < 4)
+	{
+		shooterMotor->Set(1);
+		intakeModule->UpdateState(intakeModule->Shooting);
+	}
+	else if (shooterTimer.GetStartTime() > 4)
+	{
+		shooterTimer.Reset();
+	}
+	else
+	{
+		shooterMotor->Set(0);
+		intakeModule->UpdateState(intakeModule->Idle);
+	}
 
 
 	intakeModule->Update();	
@@ -69,6 +70,8 @@ void Robot::TeleopInit()
 void Robot::TeleopPeriodic() 
 {
 	Core::Timer timer{};
+	
+	/*
 
 	// Left Driver
 	// Intake
@@ -95,60 +98,71 @@ void Robot::TeleopPeriodic()
 		isIntaking = false;
 	}
 
-	// Right Trigger
-	// Shoot
-	if (driver1.GetRawAxis(3) > 0.25)
-	{
-		isShooting = true;
-		shooterMotor->Set(0.8);
-		intakeModule->UpdateState(intakeModule->Shooting);
-	}
-	else if (driver1.GetRawButton(6))
-	{
-		
-		shooterMotor->Set(0.0);
-		intakeModule->UpdateState(intakeModule->Unjamming);
-		isShooting = true;
-	}
-	else
-	{
-		shooterMotor->Set(0.0);
-		isShooting = false;
-		if (isIntaking == false)
-		{
-			intakeModule->UpdateState(intakeModule->Idle);
-		}
-	}
 
-	// A
+	// X
 	// Toggle Basket
 	if (driver1.GetRawButtonPressed(2))
 	{
 		if (basketModule->GetState() == basketModule->High)
 		{
 			basketModule->UpdateState(basketModule->Low);
-			turretModule->Track();
 		}
 		else
 		{
 			basketModule->UpdateState(basketModule->High);
-			turretModule->turretIdle();
 		}
 	}
+	if (driver1.GetRawButtonPressed(1))
+	{
+		isTracking = !isTracking;
+	}
 	
+	*/
+	
+
+	// Right Trigger
+	// Shoot
+	if (driver1.GetRawAxis(3) > 0.25)
+	{
+		if (shooterTimer.GetStartTime() > 3 && shooterTimer.GetStartTime() < 4)
+		{
+			shooterMotor->Set(1);
+			intakeModule->UpdateState(intakeModule->Shooting);
+		}
+		else if (shooterTimer.GetStartTime() > 4)
+		{
+			shooterTimer.Reset();
+		}
+		else
+		{
+			shooterMotor->Set(0);
+			intakeModule->UpdateState(intakeModule->Idle);
+		}
+	}
+
+	turretModule->Track();
+
+
+ 	turretOffset = driver2.GetRawAxis(4) * 10;
+	
+
+	if (driver1.GetRawButtonPressed(7))
+	{
+		swerveDrive->ResetIMU();
+	}
+
 	
 	double x = driver1.GetRawAxis(0);
 	double z = driver1.GetRawAxis(1);
 	double rotation = driver1.GetRawAxis(4);
 
-	swerveDrive->MoveFieldCentric1(x, z, rotation);
+	swerveDrive->MoveFieldCentric1(x, -z, rotation);
 	
-	
-	intakeModule->Update();	
 
-	
 	timer.Update();
 	std::cout << "Time: " << timer.GetStartTime() << '\n';
+
+	turretModule->Rotate(swerveDrive->GetYaw() - 180 + turretOffset);
 }
 
 void Robot::DisabledInit() 
@@ -165,10 +179,13 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic() 
 {
-	std::cout << "Encoder Position: " << encoder.GetAbsolutePosition().GetValueAsDouble() << '\n';
+	turretModule->Rotate(100);
 }
 
-void Robot::SimulationInit() {}	
+void Robot::SimulationInit() 
+{
+
+}
 
 void Robot::SimulationPeriodic() {}
 

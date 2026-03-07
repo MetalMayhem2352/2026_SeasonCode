@@ -48,11 +48,6 @@ namespace CustomSwerveDrive
         Core::Vector2 backRightPower = (Constants::Swerve::BackRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
 
         double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});
-
-        std::cout << "Front Right X: " << frontRightPower.GetX() << ", Y: " << frontRightPower.GetY() << '\n';
-        std::cout << "Front Left X: " << frontLeftPower.GetX() << ", Y: " << frontLeftPower.GetY() << '\n';
-        std::cout << "Back Left: " << backLeftPower.GetX() << ", Y: " << backLeftPower.GetY() << '\n';
-        std::cout << "Back Right: " << backRightPower.GetX() << ", Y: " << backRightPower.GetY() << '\n';
         
         frontRightPod->Move(frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator);
         frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
@@ -121,6 +116,8 @@ namespace CustomSwerveDrive
     double SwerveDriveModule::GetYaw()
     {
         double yaw = pigeon->GetYaw().GetValue().value();
+
+        yaw = 360 - yaw;
 
         while (yaw < 0)
         {

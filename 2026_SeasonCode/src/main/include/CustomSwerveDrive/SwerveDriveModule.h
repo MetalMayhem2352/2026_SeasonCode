@@ -28,9 +28,6 @@ namespace CustomSwerveDrive
 
         void Move(double x, double z, double yRotation);
 
-        /// @brief Degrees
-        /// @return The YAW of the giro in degrees.
-        double GetYaw();
     public:
         SwerveDriveModule();
         ~SwerveDriveModule();
@@ -40,6 +37,10 @@ namespace CustomSwerveDrive
         void MoveFieldCentric1(double x, double z, double yRotation);
         void MoveFieldCentric2(double xMovement, double zMovement, double headingDegrees);
         void Update();
+        
+        /// @brief Degrees
+        /// @return The YAW of the giro in degrees.
+        double GetYaw();
 
         SwerveDriveOdometry* CreateSwerveDriveOdometery();
     };

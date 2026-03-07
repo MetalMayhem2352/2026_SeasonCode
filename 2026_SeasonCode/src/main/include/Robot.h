@@ -48,6 +48,7 @@ class Robot : public frc::TimedRobot
 
 		bool isIntaking = false;
 		bool isShooting = false;
+		bool isTracking = false;
 
 		frc::Joystick driver1{0};
 		frc::Joystick driver2{1};
@@ -55,4 +56,8 @@ class Robot : public frc::TimedRobot
 		ctre::phoenix6::hardware::TalonFX* shooterMotor;
 
 		ctre::phoenix6::hardware::CANcoder encoder{20, Constants::CANIVOUR_NAME};
+
+		double turretOffset = 0;
+
+		Core::Timer shooterTimer{};
 };

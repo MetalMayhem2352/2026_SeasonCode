@@ -44,6 +44,25 @@ namespace Modules
         {
             intakePivot->Set(0);
         }
+
+        if (currentState == Shooting)
+        {
+            if (pivotPIDTimer->GetStartTime() < 2.5)
+            {
+                topIntakeMotor->Set(1);
+                basketIntakeMotor->Set(-1);
+            }
+            else if (pivotPIDTimer->GetStartTime() < 3)
+            {
+                topIntakeMotor->Set(-1);
+                basketIntakeMotor->Set(1);
+            }
+            else
+            {
+                pivotPIDTimer->Reset();
+            }
+
+        }
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -71,11 +90,11 @@ namespace Modules
         }
         case State::Shooting:
         {
-            topIntakeMotor->Set(1);
-            basketIntakeMotor->Set(-1);
+            // topIntakeMotor->Set(1);
+            // basketIntakeMotor->Set(-1);
             // groundIntakeMotor->Set(-1);
             
-            targetPivotPos = 1;
+            targetPivotPos = 0;
             break;
         }
         case State::Outaking:

@@ -47,7 +47,7 @@ namespace Core
     /// @return rotation of the vector in Degrees
     [[nondiscard]] double Vector2::GetAngle() const
     {
-        double angle = (std::atan2(y, x) * Constants::RADIANS_TO_DEGREES);
+        double angle = (std::atan2(x, y) * Constants::RADIANS_TO_DEGREES);
         while (angle < 0)
         {
             angle += 360;
