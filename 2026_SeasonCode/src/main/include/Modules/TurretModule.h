@@ -13,7 +13,7 @@ class Turret_Tracking
 	private:
 		frc::Timer timer;
 
-		Core::Timer* PIDTimer;
+		Core::Timer* pidTimer;
 		Core::PIDController* PIDController;
 
 		double tx;
@@ -49,6 +49,11 @@ class Turret_Tracking
 		void Update();
 		void turretIdle();
 		double limelight_Distance();
-	
+		bool CanShoot();
 
+		void Rotate(double angle);
+		double GetTurretPosition();
+
+		void Pass();
+		bool CanPass();
 };

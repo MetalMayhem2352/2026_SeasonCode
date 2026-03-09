@@ -35,9 +35,9 @@ namespace Modules
 
     void BasketModule::Update()
     {
-        pidTimer->Update();
-        leftBasketMotor->Set(leftPIDController->Calculate(leftBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
-        rightBasketMotor->Set(rightPIDController->Calculate(rightBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
+        // pidTimer->Update();
+        // leftBasketMotor->Set(leftPIDController->Calculate(leftBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
+        // rightBasketMotor->Set(rightPIDController->Calculate(rightBasketMotor->GetPosition().GetValue().value(), targetPosition, pidTimer->GetDeltaTime()));
     }
     
     void BasketModule::UpdateState(State newState)

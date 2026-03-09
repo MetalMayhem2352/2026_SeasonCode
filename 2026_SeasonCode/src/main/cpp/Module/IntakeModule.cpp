@@ -18,7 +18,7 @@ namespace Modules
 
 
         pivotPIDTimer = new Core::Timer();
-        pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
+        // pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -29,20 +29,40 @@ namespace Modules
         delete(intakePivot);
         
         delete(pivotPIDTimer);
-        delete(pivotPIDController);
+        // delete(pivotPIDController);
     }
 
     void IntakeModule::Update()
     {
-        targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
-        std::cout << "Pivot Pos: " << -intakePivot->GetPosition().GetValue().value() << "\n";
-        std::cout << "Target Pos: " << targetPivotPos << "\n";
         pivotPIDTimer->Update();
-        std::cout << "Pivot Pwer: " << (pivotPIDController->Calculate(-intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime())) << "\n";
 
+        if (targetPivotPos == 1)
+        {
+            intakePivot->Set(-0.5);
+        }
+        else
+        {
+            intakePivot->Set(0);
+        }
 
-        // intakePivot->Set(0.1);
-        // intakePivot->Set(pivotPIDController->Calculate(intakePivot->GetPosition().GetValue().value(), targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        if (currentState == Shooting)
+        {
+            if (pivotPIDTimer->GetStartTime() < 2.5)
+            {
+                topIntakeMotor->Set(1);
+                basketIntakeMotor->Set(-1);
+            }
+            else if (pivotPIDTimer->GetStartTime() < 3)
+            {
+                topIntakeMotor->Set(-1);
+                basketIntakeMotor->Set(1);
+            }
+            else
+            {
+                pivotPIDTimer->Reset();
+            }
+
+        }
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -54,35 +74,45 @@ namespace Modules
         {
             topIntakeMotor->Set(0);
             basketIntakeMotor->Set(0);
-            groundIntakeMotor->Set(0);
+            // groundIntakeMotor->Set(0);
 
+            targetPivotPos = 0;
             break;
         }
         case State::Intaking:
         {
             topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(0.5);
-            groundIntakeMotor->Set(0.5);
+            basketIntakeMotor->Set(1);
+            // groundIntakeMotor->Set(0.5);
 
-            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
-            break;
-        }
-        case State::Outaking:
-        {
-            topIntakeMotor->Set(-0.5);
-            basketIntakeMotor->Set(-0.5);
-            groundIntakeMotor->Set(-0.5);
-
-            targetPivotPos = Constants::Intake::GROUND_PIVOT_POSITION;
+            targetPivotPos = 0;
             break;
         }
         case State::Shooting:
         {
-            topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(-0.5);
-            groundIntakeMotor->Set(-0.5);
+            // topIntakeMotor->Set(1);
+            // basketIntakeMotor->Set(-1);
+            // groundIntakeMotor->Set(-1);
             
-            targetPivotPos = Constants::Intake::SHOOT_PIVOT_POSITION;
+            targetPivotPos = 0;
+            break;
+        }
+        case State::Outaking:
+        {
+            topIntakeMotor->Set(-1);
+            basketIntakeMotor->Set(-1);
+            // groundIntakeMotor->Set(-1);
+            
+            targetPivotPos = 0;
+            break;
+        }
+        case State::Unjamming:
+        {
+            topIntakeMotor->Set(-1);
+            basketIntakeMotor->Set(1);
+            // groundIntakeMotor->Set(-1);
+            
+            targetPivotPos = 1;
             break;
         }
         default:

@@ -6,12 +6,12 @@ namespace CustomSwerveDrive
 {
     SwerveDriveModule::SwerveDriveModule()
     {
-        frontRightPod = new SwervePod(Constants::Swerve::FrontRightPod::encoderID, Constants::Swerve::FrontRightPod::encoderOffset, Constants::Swerve::FrontRightPod::driveMotorId, Constants::Swerve::FrontRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        frontLeftPod = new SwervePod(Constants::Swerve::FrontLeftPod::encoderID, Constants::Swerve::FrontLeftPod::encoderOffset, Constants::Swerve::FrontLeftPod::driveMotorId, Constants::Swerve::FrontLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        backLeftPod = new SwervePod(Constants::Swerve::BackLeftPod::encoderID, Constants::Swerve::BackLeftPod::encoderOffset, Constants::Swerve::BackLeftPod::driveMotorId, Constants::Swerve::BackLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
-        backRightPod = new SwervePod(Constants::Swerve::BackRightPod::encoderID, Constants::Swerve::BackRightPod::encoderOffset, Constants::Swerve::BackRightPod::driveMotorId, Constants::Swerve::BackRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        frontRightPod = new SwervePod(Constants::Swerve::FrontRightPod::encoderID, Constants::Swerve::FrontRightPod::encoderOffset, Constants::Swerve::FrontRightPod::driveMotorId, Constants::Swerve::rightDriveMotorConfig, Constants::Swerve::FrontRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        frontLeftPod = new SwervePod(Constants::Swerve::FrontLeftPod::encoderID, Constants::Swerve::FrontLeftPod::encoderOffset, Constants::Swerve::FrontLeftPod::driveMotorId, Constants::Swerve::leftDriveMotorConfig, Constants::Swerve::FrontLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        backLeftPod = new SwervePod(Constants::Swerve::BackLeftPod::encoderID, Constants::Swerve::BackLeftPod::encoderOffset, Constants::Swerve::BackLeftPod::driveMotorId, Constants::Swerve::leftDriveMotorConfig, Constants::Swerve::BackLeftPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
+        backRightPod = new SwervePod(Constants::Swerve::BackRightPod::encoderID, Constants::Swerve::BackRightPod::encoderOffset, Constants::Swerve::BackRightPod::driveMotorId, Constants::Swerve::rightDriveMotorConfig, Constants::Swerve::BackRightPod::turnMotorId, Constants::Swerve::moduleTurnPIDConfig);
 
-        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, "rio");
+        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, Constants::CANIVOUR_NAME);
 
         turningPIDController = new Core::PIDController(Constants::Swerve::turnPIDConfig);
         turningPIDController->SetLoop(true, -std::numbers::pi, std::numbers::pi);
@@ -48,12 +48,12 @@ namespace CustomSwerveDrive
         Core::Vector2 backRightPower = (Constants::Swerve::BackRightPod::TURN_VECTOR * yRotation) + Core::Vector2(x, z);
 
         double denominator = std::max({frontRightPower.GetMagnitude(), frontLeftPower.GetMagnitude(), backLeftPower.GetMagnitude(), backRightPower.GetMagnitude(), 1.0});
-
-        // frontRightPod->Move(0, 0);
+        
         frontRightPod->Move(frontRightPower.GetAngle(), frontRightPower.GetMagnitude() / denominator);
         frontLeftPod->Move(frontLeftPower.GetAngle(), frontLeftPower.GetMagnitude() / denominator);
         backLeftPod->Move(backLeftPower.GetAngle(), backLeftPower.GetMagnitude() / denominator);
         backRightPod->Move(backRightPower.GetAngle(), backRightPower.GetMagnitude() / denominator);
+    
     }
 
     void SwerveDriveModule::MoveRobotCentric(double x, double z, double yRotation)
@@ -117,11 +117,19 @@ namespace CustomSwerveDrive
     {
         double yaw = pigeon->GetYaw().GetValue().value();
 
+        yaw = 360 - yaw;
+
         while (yaw < 0)
         {
             yaw += 360;
         }
         return std::fmod(yaw, 360.0);
+    }
+
+    
+    SwerveDriveOdometry* SwerveDriveModule::CreateSwerveDriveOdometery()
+    {
+        return new SwerveDriveOdometry(frontRightPod, frontLeftPod, backRightPod, backLeftPod, pigeon);
     }
 
 }

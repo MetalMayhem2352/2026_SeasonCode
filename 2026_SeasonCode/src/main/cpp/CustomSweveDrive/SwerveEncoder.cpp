@@ -1,11 +1,16 @@
 #include "CustomSwerveDrive/SwerveEncoder.h"
 
+#include "Constants.h"
+
+// TEMP!
+#include <iostream>>
 
 namespace CustomSwerveDrive
 {
-    SwerveEncoder::SwerveEncoder(char enocderIndex)
-        : encoder{enocderIndex}
+    SwerveEncoder::SwerveEncoder(int encoderIndex)
     {
+        encoder = new ctre::phoenix6::hardware::CANcoder(encoderIndex, Constants::CANIVOUR_NAME);
+        positionOffset = 0;
     }
 
     SwerveEncoder::~SwerveEncoder()
@@ -19,19 +24,20 @@ namespace CustomSwerveDrive
         this->isInverted = isInverted;
     }
 
-    void SwerveEncoder::SetOffsert(double offset)
+    void SwerveEncoder::SetOffset(double offset)
     {
         positionOffset = offset / 360;
     }
 
     void SwerveEncoder::ResetAngle()
     {
-        positionOffset = encoder.GetAbsolutePosition().GetValueAsDouble();
+        positionOffset = encoder->GetAbsolutePosition().GetValueAsDouble();
     }
 
     double SwerveEncoder::GetAngle()
     {
-        position = (encoder.GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
+        position = (encoder->GetAbsolutePosition().GetValueAsDouble() - positionOffset) * 360;
+        
         
         
         // normallizing Point to 0-360;
@@ -43,6 +49,8 @@ namespace CustomSwerveDrive
         {
             position -= 360;
         }
+
+        
 
         if (isInverted)
         {

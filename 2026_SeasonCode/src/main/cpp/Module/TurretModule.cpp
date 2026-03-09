@@ -8,6 +8,7 @@
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableInstance.h"
 #include "networktables/NetworkTableEntry.h"
+
     
 
 
@@ -16,7 +17,7 @@ Turret_Tracking::Turret_Tracking()
 {
 	turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
 
-  	PIDTimer = new Core::Timer();
+  	pidTimer = new Core::Timer();
   	PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
 
   	LimelightHelpers::setPipelineIndex("limelight",0);
@@ -50,35 +51,29 @@ Turret_Tracking::Turret_Tracking()
 
 Turret_Tracking::~Turret_Tracking()
 {
-    delete(PIDTimer);
+    delete(pidTimer);
     delete(PIDController);
 };
 
 void Turret_Tracking::Update()
-{      
-	std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+{
+	/*
+	
 	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
+	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	
 	limelight_Error = tx * angleoffset;
 	angleoffset = 1; // Calibrate the motor encoder value per degree
 	motorangle = currentpos / angleoffset; // Output
-  	
 	
 	
-	std::cout << "tx: " << tx << '\n';
-	std::cout << "tx2 : " << table.get()->GetNumber("tx", 0.0) << '\n';
-
-	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
-	PIDTimer->Update();
-
 	
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
-
-	std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
-  	angleoffset = 1; // Calibrate the motor encoder value per degree
-  	
-  	motorangle = currentpos / angleoffset; // Output
-
+	
+	angleoffset = 1; // Calibrate the motor encoder value per degree
+	
+	motorangle = currentpos / angleoffset; // Output
+	
 	if(limelight_Error > maxRotation)
 	{
 		desiredEncoderPosition = maxRotation * angleoffset;
@@ -87,7 +82,12 @@ void Turret_Tracking::Update()
 	{
 		desiredEncoderPosition = minRotation * angleoffset;
 	}
+    */
 
+   	pidTimer->Update();
+   
+	// NEw Stuff.
+	Rotate(0);
 }
 
 //find april is for looking for the april tag if it cant find it
@@ -95,11 +95,11 @@ void Turret_Tracking::Find_april()
 {
     if (hasTarget == false && motorangle < 170)
 	{
-		turret_motor->Set(PIDController->Calculate(currentpos,minRotation * angleoffset,PIDTimer->GetDeltaTime()));
+		turret_motor->Set(PIDController->Calculate(currentpos,minRotation * angleoffset,pidTimer->GetDeltaTime()));
     }
     if (hasTarget == false && motorangle > -170)
 	{
-		turret_motor->Set(PIDController->Calculate(currentpos,maxRotation * angleoffset,PIDTimer->GetDeltaTime()));
+		turret_motor->Set(PIDController->Calculate(currentpos,maxRotation * angleoffset,pidTimer->GetDeltaTime()));
     }
 }
 void Turret_Tracking::turretIdle(){
@@ -110,19 +110,16 @@ void Turret_Tracking::Track()
 {
 	Update();
 
-	std::cout << "error :" << limelight_Error << "\n";
-	std::cout << "pos :" << currentpos << "\n";
-	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()) << "\n";
-	
-	
-    
-	if (hasTarget == true)
+	std::cout << "limelight_Error: " << limelight_Error << "\n";
+	std::cout << "limelight_Error: " << limelight_Error << "\n";
+
+	if (std::abs(limelight_Error) > 0.5)
 	{
-        turret_motor->Set(PIDController->Calculate(0, limelight_Error, PIDTimer->GetDeltaTime()));
+        turret_motor->Set(PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()));
     }
     else 
 	{
-      	// Find_april();
+		turret_motor->Set(0);
     }
 }
 double Turret_Tracking::limelight_Distance()
@@ -152,4 +149,52 @@ double Turret_Tracking::limelight_Distance()
 		//scale = 11672.17;
 		//distance = (scale * std::pow(TA, 1.9));
 		//std::cout << "distance : " << distance << "\n";
+}
+
+bool Turret_Tracking::CanShoot()
+{
+	return tx < 2;
+}
+
+void Turret_Tracking::Rotate(double targetPosition)
+{
+	// Normallizing pos between -180 and 180
+	while (targetPosition < -180)
+	{
+		targetPosition += 360;
+	}
+	while (targetPosition > 180)
+	{
+		targetPosition -= 360;
+	}
+
+	if (targetPosition < Constants::Turret::MIN_ROTATION + Constants::Turret::TOLERANCE)
+	{
+		targetPosition = Constants::Turret::MIN_ROTATION + Constants::Turret::TOLERANCE;
+	}
+	else if (targetPosition > Constants::Turret::MAX_ROTATION - Constants::Turret::TOLERANCE)
+	{
+		targetPosition = Constants::Turret::MAX_ROTATION - Constants::Turret::TOLERANCE;
+	}
+
+	double position = GetTurretPosition();
+	double error = targetPosition - position;
+	double power = PIDController->Calculate(position, targetPosition, pidTimer->GetDeltaTime());
+	
+	turret_motor->Set(power);
+}
+
+double Turret_Tracking::GetTurretPosition()
+{
+	return turret_motor->GetPosition().GetValueAsDouble() * Constants::Turret::MOTOR_TICKS_PER_DEGREE;
+}
+
+void Turret_Tracking::Pass()
+{
+
+}
+
+bool Turret_Tracking::CanPass()
+{
+	
 }

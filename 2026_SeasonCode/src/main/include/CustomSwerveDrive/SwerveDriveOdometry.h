@@ -12,11 +12,11 @@ namespace CustomSwerveDrive
     class SwerveDriveOdometry 
     {
     private:
-        SwervePod& frontRightPod;
-        SwervePod& frontLeftPod;
-        SwervePod& backRightPod;
-        SwervePod& backLeftPod;
-        ctre::phoenix6::hardware::Pigeon2& pigeon;
+        SwervePod* frontRightPod;
+        SwervePod* frontLeftPod;
+        SwervePod* backRightPod;
+        SwervePod* backLeftPod;
+        ctre::phoenix6::hardware::Pigeon2* pigeon;
 
         double lastHeading;
 
@@ -24,7 +24,7 @@ namespace CustomSwerveDrive
         CustomDriveBase::RobotPosition offsetPosition;
         
     public:
-        SwerveDriveOdometry(SwervePod& frontRight, SwervePod& frontLeft, SwervePod& backRight, SwervePod& backLeft, ctre::phoenix6::hardware::Pigeon2& pigeon);
+        SwerveDriveOdometry(SwervePod* frontRight, SwervePod* frontLeft, SwervePod* backRight, SwervePod* backLeft, ctre::phoenix6::hardware::Pigeon2* pigeon);
         ~SwerveDriveOdometry();
 
         void Update();
@@ -37,7 +37,7 @@ namespace CustomSwerveDrive
     private:
         Core::Vector2 GetMovementDelta(double headingDelta);
         static double NormalizeDeg0360(double deg);
-        Core::Vector2 GetPodMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod& pod); 
+        Core::Vector2 GetPodMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod*& pod); 
 
 
     };

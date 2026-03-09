@@ -4,12 +4,12 @@
 // TODO: Make Base Odometry Class to inherite from
 namespace CustomSwerveDrive
 {
-    SwerveDriveOdometry::SwerveDriveOdometry(   SwervePod& frontRight, SwervePod& frontLeft, 
-                                                SwervePod& backRight, SwervePod& backLeft, 
-                                                ctre::phoenix6::hardware::Pigeon2& pigeon)
+    SwerveDriveOdometry::SwerveDriveOdometry(   SwervePod* frontRight, SwervePod* frontLeft, 
+                                                SwervePod* backRight, SwervePod* backLeft, 
+                                                ctre::phoenix6::hardware::Pigeon2* pigeon)
         : frontRightPod(frontRight), frontLeftPod(frontLeft), backRightPod(backRight), backLeftPod(backLeft), pigeon(pigeon)
     {
-        pigeon.Reset();
+        pigeon->Reset();
     }
     
     SwerveDriveOdometry::~SwerveDriveOdometry()
@@ -21,7 +21,7 @@ namespace CustomSwerveDrive
     void SwerveDriveOdometry::Update()
     {
         bool canNormalize = false;
-        double currentHeading = pigeon.GetYaw().GetValue().value();
+        double currentHeading = pigeon->GetYaw().GetValue().value();
         if (currentHeading > 360 || currentHeading <= 0)
         {
 
@@ -89,12 +89,12 @@ namespace CustomSwerveDrive
         return deg;
     }
     
-    Core::Vector2 SwerveDriveOdometry::GetPodMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod& pod)
+    Core::Vector2 SwerveDriveOdometry::GetPodMovementDelta(double robotHeadingDelta, Core::Vector2 turnVector, SwervePod*& pod)
     {
         double rotaionDistanceDelta = (Constants::Swerve::DIAGONAL_MODULE_OFFSET * robotHeadingDelta * std::numbers::pi) / 180;
         Core::Vector2 rotaionDelta = turnVector * rotaionDistanceDelta;
         
-        Core::Vector2 podMovementDelta = Core::Vector2::CreateAngularVector(pod.GetAngle() - (pod.GetAngleDelta() / 2), pod.GetMovementDelta() * Constants::Swerve::METERS_PER_TICK);
+        Core::Vector2 podMovementDelta = Core::Vector2::CreateAngularVector(pod->GetAngle() - (pod->GetAngleDelta() / 2), pod->GetMovementDelta() * Constants::Swerve::METERS_PER_TICK);
         return podMovementDelta - rotaionDelta;
     }
 

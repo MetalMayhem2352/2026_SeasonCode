@@ -14,8 +14,7 @@
 #include "Modules/BasketModule.h"
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
-#include "Pathing/SwerveDrive.h"
-#include "Modules/TestModule.h"
+#include "CustomSwerveDrive/SwerveDriveModule.h"
 
 class Robot : public frc::TimedRobot 
 {
@@ -45,10 +44,20 @@ class Robot : public frc::TimedRobot
 		Modules::BasketModule* basketModule;
 		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
-		Modules::TestModule* testModule;
-		Pathing::SwerveDrive swerveDrive;
+		CustomSwerveDrive::SwerveDriveModule* swerveDrive;
 
-		frc::Joystick asherController{0};
-		frc::Joystick bryceController{1};
-		frc::Joystick testController{1};
+		bool isIntaking = false;
+		bool isShooting = false;
+		bool isTracking = false;
+
+		frc::Joystick driver1{0};
+		frc::Joystick driver2{1};
+		
+		ctre::phoenix6::hardware::TalonFX* shooterMotor;
+
+		ctre::phoenix6::hardware::CANcoder encoder{20, Constants::CANIVOUR_NAME};
+
+		double turretOffset = 0;
+
+		Core::Timer shooterTimer{};
 };
