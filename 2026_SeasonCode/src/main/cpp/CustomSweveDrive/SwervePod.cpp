@@ -63,47 +63,53 @@ namespace CustomSwerveDrive
             driveMotor->Set(0);
             return;
         }
-/*
+
         
         bool dirrect = true;
         double currentAngle = GetAngle();
         
         if (currentAngle > 180)
         {
-            currentAngle = - 180 - (180 - currentAngle);
+            currentAngle -= 360;
         }
         if (angle > 180)
         { 
-            angle = -180 - (180 - angle);
+            angle -= 360;
         }
 
         double reverseTarget = angle < 0 ? angle + 180 : angle - 180;
 
-        double dirrectAngle = std::abs(std::abs(angle) - std::abs(currentAngle));
-        double reverseAngle = std::abs(std::abs(reverseTarget) - std::abs(currentAngle));
+        double dirrectAngle = std::abs(angle < 0 ? angle - currentAngle : angle + currentAngle);
+        double reverseAngle = std::abs(reverseTarget < 0 ? reverseTarget - currentAngle : reverseTarget + currentAngle);
         
-        if (reverseAngle < dirrectAngle)
-        {
-            dirrect = false;
-        }
-        else
-        {
+        std::cout << "currentAngle: " << currentAngle << '\n';
+        std::cout << "angle: " << angle << '\n';
+        std::cout << "reverseTarget: " << reverseTarget << "\n\n";
+        std::cout << "dirrectAngle: " << dirrectAngle << '\n';
+        std::cout << "reverseAngle: " << reverseAngle << '\n';
+  
+        //if (reverseAngle < dirrectAngle)
+        //{
+        //    dirrect = false;
+        //}
+        //else
+        //{
             dirrect = true;
-        }
+        //}
 
         if (dirrect)
-        {*/
+        {
             targetAngle = angle;
-            driveMotor->Set(power);
-        /*
+            // driveMotor->Set(power);
+        
         }
         else
         {
             targetAngle = reverseTarget;
-            driveMotor->Set(-power);
+            // driveMotor->Set(-power);
         }
-        */
-        Turn(targetAngle);
+        
+        // Turn(targetAngle);
     }
     void SwervePod::Update()
     {

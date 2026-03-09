@@ -8,26 +8,31 @@
 #include "CustomSwerveDrive/SwerveDriveOdometry.h"
 #include "Core/Timer.h"
 
+#include "Auto/Point.h"
 
-namespace Auto
+
+#include <initializer_list>
+#include <queue>
+
+
+
+namespace Autonomous
 {
     class AutoRunner
     {
         private:
             CustomSwerveDrive::SwerveDriveOdometry* swerveDriveOdometry;
             CustomSwerveDrive::SwerveDriveModule* swerveDriveModule;
-            Modules::IntakeModule* intakeModule;
-            Modules::ShooterModule* shooterModule;
-            Modules::BasketModule* basketModule;
-            Turret_Tracking* turretModule;
 
-            Core::Timer* autoTimer;
-
+            std::queue<Point> points;
         public:
-            AutoRunner(CustomSwerveDrive::SwerveDriveModule* swerveDriveModule, Modules::IntakeModule* intakeModule, 
-                Modules::ShooterModule* shooterModule, Modules::BasketModule* basketModule, Turret_Tracking* turretModule);
+            AutoRunner(CustomSwerveDrive::SwerveDriveModule* swerveDriveModule, CustomSwerveDrive::SwerveDriveOdometry* swerveDriveOdometry);
             ~AutoRunner();
 
             void Update();
+
+            void MakePaths(std::initializer_list<Point> points);
+
+            std::queue<Point> ToQueue(std::initializer_list<Point> points);
     };
 }

@@ -15,11 +15,15 @@ Robot::Robot()
 
 	shooterMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Shooter::shooterID, Constants::CANIVOUR_NAME);
 
+  	swerveDrive = new CustomSwerveDrive::SwerveDriveModule();
   	intakeModule = new Modules::IntakeModule();
   	basketModule = new Modules::BasketModule();
-  	turretModule = new Turret_Tracking();
+  	turretModule = new Turret_Tracking(swerveDrive);
   	shooterModule = new Modules::ShooterModule();
-  	swerveDrive = new CustomSwerveDrive::SwerveDriveModule();
+
+	odometery = swerveDrive->CreateSwerveDriveOdometery();
+
+	autoRunner = new Autonomous::AutoRunner(swerveDrive, odometery);
 }
 
 Robot::~Robot() 
@@ -29,6 +33,8 @@ Robot::~Robot()
   	delete(turretModule);
   	delete(shooterModule);
   	delete(swerveDrive);
+	  
+  	delete(autoRunner);
 }
 
 
@@ -36,13 +42,86 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() 
 {
+	m_autoSelected = m_chooser.GetSelected();
+	// m_autoSelected = SmartDashboard::GetString("Auto Selector",
+	//     kAutoNameDefault);
+	wpi::print("Auto selected: {}\n", m_autoSelected);
+
+  	if (m_autoSelected == "Left Trench") 
+	{
+    	autoPath = LeftTrench;
+  	} 
+	else if (m_autoSelected == "Left Bump") 
+	{
+    	autoPath = LeftBump;
+  	} 
+	else if (m_autoSelected == "Right Bump") 
+	{
+    	autoPath = RightBump;
+  	} 
+	else if (m_autoSelected == "Right Trench") 
+	{
+    	autoPath = RightTrench;
+  	} 
+
+	swerveDrive->ResetIMU();
 	shooterTimer.Reset();
+	
+	switch (autoPath)
+	{
+		case AutoPath::LeftTrench:
+		{
+			odometery->SetStartPosition(Constants::Auto::START_POSE__LEFT_TRENCH);
+
+			autoRunner->MakePaths({Constants::Auto::THROUGH_LEFT_TRENCH_POSITION2, 
+									Constants::Auto::FAR1_LEFT_INTAKE_POSITION, Constants::Auto::FAR1_RIGHT_INTAKE_POSITION, Constants::Auto::FAR2_RIGHT_INTAKE_POSITION, 
+									Constants::Auto::FAR2_LEFT_INTAKE_POSITION, Constants::Auto::FAR3_LEFT_INTAKE_POSITION, Constants::Auto::FAR3_RIGHT_INTAKE_POSITION});
+			
+			break;
+		}
+		case AutoPath::LeftBump:
+		{
+			odometery->SetStartPosition(Constants::Auto::START_POSE__LEFT_BUMP);
+
+			autoRunner->MakePaths({Constants::Auto::THROUGH_LEFT_TRENCH_POSITION1.WithStartupDelay(10), Constants::Auto::THROUGH_LEFT_TRENCH_POSITION2.WithStartupDelay(1), 
+									Constants::Auto::FAR1_LEFT_INTAKE_POSITION, Constants::Auto::FAR1_RIGHT_INTAKE_POSITION, Constants::Auto::FAR2_RIGHT_INTAKE_POSITION, 
+									Constants::Auto::FAR2_LEFT_INTAKE_POSITION, Constants::Auto::FAR3_LEFT_INTAKE_POSITION, Constants::Auto::FAR3_RIGHT_INTAKE_POSITION});
+			
+			break;
+		}
+		case AutoPath::RightBump:
+		{
+			odometery->SetStartPosition(Constants::Auto::START_POSE__RIGHT_BUMP);
+
+			autoRunner->MakePaths({Constants::Auto::THROUGH_RIGHT_TRENCH_POSITION1.WithStartupDelay(10), Constants::Auto::THROUGH_RIGHT_TRENCH_POSITION2.WithStartupDelay(1), 
+									Constants::Auto::FAR1_RIGHT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR1_LEFT_INTAKE_POSITION.WithReverseHeading(), 
+									Constants::Auto::FAR2_LEFT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR2_RIGHT_INTAKE_POSITION.WithReverseHeading(), 
+									Constants::Auto::FAR3_RIGHT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR3_LEFT_INTAKE_POSITION.WithReverseHeading()});
+
+			break;
+		}
+		case AutoPath::RightTrench:
+		{
+			odometery->SetStartPosition(Constants::Auto::START_POSE__RIGHT_TRENCH);
+
+			autoRunner->MakePaths({Constants::Auto::THROUGH_RIGHT_TRENCH_POSITION2, 
+									Constants::Auto::FAR1_RIGHT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR1_LEFT_INTAKE_POSITION.WithReverseHeading(), 
+									Constants::Auto::FAR2_LEFT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR2_RIGHT_INTAKE_POSITION.WithReverseHeading(), 
+									Constants::Auto::FAR3_RIGHT_INTAKE_POSITION.WithReverseHeading(), Constants::Auto::FAR3_LEFT_INTAKE_POSITION.WithReverseHeading()});
+
+			break;
+		}
+	}
+	
 }
 
 void Robot::AutonomousPeriodic() 
 {
+	// Constant Shooting
+
 	shooterTimer.Update();
 
+	
 	if (shooterTimer.GetStartTime() > 3 && shooterTimer.GetStartTime() < 4)
 	{
 		shooterMotor->Set(1);
@@ -54,22 +133,25 @@ void Robot::AutonomousPeriodic()
 	}
 	else
 	{
-		shooterMotor->Set(0);
-		intakeModule->UpdateState(intakeModule->Idle);
+		shooterMotor->Set(1);
+		intakeModule->UpdateState(intakeModule->Outaking);
 	}
-
-
+	
 	intakeModule->Update();	
+	turretModule->Rotate(swerveDrive->GetYaw() - 180 + turretOffset);
+	
+	// Constant Shooting
+
 }
 
 void Robot::TeleopInit() 
 {
-	swerveDrive->ResetIMU();
 }
 
 void Robot::TeleopPeriodic() 
 {
 	Core::Timer timer{};
+	shooterTimer.Update();
 	
 	/*
 
@@ -118,32 +200,79 @@ void Robot::TeleopPeriodic()
 	}
 	
 	*/
-	
 
-	// Right Trigger
-	// Shoot
+	if (driver1.GetRawAxis(2) > 0.25)
+	{
+		if (!isShooting)
+		{
+			intakeModule->UpdateState(intakeModule->Intaking);
+			isIntaking = true;
+		}
+	
+	}
+	else if (driver1.GetRawButton(5))
+	{
+		intakeModule->UpdateState(intakeModule->Outaking);
+		isIntaking = true;
+	}
+	else
+	{
+		if (isShooting == false)
+		{
+			intakeModule->UpdateState(intakeModule->Idle);
+		}
+		isIntaking = false;
+	}
+
 	if (driver1.GetRawAxis(3) > 0.25)
 	{
-		if (shooterTimer.GetStartTime() > 3 && shooterTimer.GetStartTime() < 4)
+		if (shooterTimer.GetStartTime() < 2.5)
 		{
 			shooterMotor->Set(1);
 			intakeModule->UpdateState(intakeModule->Shooting);
 		}
-		else if (shooterTimer.GetStartTime() > 4)
+		else if (shooterTimer.GetStartTime() > 3)
 		{
 			shooterTimer.Reset();
 		}
 		else
 		{
-			shooterMotor->Set(0);
+			shooterMotor->Set(1);
+			intakeModule->UpdateState(intakeModule->Outaking);
+		}
+		isShooting = true;
+	}
+	else if (driver1.GetRawButton(6))
+	{
+		if (shooterTimer.GetStartTime() < 2.5)
+		{
+			shooterMotor->Set(1);
+			intakeModule->UpdateState(intakeModule->GroundShoot);
+		}
+		else if (shooterTimer.GetStartTime() > 3)
+		{
+			shooterTimer.Reset();
+		}
+		else
+		{
+			shooterMotor->Set(1);
+			intakeModule->UpdateState(intakeModule->Outaking);
+		}
+		isShooting = true;
+	}
+	else
+	{
+		isShooting = false;
+		if (isIntaking == false)
+		{
 			intakeModule->UpdateState(intakeModule->Idle);
 		}
+		shooterMotor->Set(0);
 	}
 
-	turretModule->Track();
+	// turretModule->Track();
 
-
- 	turretOffset = driver2.GetRawAxis(4) * 10;
+ 	turretOffset = driver2.GetRawAxis(4) * 20;
 	
 
 	if (driver1.GetRawButtonPressed(7))
@@ -162,7 +291,10 @@ void Robot::TeleopPeriodic()
 	timer.Update();
 	std::cout << "Time: " << timer.GetStartTime() << '\n';
 
-	turretModule->Rotate(swerveDrive->GetYaw() - 180 + turretOffset);
+	// turretModule->Rotate(175 - swerveDrive->GetYaw() + turretOffset);
+	turretModule->Rotate(turretOffset);
+
+	intakeModule->Update();
 }
 
 void Robot::DisabledInit() 
@@ -175,11 +307,14 @@ void Robot::DisabledPeriodic()
 }
 void Robot::TestInit() 
 {
+
 }
+
+
 
 void Robot::TestPeriodic() 
 {
-	turretModule->Rotate(100);
+	basketModule->Update();
 }
 
 void Robot::SimulationInit() 

@@ -18,7 +18,7 @@ namespace Modules
 
 
         pivotPIDTimer = new Core::Timer();
-        // pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
+        pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
     }
 
     IntakeModule::~IntakeModule()
@@ -29,7 +29,7 @@ namespace Modules
         delete(intakePivot);
         
         delete(pivotPIDTimer);
-        // delete(pivotPIDController);
+        delete(pivotPIDController);
     }
 
     void IntakeModule::Update()
@@ -63,6 +63,15 @@ namespace Modules
             }
 
         }
+
+        if (targetPivotPos == 0)
+        {
+            intakePivot->Set(0);
+        }
+        else
+        {
+            intakePivot->Set(-0.25);
+        }
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -90,11 +99,11 @@ namespace Modules
         }
         case State::Shooting:
         {
-            // topIntakeMotor->Set(1);
-            // basketIntakeMotor->Set(-1);
+            topIntakeMotor->Set(1);
+            basketIntakeMotor->Set(-1);
             // groundIntakeMotor->Set(-1);
             
-            targetPivotPos = 0;
+            targetPivotPos = 1;
             break;
         }
         case State::Outaking:
@@ -113,6 +122,15 @@ namespace Modules
             // groundIntakeMotor->Set(-1);
             
             targetPivotPos = 1;
+            break;
+        }
+        case State::GroundShoot:
+        {
+            topIntakeMotor->Set(1);
+            basketIntakeMotor->Set(-1);
+            // groundIntakeMotor->Set(-1);
+            
+            targetPivotPos = 0;
             break;
         }
         default:

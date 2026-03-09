@@ -3,6 +3,8 @@
 // Custom
 #include "Core/PIDConfig.h"
 #include "Core/Vector2.h"
+#include "CustomSwerveDrive/RobotPosition.h"
+#include "Auto/Point.h"
 
 // FRC
 #include <ctre/phoenix6/core/CoreTalonFX.hpp>
@@ -61,12 +63,14 @@ namespace Constants
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+                .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
         );
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightDriveMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+                .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
         );
 
         namespace FrontLeftPod
@@ -191,7 +195,7 @@ namespace Constants
         inline constexpr int PIVOT_ID = 11; 
     
         
-        // static inline Core::PIDConfig PivotPIDConfig(1, 0.2, 0.5, 0.2, 0);
+        static inline Core::PIDConfig PivotPIDConfig(1, 0.2, 0.5, 0.2, 0);
         
         inline constexpr double GROUND_PIVOT_POSITION = 0.0;
         inline constexpr double SHOOT_PIVOT_POSITION = -0.22; 
@@ -220,6 +224,39 @@ namespace Constants
         inline constexpr int UP_POSITION = 0; 
         inline constexpr int DOWN_POSITON = -1800; 
     }
+
+
+    namespace Auto
+    {
+        
+
+        static constexpr CustomDriveBase::RobotPosition START_POSE__LEFT_TRENCH{0.65, 4, 0};
+        static constexpr CustomDriveBase::RobotPosition START_POSE__LEFT_BUMP{0.65, 4, 0};
+        static constexpr CustomDriveBase::RobotPosition START_POSE__RIGHT_BUMP{0.65, 4, 0};
+        static constexpr CustomDriveBase::RobotPosition START_POSE__RIGHT_TRENCH{0.65, 4, 0};
+
+
+        static Autonomous::Point FAR1_LEFT_INTAKE_POSITION{0.5, 7.5, 90};
+        static Autonomous::Point FAR1_RIGHT_INTAKE_POSITION{7.5, 7.5, 90};
+        
+        static Autonomous::Point FAR2_LEFT_INTAKE_POSITION{0.5, 7, 180};
+        static Autonomous::Point FAR2_RIGHT_INTAKE_POSITION{7.5, 7, 180};
+
+        static Autonomous::Point FAR3_LEFT_INTAKE_POSITION{0.5, 6.5, 90};
+        static Autonomous::Point FAR3_RIGHT_INTAKE_POSITION{7.5, 6.5, 90};
+
+        static Autonomous::Point FAR4_LEFT_INTAKE_POSITION{0.5, 6, 180};
+        static Autonomous::Point FAR4_RIGHT_INTAKE_POSITION{7.5, 6, 180};
+
+        
+        static Autonomous::Point THROUGH_LEFT_TRENCH_POSITION1{0.3, 3, 0};
+        static Autonomous::Point THROUGH_LEFT_TRENCH_POSITION2{0.3, 6, 0};
+
+        
+        static Autonomous::Point THROUGH_RIGHT_TRENCH_POSITION1{7.25, 3, 0};
+        static Autonomous::Point THROUGH_RIGHT_TRENCH_POSITION2{7.25, 6, 0};
+    }
+
 
     static std::string CANIVOUR_NAME = "Default Name";
 }

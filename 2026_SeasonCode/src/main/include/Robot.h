@@ -16,9 +16,19 @@
 #include "Modules/TurretModule.h"
 #include "CustomSwerveDrive/SwerveDriveModule.h"
 
+#include "Auto/AutoRunner.h"
+
 class Robot : public frc::TimedRobot 
 {
  	public:
+		enum AutoPath
+		{
+			LeftTrench = 0,
+			LeftBump = 1,
+			RightBump = 2,
+			RightTrench = 3,
+		};
+
 		Robot();
 		~Robot();
 		void RobotPeriodic() override;
@@ -46,6 +56,8 @@ class Robot : public frc::TimedRobot
 		Turret_Tracking* turretModule;
 		CustomSwerveDrive::SwerveDriveModule* swerveDrive;
 
+		CustomSwerveDrive::SwerveDriveOdometry* odometery;
+
 		bool isIntaking = false;
 		bool isShooting = false;
 		bool isTracking = false;
@@ -60,4 +72,10 @@ class Robot : public frc::TimedRobot
 		double turretOffset = 0;
 
 		Core::Timer shooterTimer{};
+
+		AutoPath autoPath;
+
+		Autonomous::AutoRunner* autoRunner;
+
+		double heading; 
 };

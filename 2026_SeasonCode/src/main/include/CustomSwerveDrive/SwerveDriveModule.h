@@ -14,7 +14,6 @@ namespace CustomSwerveDrive
     private:
         // SwerveDriveOdometry SwerveDriveOdometry;
 
-        SwervePod* frontRightPod;
         SwervePod* frontLeftPod;
         SwervePod* backLeftPod;
         SwervePod* backRightPod;
@@ -29,6 +28,7 @@ namespace CustomSwerveDrive
         void Move(double x, double z, double yRotation);
 
     public:
+        SwervePod* frontRightPod;
         SwerveDriveModule();
         ~SwerveDriveModule();
 

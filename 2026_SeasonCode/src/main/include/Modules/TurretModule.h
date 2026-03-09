@@ -3,6 +3,7 @@
 #include "Core/Timer.h"
 #include "Core/PIDController.h"
 #include "Constants.h"
+#include "CustomSwerveDrive/SwerveDriveModule.h"
 
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
@@ -38,10 +39,12 @@ class Turret_Tracking
 		double minRotation;
 		bool hasTarget;
 
-		ctre::phoenix6::hardware::TalonFX* turret_motor;
+		ctre::phoenix6::hardware::TalonFX* turret_motor; 
 
+		CustomSwerveDrive::SwerveDriveModule* swerveDrive; 
+		
 	public:
-		Turret_Tracking();
+		Turret_Tracking(CustomSwerveDrive::SwerveDriveModule* swerveDrive);
 		~Turret_Tracking();
 
 		void Find_april();

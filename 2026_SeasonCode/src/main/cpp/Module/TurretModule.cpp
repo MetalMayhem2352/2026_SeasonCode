@@ -13,7 +13,7 @@
 
 
 
-Turret_Tracking::Turret_Tracking()
+Turret_Tracking::Turret_Tracking(CustomSwerveDrive::SwerveDriveModule* swerveDrive)
 {
 	turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
 
@@ -47,6 +47,7 @@ Turret_Tracking::Turret_Tracking()
   	limelight_Error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
+	this->swerveDrive = swerveDrive;
 }
 
 Turret_Tracking::~Turret_Tracking()
@@ -177,10 +178,15 @@ void Turret_Tracking::Rotate(double targetPosition)
 		targetPosition = Constants::Turret::MAX_ROTATION - Constants::Turret::TOLERANCE;
 	}
 
+
 	double position = GetTurretPosition();
 	double error = targetPosition - position;
 	double power = PIDController->Calculate(position, targetPosition, pidTimer->GetDeltaTime());
 	
+	std::cout << "position: " << position << "\n";
+	std::cout << "error: " << error << "\n";
+	std::cout << "power: " << power << "\n";
+
 	turret_motor->Set(power);
 }
 
