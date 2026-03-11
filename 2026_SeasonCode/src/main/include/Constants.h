@@ -224,6 +224,23 @@ namespace Constants
         inline constexpr int UP_POSITION = 0; 
         inline constexpr int DOWN_POSITON = -1800; 
     }
+    namespace Feeder 
+    {
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftBasketMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightBasketMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+
+        inline constexpr int feederMotor_ID = 0;
+    }
 
 
     namespace Auto

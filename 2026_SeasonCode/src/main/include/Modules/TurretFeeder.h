@@ -10,7 +10,13 @@ class TurretFeeder
 {
     private:
         ctre::phoenix6::hardware::TalonFX* feederMotor;
+        
 
     public:
+        void Feed();
+        void Unjuam();
+        void Idle();
+        ~TurretFeeder();
+        
 
 };
