@@ -54,9 +54,9 @@ class Turret_Tracking
 		double limelight_Distance();
 		bool CanShoot();
 
-		void Rotate(double angle);
-		double GetTurretPosition();
-
-		void Pass();
-		bool CanPass();
+		// void Rotate(double angle);
+		// double GetTurretPosition();
+// 
+		// void Pass();
+		// bool CanPass();
 };

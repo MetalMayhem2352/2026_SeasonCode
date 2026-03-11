@@ -12,7 +12,7 @@
 
 
 
-Turret_Tracking::Turret_Tracking()
+Turret_Tracking::Turret_Tracking(CustomSwerveDrive::SwerveDriveModule* swerveDrive)
 {
 	turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
 
@@ -46,6 +46,7 @@ Turret_Tracking::Turret_Tracking()
   	limelight_Error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
+	this->swerveDrive = swerveDrive;
 }
 
 Turret_Tracking::~Turret_Tracking()
@@ -125,7 +126,7 @@ void Turret_Tracking::Track()
       	// Find_april();
     }
 }
-void Turret_Tracking::limelight_Distance()
+double Turret_Tracking::limelight_Distance()
 {
 	bool hasTarget = LimelightHelpers::getTV("limelight"); // 1 if target detected, 0 if not
 	double ty = LimelightHelpers::getTY("limelight");      // Vertical offset in degrees

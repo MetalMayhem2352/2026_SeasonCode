@@ -138,7 +138,7 @@ void Robot::AutonomousPeriodic()
 	}
 	
 	intakeModule->Update();	
-	turretModule->Rotate(swerveDrive->GetYaw() - 180 + turretOffset);
+	// turretModule->Rotate(swerveDrive->GetYaw() - 180 + turretOffset);
 	
 	// Constant Shooting
 
@@ -292,7 +292,7 @@ void Robot::TeleopPeriodic()
 	std::cout << "Time: " << timer.GetStartTime() << '\n';
 
 	// turretModule->Rotate(175 - swerveDrive->GetYaw() + turretOffset);
-	turretModule->Rotate(turretOffset);
+	// turretModule->Rotate(turretOffset);
 
 	intakeModule->Update();
 }

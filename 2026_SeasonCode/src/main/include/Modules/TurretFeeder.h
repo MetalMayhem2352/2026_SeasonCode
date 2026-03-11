@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Core/Timer.h"
 #include "Core/PIDController.h"
 #include "Constants.h"
@@ -13,10 +15,13 @@ class TurretFeeder
         
 
     public:
+
+        TurretFeeder();
+        ~TurretFeeder();
+
         void Feed();
         void Unjuam();
         void Idle();
-        ~TurretFeeder();
         
 
 };
