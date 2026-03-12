@@ -188,11 +188,18 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration intakePivotMotor2Config =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
 
         inline constexpr int TOP_INTAKE_ID = 8; 
         inline constexpr int BASKET_INTAKE_ID = 9; 
         inline constexpr int GROUND_INTAKE_ID = 10; 
-        inline constexpr int PIVOT_ID = 11; 
+        inline constexpr int PIVOT_ID = 11;
+        inline constexpr int PIVOT_ID2 = -1; 
     
         
         static inline Core::PIDConfig PivotPIDConfig(1, 0.2, 0.5, 0.2, 0);

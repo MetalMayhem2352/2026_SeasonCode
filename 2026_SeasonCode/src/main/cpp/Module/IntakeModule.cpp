@@ -1,21 +1,26 @@
+
 #include "Modules/IntakeModule.h"
 
 namespace Modules
 {
     IntakeModule::IntakeModule()
     {
-        topIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::TOP_INTAKE_ID, Constants::CANIVOUR_NAME);
+        frontIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::TOP_INTAKE_ID, Constants::CANIVOUR_NAME);
         basketIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::BASKET_INTAKE_ID, Constants::CANIVOUR_NAME);
-        groundIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::GROUND_INTAKE_ID, Constants::CANIVOUR_NAME);
+        bottomIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::GROUND_INTAKE_ID, Constants::CANIVOUR_NAME);
         intakePivot = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::PIVOT_ID, Constants::CANIVOUR_NAME);
+        intakePivot2 = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::PIVOT_ID2, Constants::CANIVOUR_NAME);
 
-        topIntakeMotor->GetConfigurator().Apply(Constants::Intake::topIntakeMotorConfig);
+        frontIntakeMotor->GetConfigurator().Apply(Constants::Intake::topIntakeMotorConfig);
         basketIntakeMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
-        groundIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
+        bottomIntakeMotor->GetConfigurator().Apply(Constants::Intake::groundIntakeMotorConfig);
         intakePivot->GetConfigurator().Apply(Constants::Intake::intakePivotMotorConfig);
+        intakePivot2->GetConfigurator().Apply(Constants::Intake::intakePivotMotor2Config);
 
         intakePivot->SetPosition(units::angle::turn_t(0));
 
+        intakePivotPos = intakePivot->GetPosition().GetValue().value();;
+        targetPivotPos = 0;
 
         pivotPIDTimer = new Core::Timer();
         pivotPIDController = new Core::PIDController(Constants::Intake::PivotPIDConfig);
@@ -23,11 +28,11 @@ namespace Modules
 
     IntakeModule::~IntakeModule()
     {
-        delete(topIntakeMotor);
+        delete(frontIntakeMotor);
         delete(basketIntakeMotor);
-        delete(groundIntakeMotor);
+        delete(bottomIntakeMotor);
         delete(intakePivot);
-        
+        delete(intakePivot2);
         delete(pivotPIDTimer);
         delete(pivotPIDController);
     }
@@ -36,25 +41,19 @@ namespace Modules
     {
         pivotPIDTimer->Update();
 
-        if (targetPivotPos == 1)
-        {
-            intakePivot->Set(-0.5);
-        }
-        else
-        {
-            intakePivot->Set(0);
-        }
+        intakePivot->Set(pivotPIDController->Calculate(intakePivotPos, targetPivotPos, pivotPIDTimer->GetDeltaTime()));
+        intakePivot2->Set(pivotPIDController->Calculate(intakePivotPos, targetPivotPos, pivotPIDTimer->GetDeltaTime()));
 
         if (currentState == Shooting)
         {
             if (pivotPIDTimer->GetStartTime() < 2.5)
             {
-                topIntakeMotor->Set(1);
+                frontIntakeMotor->Set(1);
                 basketIntakeMotor->Set(-1);
             }
             else if (pivotPIDTimer->GetStartTime() < 3)
             {
-                topIntakeMotor->Set(-1);
+                frontIntakeMotor->Set(-1);
                 basketIntakeMotor->Set(1);
             }
             else
@@ -81,56 +80,37 @@ namespace Modules
         {
         case State::Idle:
         {
-            topIntakeMotor->Set(0);
+            frontIntakeMotor->Set(0);
+            bottomIntakeMotor->Set(0);
             basketIntakeMotor->Set(0);
-            // groundIntakeMotor->Set(0);
 
             targetPivotPos = 0;
             break;
         }
         case State::Intaking:
         {
-            topIntakeMotor->Set(0.5);
-            basketIntakeMotor->Set(1);
-            // groundIntakeMotor->Set(0.5);
-
-            targetPivotPos = 0;
+            frontIntakeMotor->Set(0.5);
+            bottomIntakeMotor->Set(0.5);
+            basketIntakeMotor->Set(0.5);
+            targetPivotPos == 0; // intake down pos set
             break;
         }
         case State::Shooting:
         {
-            topIntakeMotor->Set(1);
-            basketIntakeMotor->Set(-1);
-            // groundIntakeMotor->Set(-1);
             
-            targetPivotPos = 1;
+            frontIntakeMotor->Set(0.5);
+            bottomIntakeMotor->Set(0.5);
+            basketIntakeMotor->Set(0.5);
             break;
         }
-        case State::Outaking:
+        case State::intake_up:
         {
-            topIntakeMotor->Set(-1);
-            basketIntakeMotor->Set(-1);
-            // groundIntakeMotor->Set(-1);
-            
-            targetPivotPos = 0;
+            targetPivotPos == 0; // set intake down position here TODO
             break;
         }
         case State::Unjamming:
         {
-            topIntakeMotor->Set(-1);
-            basketIntakeMotor->Set(1);
-            // groundIntakeMotor->Set(-1);
-            
-            targetPivotPos = 1;
-            break;
-        }
-        case State::GroundShoot:
-        {
-            topIntakeMotor->Set(1);
-            basketIntakeMotor->Set(-1);
-            // groundIntakeMotor->Set(-1);
-            
-            targetPivotPos = 0;
+            basketIntakeMotor->Set(-0.5);
             break;
         }
         default:
