@@ -307,6 +307,7 @@ void Robot::DisabledPeriodic()
 }
 void Robot::TestInit() 
 {
+	swerveDrive->MoveRobotCentric(0, 0.5, 0.5);
 
 }
 
@@ -314,7 +315,7 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic() 
 {
-	basketModule->Update();
+	swerveDrive->MoveRobotCentric(0, 0, 0.5);
 }
 
 void Robot::SimulationInit() 

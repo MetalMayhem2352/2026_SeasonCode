@@ -75,7 +75,7 @@ namespace Constants
 
         namespace FrontLeftPod
         {
-            inline constexpr int encoderID = 20;
+            inline constexpr int encoderID = 22;
             inline constexpr double encoderOffset = 359.736;
             inline constexpr char driveMotorId = 1;
             inline constexpr char turnMotorId = 0;

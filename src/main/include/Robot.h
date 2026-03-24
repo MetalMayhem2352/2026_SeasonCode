@@ -12,12 +12,6 @@
 
 #include "RobotContainer.h"
 
-
-
-#include "generated/TunerConstants.h"
-#include <ctre/phoenix6/swerve/SwerveDrivetrain.hpp>
-#include <ctre/phoenix6/swerve/SwerveModuleConstants.hpp>
-
 class Robot : public frc::TimedRobot {
 public:
     Robot();
@@ -37,9 +31,6 @@ public:
 
 private:
     std::optional<frc2::CommandPtr> m_autonomousCommand;
-    
-    ctre::phoenix6::swerve::SwerveDrivetrain<ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::TalonFX, ctre::phoenix6::hardware::CANcoder> 
-        swerveDrive{TunerConstants::DrivetrainConstants, TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackRight, TunerConstants::BackLeft};
 
     RobotContainer m_container;
 
