@@ -43,7 +43,7 @@ namespace Modules
         {
             // frontIntakeMotor->Set(0.5);
             // backIntakeMotor->Set(0.5);
-            basketMotor->Set(0.8);
+            basketMotor->Set(1);
             break;
         }
         case State::Shooting:

@@ -16,7 +16,7 @@ namespace Modules
 
     void ShooterModule::ShootAtDistance(double distance)
     {
-        shooterMotor->Set(0.8);
+        shooterMotor->Set(1);
         currentState = State::Shoot;
     }
     void ShooterModule::Stop()
