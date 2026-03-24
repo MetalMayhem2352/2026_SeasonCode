@@ -260,6 +260,9 @@ void Robot::TeleopPeriodic()
 		}
 		isShooting = true;
 	}
+	if (m_autonomousCommand) {
+        frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
+    }
 	else
 	{
 		isShooting = false;
@@ -281,11 +284,7 @@ void Robot::TeleopPeriodic()
 	}
 
 	
-	double x = driver1.GetRawAxis(0);
-	double z = driver1.GetRawAxis(1);
-	double rotation = driver1.GetRawAxis(4);
-
-	swerveDrive->MoveFieldCentric1(x, -z, rotation);
+	
 	
 
 	timer.Update();
