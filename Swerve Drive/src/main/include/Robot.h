@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include "ctre/phoenix6/HootAutoReplay.hpp"
-
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
 #include <optional>
+#include <frc/Joystick.h>
 
 #include "RobotContainer.h"
+
+#include <ctre/phoenix6/swerve/SwerveRequest.hpp>
 
 class Robot : public frc::TimedRobot {
 public:
@@ -30,14 +31,14 @@ public:
     void TestExit() override;
 
 private:
-    std::optional<frc2::CommandPtr> m_autonomousCommand;
 
+    TunerSwerveDrivetrain swerveDrive{TunerConstants::DrivetrainConstants, 
+        TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackLeft, TunerConstants::BackRight};
 
-    /* log and replay timestamp and joystick data */
-    ctre::phoenix6::HootAutoReplay m_timeAndJoystickReplay = ctre::phoenix6::HootAutoReplay{}
-        .WithTimestampReplay()
-        .WithJoystickReplay();
-
+    swerve::requests::FieldCentric m_driveRequest = swerve::requests::FieldCentric{}
+        .WithDeadband(TunerConstants::kSpeedAt12Volts * 0.1).WithRotationalDeadband(TunerConstants::kRotationSpeedAt12Volts * 0.1) // Add a 10% deadband
+        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
+        .WithSteerRequestType(swerve::SteerRequestType::Position);
         
-    frc2::CommandXboxController joystick{0};
+    frc::Joystick driver1{0};
 };

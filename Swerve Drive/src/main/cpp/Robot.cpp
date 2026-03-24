@@ -4,13 +4,13 @@
 
 #include "Robot.h"
 
+#include <iostream>
+
 #include <frc2/command/CommandScheduler.h>
 
 Robot::Robot() {}
 
 void Robot::RobotPeriodic() {
-    m_timeAndJoystickReplay.Update();
-    frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::DisabledInit() {}
@@ -20,11 +20,7 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-    m_autonomousCommand = m_container.GetAutonomousCommand();
 
-    if (m_autonomousCommand) {
-        frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
-    }
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -32,20 +28,33 @@ void Robot::AutonomousPeriodic() {}
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-    if (m_autonomousCommand) {
-        frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
-    }
+    
 }
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() 
+{
+    // Read joystick (example: left stick for translation, right X for rotation)
+    double x = driver1.GetRawAxis(0); // forward
+    double y = -driver1.GetRawAxis(1);  // strafe
+    double rotation = driver1.GetRawAxis(4); // rotation input
+
+    swerveDrive.SetControl(m_driveRequest.WithVelocityX(y * TunerConstants::kSpeedAt12Volts).WithVelocityY(x * TunerConstants::kSpeedAt12Volts).WithRotationalRate(rotation * TunerConstants::kRotationSpeedAt12Volts));
+
+    if (driver1.GetRawButtonPressed(7))
+    {
+        std::cout << "1\n";
+        swerveDrive.SeedFieldCentric();
+    }
+}
 
 void Robot::TeleopExit() {}
 
 void Robot::TestInit() {
-    frc2::CommandScheduler::GetInstance().CancelAll();
 }
 
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+        
+}
 
 void Robot::TestExit() {}
 
