@@ -33,16 +33,18 @@ Turret_Tracking::Turret_Tracking(CustomSwerveDrive::SwerveDriveModule* swerveDri
   	double tync = LimelightHelpers::getTYNC("limelight");  // Vertical offset from principal pixel/point to target in degrees
 
   	bool looking = false;
+	//robotYaw = pigeon->GetYaw().GetValue();
+	
 
-  	maxRotation = 180;
-  	minRotation = -180;
+  	maxRotation = 90;
+  	minRotation = -90;
 
 	camera_height = 113.0;
 	target_height = 128.0;
 	camera_angle = 0;
 
   	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
-  	angleoffset = 1; // Calibrate the motor encoder value per degree
+  	angleoffset = 5.556; // Calibrate the motor encoder value per degree
   	limelight_Error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
@@ -61,7 +63,7 @@ void Turret_Tracking::Update()
 	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
 	
 	limelight_Error = tx * angleoffset;
-	angleoffset = 1; // Calibrate the motor encoder value per degree
+	angleoffset = 5.556; // Calibrate the motor encoder value per degree
 	motorangle = currentpos / angleoffset; // Output
   	
 	
@@ -71,6 +73,13 @@ void Turret_Tracking::Update()
 
 	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	pidTimer->Update();
+
+	lockedTargetHeading = robotYaw + tx;
+	targetAngle = error;
+	targetticks = targetAngle * angleoffset;
+	while (error > 180) error -= 360;
+	while (error < -180) error += 360;
+	error = lockedTargetHeading - robotYaw;
 
 	
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
@@ -115,42 +124,17 @@ void Turret_Tracking::Track()
 	std::cout << "pos :" << currentpos << "\n";
 	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()) << "\n";
 	
-	
+    turret_motor->Set(PIDController->Calculate(0, targetticks, pidTimer->GetDeltaTime()));
     
-	if (hasTarget == true)
-	{
-        turret_motor->Set(PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()));
-    }
-    else 
-	{
-      	// Find_april();
-    }
 }
 double Turret_Tracking::limelight_Distance()
 {
+	
+
 	bool hasTarget = LimelightHelpers::getTV("limelight"); // 1 if target detected, 0 if not
 	double ty = LimelightHelpers::getTY("limelight");      // Vertical offset in degrees
 
     if (hasTarget) {
-        // Convert angles to radians for trig functions
-        double angleToTargetRad = (camera_angle + ty) * M_PI / 180.0;
-
-        // Distance formula: (targetHeight - cameraHeight) / tan(angle)
-        distance = (target_height - camera_height) / std::tan(angleToTargetRad);
-
-        std::cout << "Target detected!\n";
-        std::cout << "Vertical angle (ty): " << ty << " degrees\n";
-        std::cout << "Distance: " << distance << " meters\n";
+        
     } 
-	else {
-        distance = 0.0;
-        std::cout << "distance : " << distance << "\n";
-    }
-
-		//TA = LimelightHelpers::getTA("limelight");
-		//std::cout << "Target_Area : " << TA << "\n";
-
-		//scale = 11672.17;
-		//distance = (scale * std::pow(TA, 1.9));
-		//std::cout << "distance : " << distance << "\n";
 }
