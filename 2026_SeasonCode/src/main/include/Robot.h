@@ -13,6 +13,7 @@
 #include "Modules/IntakeModule.h"
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
+#include "Modules/FunnelModule.h"
 #include "CustomSwerveDrive/SwerveDriveModule.h"
 
 #include "Auto/AutoRunner.h"
@@ -52,6 +53,7 @@ class Robot : public frc::TimedRobot
 		Modules::IntakeModule* intakeModule;
 		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
+		FunnelModule* funnelModule;
 		CustomSwerveDrive::SwerveDriveModule* swerveDrive;
 
 		CustomSwerveDrive::SwerveDriveOdometry* odometery;

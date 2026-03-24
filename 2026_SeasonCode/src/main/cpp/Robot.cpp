@@ -19,6 +19,7 @@ Robot::Robot()
   	intakeModule = new Modules::IntakeModule();
   	turretModule = new Turret_Tracking(swerveDrive);
   	shooterModule = new Modules::ShooterModule();
+  	funnelModule = new FunnelModule();
 
 	odometery = swerveDrive->CreateSwerveDriveOdometery();
 
@@ -31,6 +32,7 @@ Robot::~Robot()
   	delete(turretModule);
   	delete(shooterModule);
   	delete(swerveDrive);
+  	delete(funnelModule);
 	  
   	delete(autoRunner);
 }
@@ -308,6 +310,8 @@ void Robot::TestInit()
 void Robot::TestPeriodic() 
 {
 	intakeModule->UpdateState(intakeModule->Intaking);
+	funnelModule->Feed();
+	shooterModule->ShootAtDistance(0);
 }
 
 void Robot::SimulationInit() 

@@ -6,14 +6,17 @@ namespace Modules
     ShooterModule::ShooterModule()
     {
         shooterMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Shooter::shooterID, Constants::CANIVOUR_NAME);
+
+        shooterMotor->GetConfigurator().Apply(Constants::Shooter::shooterMotorCondiguration);
     }
     ShooterModule::~ShooterModule()
     {
+        delete(shooterMotor);
     }
 
     void ShooterModule::ShootAtDistance(double distance)
     {
-        shooterMotor->Set(1);
+        shooterMotor->Set(0.8);
         currentState = State::Shoot;
     }
     void ShooterModule::Stop()

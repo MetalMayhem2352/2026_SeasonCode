@@ -181,10 +181,10 @@ namespace Constants
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
 
-        inline constexpr int Funnel_MOTOR_ID = 13;
+        inline constexpr int FUNNEL_MOTOR_ID = 13;
     }
 
 
