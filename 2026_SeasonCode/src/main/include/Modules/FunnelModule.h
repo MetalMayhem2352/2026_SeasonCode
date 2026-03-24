@@ -8,14 +8,14 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Timer.h>
 
-class TurretFeeder
+class FunnelModule
 {
     private:
-        ctre::phoenix6::hardware::TalonFX* feederMotor;
+        ctre::phoenix6::hardware::TalonFX* funnelMotor;
     public:
 
-        TurretFeeder();
-        ~TurretFeeder();
+        FunnelModule();
+        ~FunnelModule();
 
         void Feed();
         void Unjam();

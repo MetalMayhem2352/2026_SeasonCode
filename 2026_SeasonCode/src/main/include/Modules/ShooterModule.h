@@ -21,7 +21,6 @@ namespace Modules
         private:
 
             ctre::phoenix6::hardware::TalonFX* shooterMotor;
-            ctre::phoenix6::hardware::TalonFX* hoodMotor;
 
             State currentState;
 

@@ -11,7 +11,6 @@
 #include <frc/Joystick.h>
 
 #include "Modules/IntakeModule.h"
-#include "Modules/BasketModule.h"
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
 #include "CustomSwerveDrive/SwerveDriveModule.h"
@@ -51,7 +50,6 @@ class Robot : public frc::TimedRobot
 		int varName = 0;
 
 		Modules::IntakeModule* intakeModule;
-		Modules::BasketModule* basketModule;
 		Modules::ShooterModule* shooterModule;
 		Turret_Tracking* turretModule;
 		CustomSwerveDrive::SwerveDriveModule* swerveDrive;

@@ -138,8 +138,6 @@ namespace Constants
     namespace Shooter
     {
         inline constexpr int shooterID = 15; 
-        inline constexpr int hoodID = 16; 
-
 
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotorCondiguration =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
@@ -147,106 +145,46 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
-
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration hoodMotorCongiuration =
-        ctre::phoenix6::configs::TalonFXConfiguration{}
-        .WithMotorOutput(
-            ctre::phoenix6::configs::MotorOutputConfigs{}
-            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
-            .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        )
-        .WithCurrentLimits(
-            ctre::phoenix6::configs::CurrentLimitsConfigs{}
-            .WithStatorCurrentLimit(40_A)
-            .WithStatorCurrentLimitEnable(true)
-        );
     }
 
     namespace Intake
     {
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration topIntakeMotorConfig =
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration frontIntakeMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration backIntakeMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        );
+
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration basketIntakeMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration groundIntakeMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration intakePivotMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration intakePivotMotor2Config =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
 
-        inline constexpr int TOP_INTAKE_ID = 8; 
-        inline constexpr int BASKET_INTAKE_ID = 9; 
-        inline constexpr int GROUND_INTAKE_ID = 10; 
-        inline constexpr int PIVOT_ID = 11;
-        inline constexpr int PIVOT_ID2 = -1; 
-    
-        
-        static inline Core::PIDConfig PivotPIDConfig(1, 0.2, 0.5, 0.2, 0);
-        
-        inline constexpr double GROUND_PIVOT_POSITION = 0.0;
-        inline constexpr double SHOOT_PIVOT_POSITION = -0.22; 
+        inline constexpr int FRONT_INTAKE_ID = 8; 
+        inline constexpr int BACK_INTAKE_ID = 9; 
+
+        inline constexpr int BASKET_INTAKE_ID = 10; 
     }
 
-    namespace Basket
+    namespace Funnel 
     {
-        inline Core::PIDConfig basketPIDConfig(0.5, 360, 0, 0, 0);
-        
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftBasketMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightBasketMotorConfig =
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration funnelMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
 
-        inline constexpr int LEFT_BASKET_ID = 12; 
-        inline constexpr int RIGHT_BASKET_ID = 13; 
-
-        inline constexpr int UP_POSITION = 0; 
-        inline constexpr int DOWN_POSITON = -1800; 
-    }
-    namespace Feeder 
-    {
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftBasketMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
-        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightBasketMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
-        );
-
-        inline constexpr int feederMotor_ID = 0;
+        inline constexpr int Funnel_MOTOR_ID = 13;
     }
 
 

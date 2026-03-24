@@ -17,7 +17,6 @@ Robot::Robot()
 
   	swerveDrive = new CustomSwerveDrive::SwerveDriveModule();
   	intakeModule = new Modules::IntakeModule();
-  	basketModule = new Modules::BasketModule();
   	turretModule = new Turret_Tracking(swerveDrive);
   	shooterModule = new Modules::ShooterModule();
 
@@ -29,7 +28,6 @@ Robot::Robot()
 Robot::~Robot() 
 {
   	delete(intakeModule);
-  	delete(basketModule);
   	delete(turretModule);
   	delete(shooterModule);
   	delete(swerveDrive);
@@ -247,7 +245,6 @@ void Robot::TeleopPeriodic()
 		if (shooterTimer.GetStartTime() < 2.5)
 		{
 			shooterMotor->Set(1);
-			intakeModule->UpdateState(intakeModule->GroundShoot);
 		}
 		else if (shooterTimer.GetStartTime() > 3)
 		{
@@ -260,9 +257,6 @@ void Robot::TeleopPeriodic()
 		}
 		isShooting = true;
 	}
-	if (m_autonomousCommand) {
-        frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
-    }
 	else
 	{
 		isShooting = false;
@@ -306,7 +300,6 @@ void Robot::DisabledPeriodic()
 }
 void Robot::TestInit() 
 {
-	swerveDrive->MoveRobotCentric(0, 0.5, 0.5);
 
 }
 
@@ -314,7 +307,7 @@ void Robot::TestInit()
 
 void Robot::TestPeriodic() 
 {
-	swerveDrive->MoveRobotCentric(0, 0, 0.5);
+	intakeModule->UpdateState(intakeModule->Intaking);
 }
 
 void Robot::SimulationInit() 
