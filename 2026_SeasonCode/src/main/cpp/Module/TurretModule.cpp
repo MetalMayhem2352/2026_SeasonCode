@@ -73,7 +73,7 @@ void Turret_Tracking::Update()
 
 	lockedTargetHeading = swerveDrive->GetYaw() + tx;
 	targetAngle = error;
-	targetticks = targetAngle * angleoffset;
+	targetticks = targetAngle * angleoffset * 5;
 
 	if (motorangle < -60)
 	{
@@ -90,18 +90,8 @@ void Turret_Tracking::Update()
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
 
 	std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
-  	angleoffset = 1; // Calibrate the motor encoder value per degree
-  	
-  	motorangle = currentpos / angleoffset; // Output
 
-	if(limelight_Error > maxRotation)
-	{
-		desiredEncoderPosition = maxRotation * angleoffset;
-	}
-	if (desiredEncoderPosition < minRotation * angleoffset)
-	{
-		desiredEncoderPosition = minRotation * angleoffset;
-	}
+	
 
 }
 
@@ -129,7 +119,7 @@ void Turret_Tracking::Track()
 	std::cout << "pos :" << currentpos << "\n";
 	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()) << "\n";
 	
-    turret_motor->Set(PIDController->Calculate(0, targetticks, pidTimer->GetDeltaTime()));
+    turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
     
 }
 double Turret_Tracking::limelight_Distance()
