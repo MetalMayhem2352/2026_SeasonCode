@@ -38,12 +38,10 @@ void Robot::TeleopPeriodic()
     double y = -driver1.GetRawAxis(1);  // strafe
     double rotation = driver1.GetRawAxis(4); // rotation input
 
-    swerveDrive.SetControl(m_driveRequest.WithVelocityX(y * TunerConstants::kSpeedAt12Volts).WithVelocityY(x * TunerConstants::kSpeedAt12Volts).WithRotationalRate(rotation * TunerConstants::kRotationSpeedAt12Volts));
-
+    
     if (driver1.GetRawButtonPressed(7))
     {
-        std::cout << "1\n";
-        swerveDrive.SeedFieldCentric();
+        
     }
 }
 

@@ -5,13 +5,15 @@
 #pragma once
 
 #include <frc/TimedRobot.h>
-#include <frc2/command/CommandPtr.h>
 #include <optional>
 #include <frc/Joystick.h>
 
-#include "RobotContainer.h"
+#include "Pathing/CTRESwerveDrive.h"
 
-#include <ctre/phoenix6/swerve/SwerveRequest.hpp>
+#include "Modules/FunnelModule.h"
+#include "Modules/IntakeModule.h"
+#include "Modules/ShooterModule.h"
+#include "Modules/TurretModule.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -32,13 +34,11 @@ public:
 
 private:
 
-    TunerSwerveDrivetrain swerveDrive{TunerConstants::DrivetrainConstants, 
-        TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackLeft, TunerConstants::BackRight};
-
-    swerve::requests::FieldCentric m_driveRequest = swerve::requests::FieldCentric{}
-        .WithDeadband(TunerConstants::kSpeedAt12Volts * 0.1).WithRotationalDeadband(TunerConstants::kRotationSpeedAt12Volts * 0.1) // Add a 10% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
-        .WithSteerRequestType(swerve::SteerRequestType::Position);
+    Pathing::CTRESwerveDrive* swerveDrive;
+    Modules::FunnelModule* funnelModule;
+    Modules::IntakeModule* intakeModule;
+    Modules::ShooterModule shooterModule;
+    Modules::TurretModule* turretModule;
         
     frc::Joystick driver1{0};
 };
