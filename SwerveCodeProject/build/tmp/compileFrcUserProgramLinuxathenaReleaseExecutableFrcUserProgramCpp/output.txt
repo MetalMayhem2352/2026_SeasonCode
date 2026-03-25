@@ -1,0 +1,12 @@
+See file:///C:/Users/FRC/Desktop/2026_SeasonCode/SwerveCodeProject/build/tmp/compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp.
+compiling TunerConstants.cpp successful.
+
+compiling RobotContainer.cpp successful.
+
+compiling Robot.cpp successful.
+
+compiling Telemetry.cpp successful.
+
+compiling CommandSwerveDrivetrain.cpp successful.
+
+Finished compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp, see full log file:///C:/Users/FRC/Desktop/2026_SeasonCode/SwerveCodeProject/build/tmp/compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp/output.txt.

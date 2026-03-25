@@ -114,7 +114,7 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(0.12, 25, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig(0.4, 5, 0, 0, 0);
         
         inline constexpr double MAX_ROTATION = 90;
         inline constexpr double MIN_ROTATION = -90;

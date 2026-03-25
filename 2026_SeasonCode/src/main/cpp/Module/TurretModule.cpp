@@ -36,15 +36,15 @@ Turret_Tracking::Turret_Tracking(CustomSwerveDrive::SwerveDriveModule* swerveDri
 	//robotYaw = pigeon->GetYaw().GetValue();
 	
 
-  	maxRotation = 90;
-  	minRotation = -90;
+  	maxRotation = 90 * angleoffset;
+  	minRotation = -90* angleoffset;
 
 	camera_height = 113.0;
 	target_height = 128.0;
 	camera_angle = 0;
 
   	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
-  	angleoffset = 5.556; // Calibrate the motor encoder value per degree
+  	//angleoffset = 5.556 * 5; // Calibrate the motor encoder value per degree
   	limelight_Error = tx * angleoffset;
   	motorangle = currentpos / angleoffset; // Output
 
@@ -63,28 +63,33 @@ void Turret_Tracking::Update()
 	tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
 	
 	limelight_Error = tx * angleoffset;
-	angleoffset = 5.556; // Calibrate the motor encoder value per degree
+	angleoffset = 0.05; // Calibrate the motor encoder value per degree
 	motorangle = currentpos / angleoffset; // Output
   	
 	
 
 	hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 	pidTimer->Update();
-
-	lockedTargetHeading = swerveDrive->GetYaw() + tx;
-	targetAngle = error;
-	targetticks = targetAngle * angleoffset * 5;
-
-	if (motorangle < -60)
+	if (hasTarget)
 	{
-		targetticks = motorangle * angleoffset;
+		lockedTargetHeading = swerveDrive->GetYaw() + tx;
 	}
-	if (motorangle < 60)
-	{
-		targetticks = motorangle * angleoffset;
-	}
-
 	error = lockedTargetHeading - swerveDrive->GetYaw();
+	while (error > 180) error -= 360;
+	while (error < -180) error += 360;
+
+	targetAngle = error;
+	targetticks = targetAngle * angleoffset;
+
+	if (targetticks < -5.4)
+	{
+		targetticks = -5.4;
+	}
+	if (targetticks > 4.5)
+	{
+		targetticks = 4.5;
+	}
+	
 
 	
 	currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
@@ -115,9 +120,10 @@ void Turret_Tracking::Track()
 {
 	Update();
 
-	std::cout << "error :" << limelight_Error << "\n";
+	//std::cout << "error :" << limelight_Error << "\n";
 	std::cout << "pos :" << currentpos << "\n";
-	std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()) << "\n";
+	std::cout << "angle :" << swerveDrive->GetYaw() << "\n";
+	std::cout << "ticks :" << targetticks << "\n";
 	
     turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
     
@@ -129,7 +135,4 @@ double Turret_Tracking::limelight_Distance()
 	bool hasTarget = LimelightHelpers::getTV("limelight"); // 1 if target detected, 0 if not
 	double ty = LimelightHelpers::getTY("limelight");      // Vertical offset in degrees
 
-    if (hasTarget) {
-        
-    } 
 }

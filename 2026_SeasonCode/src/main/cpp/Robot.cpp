@@ -150,8 +150,10 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic() 
 {
-	Core::Timer timer{};
-	shooterTimer.Update();
+	turretModule->Track();
+	double x = driver1.GetRawAxis(0); // forward
+    double y = -driver1.GetRawAxis(1);  // strafe
+    double rotation = driver1.GetRawAxis(4); // rotation input
 	
 	/*
 
@@ -199,7 +201,7 @@ void Robot::TeleopPeriodic()
 		isTracking = !isTracking;
 	}
 	
-	*/
+	
 
 	if (driver1.GetRawAxis(2) > 0.25)
 	{
@@ -290,6 +292,8 @@ void Robot::TeleopPeriodic()
 	// turretModule->Rotate(turretOffset);
 
 	intakeModule->Update();
+	*/
+	
 }
 
 void Robot::DisabledInit() 
@@ -312,6 +316,10 @@ void Robot::TestPeriodic()
 	intakeModule->UpdateState(intakeModule->Intaking);
 	funnelModule->Feed();
 	shooterModule->ShootAtDistance(0);
+
+	double x = driver1.GetRawAxis(0); // forward
+    double y = -driver1.GetRawAxis(1);  // strafe
+    double rotation = driver1.GetRawAxis(4); // rotation input
 }
 
 void Robot::SimulationInit() 
