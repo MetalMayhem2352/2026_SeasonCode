@@ -68,7 +68,9 @@ void Robot::TestInit() {
 void Robot::TestPeriodic() {
 
     intakeModule->UpdateState(intakeModule->Intaking);
-        
+    funnelModule->Feed();
+    shooterModule->ShootAtDistance(0);
+    
 }
 
 void Robot::TestExit() {}
