@@ -8,7 +8,22 @@
 
 #include <frc2/command/CommandScheduler.h>
 
-Robot::Robot() {}
+Robot::Robot() 
+{
+  	intakeModule = new Modules::IntakeModule();
+  	turretModule = new Modules::TurretModule();
+  	shooterModule = new Modules::ShooterModule();
+  	funnelModule = new Modules::FunnelModule();
+}
+
+Robot::~Robot() 
+{   
+  	delete(intakeModule);
+  	delete(turretModule);
+  	delete(shooterModule);
+  	delete(swerveDrive);
+  	delete(funnelModule);
+}
 
 void Robot::RobotPeriodic() {
 }
@@ -51,6 +66,8 @@ void Robot::TestInit() {
 }
 
 void Robot::TestPeriodic() {
+
+    intakeModule->UpdateState(intakeModule->Intaking);
         
 }
 

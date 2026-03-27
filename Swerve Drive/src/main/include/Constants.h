@@ -134,6 +134,7 @@ namespace Constants
         );
         
     }
+    
 
     namespace Shooter
     {
@@ -153,13 +154,13 @@ namespace Constants
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration backIntakeMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
         );
 
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration basketIntakeMotorConfig =

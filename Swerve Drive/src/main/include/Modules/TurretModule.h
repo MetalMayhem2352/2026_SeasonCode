@@ -4,8 +4,10 @@
 #include "Core/PIDController.h"
 #include "Constants.h"
 
+
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/Pigeon2.hpp>
 #include <frc/Timer.h>
 
 namespace Modules
@@ -45,6 +47,9 @@ namespace Modules
 			bool hasTarget;
 
 			ctre::phoenix6::hardware::TalonFX* turret_motor; 
+			ctre::phoenix6::hardware::Pigeon2* pigeon;
+
+
 
 			
 		public:
@@ -57,6 +62,10 @@ namespace Modules
 			void turretIdle();
 			double limelight_Distance();
 			bool CanShoot();
+			
+			/// @brief Degrees
+			/// @return The YAW of the giro in degrees.
+			double GetYaw();
 
 			// void Rotate(double angle);
 			// double GetTurretPosition();

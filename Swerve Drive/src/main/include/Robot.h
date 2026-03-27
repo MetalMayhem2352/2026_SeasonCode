@@ -18,6 +18,8 @@
 class Robot : public frc::TimedRobot {
 public:
     Robot();
+    ~Robot();
+
     void RobotPeriodic() override;
     void DisabledInit() override;
     void DisabledPeriodic() override;
@@ -37,7 +39,7 @@ private:
     Pathing::CTRESwerveDrive* swerveDrive;
     Modules::FunnelModule* funnelModule;
     Modules::IntakeModule* intakeModule;
-    Modules::ShooterModule shooterModule;
+    Modules::ShooterModule* shooterModule;
     Modules::TurretModule* turretModule;
         
     frc::Joystick driver1{0};

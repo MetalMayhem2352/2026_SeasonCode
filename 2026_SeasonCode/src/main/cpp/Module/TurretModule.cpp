@@ -81,13 +81,13 @@ void Turret_Tracking::Update()
 	targetAngle = error;
 	targetticks = targetAngle * angleoffset;
 
-	if (targetticks < -5.4)
+	if (targetticks < -5)
 	{
-		targetticks = -5.4;
+		targetticks = -5;
 	}
-	if (targetticks > 4.5)
+	if (targetticks > 4)
 	{
-		targetticks = 4.5;
+		targetticks = 4;
 	}
 	
 

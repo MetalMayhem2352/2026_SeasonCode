@@ -15,11 +15,14 @@ namespace Modules
 	TurretModule::TurretModule()
 	{
 		turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
-
+		
 		pidTimer = new Core::Timer();
 		PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
 
+        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, Constants::CANIVOUR_NAME);
+
 		LimelightHelpers::setPipelineIndex("limelight",0);
+
 
 		LimelightHelpers::SetupPortForwardingUSB(0);
 
@@ -53,6 +56,8 @@ namespace Modules
 	{
 		delete(pidTimer);
 		delete(PIDController);
+
+        delete(pigeon);
 	};
 
 	void TurretModule::Update()
@@ -61,59 +66,39 @@ namespace Modules
 		tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
 		
 		limelight_Error = tx * angleoffset;
-		angleoffset = 5.556; // Calibrate the motor encoder value per degree
+		angleoffset = 0.05; // Calibrate the motor encoder value per degree
 		motorangle = currentpos / angleoffset; // Output
-		
-		
+  	
+	
 
 		hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
 		pidTimer->Update();
+		if (hasTarget)
+		{
+			lockedTargetHeading = GetYaw() + tx;
+		}
+		error = lockedTargetHeading -  GetYaw();
+		while (error > 180) error -= 360;
+		while (error < -180) error += 360;
 
-		// lockedTargetHeading = swerveDrive->GetYaw() + tx;
 		targetAngle = error;
 		targetticks = targetAngle * angleoffset;
 
-		if (motorangle < -60)
+		if (targetticks < -5.4)
 		{
-			targetticks = motorangle * angleoffset;
+			targetticks = -5.4;
 		}
-		if (motorangle < 60)
+		if (targetticks > 4.5)
 		{
-			targetticks = motorangle * angleoffset;
+			targetticks = 4.5;
 		}
+	
+	
 
-		error = lockedTargetHeading;
-
-		
+	
 		currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
 
 		std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
-		angleoffset = 1; // Calibrate the motor encoder value per degree
-		
-		motorangle = currentpos / angleoffset; // Output
-
-		if(limelight_Error > maxRotation)
-		{
-			desiredEncoderPosition = maxRotation * angleoffset;
-		}
-		if (desiredEncoderPosition < minRotation * angleoffset)
-		{
-			desiredEncoderPosition = minRotation * angleoffset;
-		}
-
-	}
-
-	//find april is for looking for the april tag if it cant find it
-	void TurretModule::Find_april()
-	{
-		if (hasTarget == false && motorangle < 170)
-		{
-			turret_motor->Set(PIDController->Calculate(currentpos,minRotation * angleoffset,pidTimer->GetDeltaTime()));
-		}
-		if (hasTarget == false && motorangle > -170)
-		{
-			turret_motor->Set(PIDController->Calculate(currentpos,maxRotation * angleoffset,pidTimer->GetDeltaTime()));
-		}
 	}
 	void TurretModule::turretIdle(){
 		turret_motor->Set(0);
@@ -143,4 +128,19 @@ namespace Modules
 
 		return 0;
 	}
+
+	/// @brief Degrees
+    /// @return The YAW of the giro in degrees.
+    double TurretModule::GetYaw()
+    {
+        double yaw = pigeon->GetYaw().GetValue().value();
+
+        yaw = 360 - yaw;
+
+        while (yaw < 0)
+        {
+            yaw += 360;
+        }
+        return std::fmod(yaw, 360.0);
+    }
 }

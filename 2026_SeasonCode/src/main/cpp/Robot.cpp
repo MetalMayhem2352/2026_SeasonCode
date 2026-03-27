@@ -154,6 +154,8 @@ void Robot::TeleopPeriodic()
 	double x = driver1.GetRawAxis(0); // forward
     double y = -driver1.GetRawAxis(1);  // strafe
     double rotation = driver1.GetRawAxis(4); // rotation input
+
+	
 	
 	/*
 
