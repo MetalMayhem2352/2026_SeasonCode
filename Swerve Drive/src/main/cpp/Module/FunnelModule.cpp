@@ -15,17 +15,29 @@ namespace Modules
         delete(funnelMotor);
     }
 
-    void FunnelModule::Feed()
+    void FunnelModule::Update()
     {
-        funnelMotor->Set(1);
     }
 
-    void FunnelModule::Unjam()
+    void FunnelModule::UpdateState(State state)
     {
-        funnelMotor->Set(-0.5);
+        currentState = state;
+        switch (state)
+        {
+        case Idle:
+            funnelMotor->Set(0);
+            break;
+        case Feed:
+            funnelMotor->Set(1);
+            break;
+        case Unjam:
+            funnelMotor->Set(-0.5);
+            break;
+        }
     }
-    void FunnelModule::Idle()
+
+    FunnelModule::State FunnelModule::GetState()
     {
-        funnelMotor->Set(0);
+        return currentState;
     }
 }

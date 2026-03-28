@@ -53,10 +53,11 @@ void Robot::TeleopPeriodic()
     double y = -driver1.GetRawAxis(1);  // strafe
     double rotation = driver1.GetRawAxis(4); // rotation input
 
+    swerveDrive->Move(x, y, rotation);
     
     if (driver1.GetRawButtonPressed(7))
     {
-        
+        swerveDrive->ResetYaw();
     }
 }
 
@@ -68,9 +69,8 @@ void Robot::TestInit() {
 void Robot::TestPeriodic() {
 
     intakeModule->UpdateState(intakeModule->Intaking);
-    funnelModule->Feed();
+    funnelModule->UpdateState(funnelModule->Feed);
     shooterModule->ShootAtDistance(0);
-    
 }
 
 void Robot::TestExit() {}

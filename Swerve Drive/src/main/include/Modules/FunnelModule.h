@@ -12,16 +12,28 @@ namespace Modules
 {
     class FunnelModule
     {
+        public:
+            enum State
+            {
+                Idle = 0,
+                Feed = 1,
+                Unjam = 2
+            }; 
+
         private:
+            State currentState;
+
             ctre::phoenix6::hardware::TalonFX* funnelMotor;
+        
         public:
 
             FunnelModule();
             ~FunnelModule();
 
-            void Feed();
-            void Unjam();
-            void Idle();
+            void Update();
+            void UpdateState(State state);
+
+            State GetState();
         
 
     };
