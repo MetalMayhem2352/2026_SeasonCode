@@ -114,7 +114,7 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(0.12, 25, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig(0.3, 5, 0, 0, 0);
         
         inline constexpr double MAX_ROTATION = 90;
         inline constexpr double MIN_ROTATION = -90;
@@ -139,6 +139,10 @@ namespace Constants
     namespace Shooter
     {
         inline constexpr int shooterID = 15; 
+        inline constexpr int hoodID = 9;
+
+        inline constexpr double hoodDownPos = 1;
+        inline constexpr double hoodUpPos = 0.6;
 
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotorCondiguration =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}

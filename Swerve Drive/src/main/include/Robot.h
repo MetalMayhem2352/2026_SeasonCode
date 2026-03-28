@@ -35,6 +35,7 @@ public:
     void TestExit() override;
 
 private:
+    frc::Servo hoodServo{9};
 
     Pathing::CTRESwerveDrive* swerveDrive;
     Modules::FunnelModule* funnelModule;

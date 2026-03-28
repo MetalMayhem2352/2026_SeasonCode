@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "Pathing/RobotPosition.h"
 
+#include <frc/Servo.h>
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 

@@ -63,14 +63,15 @@ void Robot::TeleopPeriodic()
 
 void Robot::TeleopExit() {}
 
-void Robot::TestInit() {
+void Robot::TestInit() 
+{
+
 }
 
-void Robot::TestPeriodic() {
-
-    intakeModule->UpdateState(intakeModule->Intaking);
-    funnelModule->UpdateState(funnelModule->Feed);
-    shooterModule->ShootAtDistance(0);
+void Robot::TestPeriodic() 
+{
+    std::cout << "hoodServo: " << hoodServo.GetChannel() << "\n";
+    hoodServo.Set(1);
 }
 
 void Robot::TestExit() {}

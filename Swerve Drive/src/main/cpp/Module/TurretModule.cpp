@@ -84,14 +84,14 @@ namespace Modules
 		targetAngle = error;
 		targetticks = targetAngle * angleoffset;
 
-		if (targetticks < -5.4)
+		/*if (targetticks < -5.4)
 		{
 			targetticks = -5.4;
 		}
 		if (targetticks > 4.5)
 		{
 			targetticks = 4.5;
-		}
+		}*/
 	
 	
 
@@ -108,11 +108,12 @@ namespace Modules
 	{
 		Update();
 
-		std::cout << "error :" << limelight_Error << "\n";
+		std::cout << "yaw :" << GetYaw() << "\n";
+		std::cout << "targetticks :" << targetticks << "\n";
 		std::cout << "pos :" << currentpos << "\n";
-		std::cout << "power :" << -PIDController->Calculate(0, limelight_Error, pidTimer->GetDeltaTime()) << "\n";
+		std::cout << "power :" << -PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()) << "\n";
 		
-		turret_motor->Set(PIDController->Calculate(0, targetticks, pidTimer->GetDeltaTime()));
+		turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
 		
 	}
 	double TurretModule::limelight_Distance()

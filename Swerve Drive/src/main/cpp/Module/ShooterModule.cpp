@@ -22,7 +22,6 @@ namespace Modules
     void ShooterModule::Stop()
     {
         currentState = Idle;
-        shooterMotor->Set(0);
     }
 
 
