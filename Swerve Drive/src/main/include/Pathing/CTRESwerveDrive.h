@@ -20,7 +20,7 @@ namespace Pathing
                 TunerConstants::FrontLeft, TunerConstants::FrontRight, TunerConstants::BackLeft, TunerConstants::BackRight};
 
             swerve::requests::FieldCentric m_driveRequest = swerve::requests::FieldCentric{}
-                .WithDeadband(TunerConstants::kSpeedAt12Volts * 0.1).WithRotationalDeadband(TunerConstants::kMaxAngularSpeed * 0.1) // Add a 10% deadband
+                .WithDeadband(TunerConstants::kSpeedAt12Volts * 0.1).WithRotationalDeadband(TunerConstants::kRotationSpeedAt12Volts * 0.1) // Add a 10% deadband
                 .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
                 .WithSteerRequestType(swerve::SteerRequestType::Position);
 

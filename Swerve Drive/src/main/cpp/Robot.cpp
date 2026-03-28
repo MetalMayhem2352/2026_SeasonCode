@@ -10,19 +10,22 @@
 
 Robot::Robot() 
 {
-  	intakeModule = new Modules::IntakeModule();
-  	turretModule = new Modules::TurretModule();
-  	shooterModule = new Modules::ShooterModule();
-  	funnelModule = new Modules::FunnelModule();
+    swerveDrive = new Pathing::CTRESwerveDrive();
+
+    funnelModule = new Modules::FunnelModule();
+    intakeModule = new Modules::IntakeModule();
+    shooterModule = new Modules::ShooterModule();
+    turretModule = new Modules::TurretModule();
 }
 
 Robot::~Robot() 
-{   
-  	delete(intakeModule);
-  	delete(turretModule);
-  	delete(shooterModule);
-  	delete(swerveDrive);
-  	delete(funnelModule);
+{
+    delete(swerveDrive);
+    
+    delete(funnelModule);
+    delete(intakeModule);
+    delete(shooterModule);
+    delete(turretModule);
 }
 
 void Robot::RobotPeriodic() {
@@ -54,25 +57,29 @@ void Robot::TeleopPeriodic()
     double rotation = driver1.GetRawAxis(4); // rotation input
 
     swerveDrive->Move(x, y, rotation);
-    
+
     if (driver1.GetRawButtonPressed(7))
     {
+        std::cout << "1\n";
         swerveDrive->ResetYaw();
     }
 }
 
 void Robot::TeleopExit() {}
 
-void Robot::TestInit() 
-{
-
+void Robot::TestInit() {
 }
 
-void Robot::TestPeriodic() 
-{
-    std::cout << "hoodServo: " << hoodServo.GetChannel() << "\n";
-    hoodServo.Set(1);
-}
+void Robot::TestPeriodic() {
+    if (driver1.GetRawButtonPressed(1))
+    {
+        hoodServo.Set(0.2);
+    }
+    if (driver1.GetRawButtonPressed(2))
+    {
+        hoodServo.Set(1);
+    }
+}   
 
 void Robot::TestExit() {}
 

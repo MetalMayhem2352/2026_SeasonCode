@@ -36,7 +36,7 @@ public:
 
 private:
     frc::Servo hoodServo{9};
-
+    
     Pathing::CTRESwerveDrive* swerveDrive;
     Modules::FunnelModule* funnelModule;
     Modules::IntakeModule* intakeModule;
