@@ -19,7 +19,7 @@ namespace Modules
 		pidTimer = new Core::Timer();
 		PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
 
-        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::Swerve::pigeonID, Constants::CANIVOUR_NAME);
+        pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::pigeonID, Constants::CANIVOUR_NAME);
 
 		LimelightHelpers::setPipelineIndex("limelight",0);
 

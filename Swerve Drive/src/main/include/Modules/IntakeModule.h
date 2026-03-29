@@ -25,6 +25,9 @@ namespace Modules
 
             State currentState;
 
+            ctre::phoenix6::hardware::TalonFX* leftPivotMotor;
+            ctre::phoenix6::hardware::TalonFX* rightPivotMotor;
+
             ctre::phoenix6::hardware::TalonFX* frontIntakeMotor;
             ctre::phoenix6::hardware::TalonFX* backIntakeMotor;
             ctre::phoenix6::hardware::TalonFX* basketMotor;
