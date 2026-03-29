@@ -3,8 +3,11 @@
 // Custom
 #include "Core/PIDConfig.h"
 #include "Core/Vector2.h"
+#include "Core/PiecewiseLinearFunction.h"
+
 #include "CustomSwerveDrive/RobotPosition.h"
 #include "Auto/Point.h"
+
 
 // FRC
 #include <ctre/phoenix6/core/CoreTalonFX.hpp>
@@ -138,11 +141,24 @@ namespace Constants
 
     namespace Shooter
     {
-        inline constexpr int shooterID = 15; 
-        inline constexpr int hoodID = 9;
+        inline constexpr int SHOOTER_ID = 15; 
+        inline constexpr int HOOD_ID = 9;
 
-        inline constexpr double hoodDownPos = 1;
-        inline constexpr double hoodUpPos = 0.6;
+        inline constexpr double HOOD_MIN_DOWN_POS = 1;
+        inline constexpr double HOOD_MAX_UP_POS = 0.2;
+        
+        inline constexpr double HOOD_MIN_DOWN_ANGLE = 0;
+        inline constexpr double HOOD_MAX_UP_ANGLE = 20;
+
+        // Degrees: Position
+        Core::PiecewiseLinearFunction HOOD_TABLE(
+            {
+                {HOOD_MIN_DOWN_ANGLE, HOOD_MIN_DOWN_POS},
+                {HOOD_MAX_UP_ANGLE, HOOD_MAX_UP_POS}
+            });
+
+
+
 
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotorCondiguration =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
@@ -150,6 +166,9 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
+
+        
+        static std::string SHOOTING_DISTANCE_LOOKUP_TABLE_NAME = "ShooingDistanceLookupTable.json";
     }
 
     namespace Intake
@@ -226,4 +245,5 @@ namespace Constants
 
 
     static std::string CANIVOUR_NAME = "Default Name";
+    static std::string HOME_DIRECTORY = "/home/lvuser/";
 }

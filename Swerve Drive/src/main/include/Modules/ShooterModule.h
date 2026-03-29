@@ -1,12 +1,9 @@
 #pragma once
 
-#include "Core/Timer.h"
-#include "Core/PIDController.h"
+#include "Core/PiecewiseLinearFunctionXYZ.h"
 #include "Constants.h"
-#include "Pathing/RobotPosition.h"
 
 #include <frc/Servo.h>
-#include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
 namespace Modules
@@ -21,17 +18,23 @@ namespace Modules
             };
         private:
 
+            frc::Servo hoodServo{9};
             ctre::phoenix6::hardware::TalonFX* shooterMotor;
 
             State currentState;
+
+            // Distance (meters): Power: HoodAngle
+            Core::PiecewiseLinearFunctionXYZ shooingDistanceTable;
 
         public:
 
             ShooterModule();
             ~ShooterModule();
 
-            void ShootAtDistance(double distance);
+            void ShootAtDistance(float distance);
             void Stop();
+
+            void MoveHood(float angle);
 
             State GetState();
         
