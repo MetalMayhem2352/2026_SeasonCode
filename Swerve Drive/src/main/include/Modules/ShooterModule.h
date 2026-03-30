@@ -15,6 +15,7 @@ namespace Modules
             {
                 Idle = 0,
                 Shoot = 1,
+                Pass = 2,
             };
         private:
 
@@ -33,10 +34,13 @@ namespace Modules
 
             void ShootAtDistance(float distance);
             void Stop();
-
-            void MoveHood(float angle);
+            void PassBall();
 
             State GetState();
+
+        private:
+            
+            void MoveHood(float angle);
         
     };
 }

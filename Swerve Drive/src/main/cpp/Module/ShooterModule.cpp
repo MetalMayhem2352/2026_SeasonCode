@@ -27,7 +27,14 @@ namespace Modules
     }
     void ShooterModule::Stop()
     {
+        shooterMotor->Set(0);
         currentState = Idle;
+    }
+    void ShooterModule::PassBall()
+    {
+        MoveHood(Constants::Shooter::HOOD_MAX_UP_ANGLE);
+        shooterMotor->Set(1);
+        currentState = Pass;
     }
 
     void ShooterModule::MoveHood(float angle)
