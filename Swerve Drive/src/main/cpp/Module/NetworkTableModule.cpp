@@ -3,8 +3,8 @@
 
 namespace Modules
 {
-    void SetUsedPrograms(Programs usedPrograms)
-            {
-                this->usedPrograms = usedPrograms;
-            }
+    void NetworkTableModule::SetUsedPrograms(Programs usedPrograms)
+    {
+        this->usedPrograms = usedPrograms;
+    }
 }

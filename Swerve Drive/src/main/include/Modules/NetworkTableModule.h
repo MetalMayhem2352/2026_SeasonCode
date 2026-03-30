@@ -26,6 +26,7 @@ namespace Modules
 
         private:
             
+            void PIDProgram(); 
             void ShooterTunningProgram(); 
             
     };
