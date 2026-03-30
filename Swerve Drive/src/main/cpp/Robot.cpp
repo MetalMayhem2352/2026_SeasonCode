@@ -38,7 +38,6 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -57,49 +56,7 @@ void Robot::TeleopPeriodic()
     double rotation = driver1.GetRawAxis(4); // rotation input
 
     swerveDrive->Move(x, y, rotation);
-
-    if (driver1.GetRawButtonPressed(7))
-    {
-        swerveDrive->ResetYaw();
-    }
-
-    if (driver1.GetRawAxis(-1)) // Right Trigger ################ Shoot 
-    {
-        intakeModule->UpdateState(intakeModule->Shooting);
-        funnelModule->UpdateState(funnelModule->Feed);
-        // TO;DO ADD DISTANCE ESTIMATE ################ ASHER
-        shooterModule->ShootAtDistance(0);
-
-        // TO;DO ADD AUTO TRACKING ################ GABE
-    }
-    else if (driver1.GetRawButton(-1)) // Right Bumper ################ Pass
-    {
-        intakeModule->UpdateState(intakeModule->Shooting);
-        funnelModule->UpdateState(funnelModule->Feed);
-        shooterModule->PassBall();
-
-        // TO;DO ADD AUTO TRACKING ################ GABE
-    }
-    else if (driver1.GetRawAxis(-1)) // Left Trigger ################ Intake 
-    {
-        intakeModule->UpdateState(intakeModule->Intaking);
-        funnelModule->UpdateState(funnelModule->Idle);
-        shooterModule->Stop();
-    }
-    else if (driver1.GetRawButton(-1)) // Left Bumper ################ Outake
-    {
-        intakeModule->UpdateState(intakeModule->Outaking);
-        funnelModule->UpdateState(funnelModule->Idle);
-        shooterModule->Stop();
-    }
-    else
-    {
-        intakeModule->UpdateState(intakeModule->Idle);
-        funnelModule->UpdateState(funnelModule->Idle);
-        shooterModule->Stop();
-    }
-
-
+    GabeDrive();
 }
 
 void Robot::TeleopExit() {}
@@ -108,17 +65,111 @@ void Robot::TestInit() {
 }
 
 void Robot::TestPeriodic() {
-    if (driver1.GetRawButtonPressed(1))
-    {
-        hoodServo.Set(0.2);
-    }
-    if (driver1.GetRawButtonPressed(2))
-    {
-        hoodServo.Set(1);
-    }
+    intakeModule->UpdateState(intakeModule->Intaking);
+    funnelModule->UpdateState(funnelModule->Feed);
+    shooterModule->ShootAtDistance(10);
 }   
 
 void Robot::TestExit() {}
+
+
+void Robot::BryceDrive() 
+{
+    // RIght Bottom Pattle: Intake Out
+    if (driver1.GetPOV(90))
+    {
+        swerveDrive->ResetYaw();
+    }
+
+    if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
+    {
+        // intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        // TO;DO ADD DISTANCE ESTIMATE ################ ASHER
+        shooterModule->ShootAtDistance(0);
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawButton(6)) // Right Bumper ################ Pass
+    {
+        // intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        shooterModule->PassBall();
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawAxis(2)) // Left Trigger ################ Intake 
+    {
+        // intakeModule->UpdateState(intakeModule->Intaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else if (driver1.GetRawButton(7)) // Left Bumper ################ Outake
+    {
+        // intakeModule->UpdateState(intakeModule->Outaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else
+    {
+        // intakeModule->UpdateState(intakeModule->Idle);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+}
+
+void Robot::GabeDrive() 
+{
+    // Left Trigger: Intake
+    // Left Bumper: Switch
+    // Bottom Left Pattle: Outake
+    // Right Tirgger: Shoot
+    // Right Bumper: Pass
+}
+
+void Robot::AsherDrive() 
+{
+    if (driver1.GetRawButtonPressed(7))
+    {
+        swerveDrive->ResetYaw();
+    }
+
+    if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
+    {
+        // intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        // TO;DO ADD DISTANCE ESTIMATE ################ ASHER
+        shooterModule->ShootAtDistance(0);
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawButton(6)) // Right Bumper ################ Pass
+    {
+        // intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        shooterModule->PassBall();
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawAxis(2)) // Left Trigger ################ Intake 
+    {
+        // intakeModule->UpdateState(intakeModule->Intaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else if (driver1.GetRawButton(7)) // Left Bumper ################ Outake
+    {
+        // intakeModule->UpdateState(intakeModule->Outaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else
+    {
+        // intakeModule->UpdateState(intakeModule->Idle);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {

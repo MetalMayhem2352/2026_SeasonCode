@@ -33,7 +33,8 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(0.3, 5, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig(0.6, 2, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig2(0.12, 25, 0, 0, 0);
         
         inline constexpr double MAX_ROTATION = 90;
         inline constexpr double MIN_ROTATION = -90;
@@ -120,7 +121,7 @@ namespace Constants
 
         inline constexpr int LEFT_PIVOT_ID = 11; 
         inline constexpr int RIGHT_PIVOT_ID = 12; 
-        inline constexpr int PIVOT_ENCODER_ID = 25; 
+        inline constexpr int PIVOT_ENCODER_ID = 0; 
 
         inline constexpr int FRONT_INTAKE_ID = 8; 
         inline constexpr int BACK_INTAKE_ID = 9; 

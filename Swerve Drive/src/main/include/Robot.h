@@ -15,33 +15,36 @@
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
 
-class Robot : public frc::TimedRobot {
-public:
-    Robot();
-    ~Robot();
-
-    void RobotPeriodic() override;
-    void DisabledInit() override;
-    void DisabledPeriodic() override;
-    void DisabledExit() override;
-    void AutonomousInit() override;
-    void AutonomousPeriodic() override;
-    void AutonomousExit() override;
-    void TeleopInit() override;
-    void TeleopPeriodic() override;
-    void TeleopExit() override;
-    void TestInit() override;
-    void TestPeriodic() override;
-    void TestExit() override;
-
-private:
-    frc::Servo hoodServo{9};
+class Robot : public frc::TimedRobot 
+{
+    private:
+        Pathing::CTRESwerveDrive* swerveDrive;
+        Modules::FunnelModule* funnelModule;
+        Modules::IntakeModule* intakeModule;
+        Modules::ShooterModule* shooterModule;
+        Modules::TurretModule* turretModule;
+            
+        frc::Joystick driver1{0};
     
-    Pathing::CTRESwerveDrive* swerveDrive;
-    Modules::FunnelModule* funnelModule;
-    Modules::IntakeModule* intakeModule;
-    Modules::ShooterModule* shooterModule;
-    Modules::TurretModule* turretModule;
-        
-    frc::Joystick driver1{0};
+    public:
+        Robot();
+        ~Robot();
+
+        void RobotPeriodic() override;
+        void DisabledInit() override;
+        void DisabledPeriodic() override;
+        void DisabledExit() override;
+        void AutonomousInit() override;
+        void AutonomousPeriodic() override;
+        void AutonomousExit() override;
+        void TeleopInit() override;
+        void TeleopPeriodic() override;
+        void TeleopExit() override;
+        void TestInit() override;
+        void TestPeriodic() override;
+        void TestExit() override;
+
+        void BryceDrive();
+        void GabeDrive();
+        void AsherDrive();
 };

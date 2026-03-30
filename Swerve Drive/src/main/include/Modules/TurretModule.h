@@ -67,8 +67,8 @@ namespace Modules
 			/// @return The YAW of the giro in degrees.
 			double GetYaw();
 
-			// void Rotate(double angle);
-			// double GetTurretPosition();
+			void Rotate(double angle);
+			double GetTurretPosition();
 	// 
 			// void Pass();
 			// bool CanPass();

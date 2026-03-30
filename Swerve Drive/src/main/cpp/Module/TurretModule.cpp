@@ -17,7 +17,7 @@ namespace Modules
 		turret_motor = new ctre::phoenix6::hardware::TalonFX(Constants::Turret::turretID, Constants::CANIVOUR_NAME);
 		
 		pidTimer = new Core::Timer();
-		PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig);
+		PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig2);
 
         pigeon = new ctre::phoenix6::hardware::Pigeon2(Constants::pigeonID, Constants::CANIVOUR_NAME);
 
@@ -63,7 +63,7 @@ namespace Modules
 	void TurretModule::Update()
 	{      
 		std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-		tx = LimelightHelpers::getTX("limelight");  // Horizontal offset from crosshair to target in degrees
+		tx = LimelightHelpers::getTX("limelight-main");  // Horizontal offset from crosshair to target in degrees
 		
 		limelight_Error = tx * angleoffset;
 		angleoffset = 0.05; // Calibrate the motor encoder value per degree
@@ -109,12 +109,12 @@ namespace Modules
 		Update();
 
 		std::cout << "yaw :" << GetYaw() << "\n";
-		std::cout << "targetticks :" << targetticks << "\n";
-		std::cout << "pos :" << currentpos << "\n";
-		std::cout << "power :" << -PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()) << "\n";
+		std::cout << "targetAngle :" << targetAngle << "\n";
+		std::cout << "tx :" << tx << "\n";
 		
-		turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
+		// turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
 		
+		Rotate(targetAngle);
 	}
 	double TurretModule::limelight_Distance()
 	{
@@ -144,4 +144,39 @@ namespace Modules
         }
         return std::fmod(yaw, 360.0);
     }
+
+	
+	void TurretModule::Rotate(double targetPosition)
+	{
+		// Normallizing pos between -180 and 180
+		while (targetPosition < -180)
+		{
+			targetPosition += 360;
+		}
+		while (targetPosition > 180)
+		{
+			targetPosition -= 360;
+		}
+
+		if (targetPosition < Constants::Turret::MIN_ROTATION + Constants::Turret::TOLERANCE)
+		{
+			targetPosition = Constants::Turret::MIN_ROTATION + Constants::Turret::TOLERANCE;
+		}
+		else if (targetPosition > Constants::Turret::MAX_ROTATION - Constants::Turret::TOLERANCE)
+		{
+			targetPosition = Constants::Turret::MAX_ROTATION - Constants::Turret::TOLERANCE;
+		}
+
+		double position = GetTurretPosition();
+		double error = targetPosition - position;
+		double power = PIDController->Calculate(position, targetPosition, pidTimer->GetDeltaTime());
+		
+		turret_motor->Set(power);
+	}
+
+	double TurretModule::GetTurretPosition()
+	{
+		return turret_motor->GetPosition().GetValueAsDouble() * Constants::Turret::MOTOR_TICKS_PER_DEGREE;
+	}
 }
+

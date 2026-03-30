@@ -1,5 +1,6 @@
 
 #include "Modules/IntakeModule.h"
+#include <iostream>
 
 namespace Modules
 {
@@ -10,11 +11,11 @@ namespace Modules
 
         frontIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::FRONT_INTAKE_ID, Constants::CANIVOUR_NAME);
         backIntakeMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::BACK_INTAKE_ID, Constants::CANIVOUR_NAME);
-        basketMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::BASKET_INTAKE_ID, Constants::CANIVOUR_NAME);
+        // basketMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Intake::BASKET_INTAKE_ID, Constants::CANIVOUR_NAME);
         
         frontIntakeMotor->GetConfigurator().Apply(Constants::Intake::frontIntakeMotorConfig);
         backIntakeMotor->GetConfigurator().Apply(Constants::Intake::backIntakeMotorConfig);
-        basketMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
+        // basketMotor->GetConfigurator().Apply(Constants::Intake::basketIntakeMotorConfig);
 
         pivotPIDTimer = new Core::Timer();
         pivotPIDController = new Core::PIDController(Constants::Intake::PIVOT_PID_CONFIG);
@@ -27,7 +28,7 @@ namespace Modules
 
         delete(frontIntakeMotor);
         delete(backIntakeMotor);
-        delete(basketMotor);
+        // delete(basketMotor);
 
         delete(pivotPIDTimer);
         delete(pivotPIDController);
@@ -50,6 +51,9 @@ namespace Modules
             targetPivotPosition = -1; // Idle
         }
         
+        std::cout << "pivotEncoder: " << pivotEncoder.Get() << "\n";
+
+        /*
         if (targetPivotPosition != -1)
         {
             double pivotPower = pivotPIDController->Calculate(pivotEncoder.Get(), targetPivotPosition, pivotPIDTimer->GetDeltaTime());
@@ -62,6 +66,7 @@ namespace Modules
             leftPivotMotor->Set(0);
             rightPivotMotor->Set(0);
         }
+        */
     }
 
     void IntakeModule::UpdateState(State newState)
@@ -73,7 +78,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(0);
                 backIntakeMotor->Set(0);
-                basketMotor->Set(0);
+                // basketMotor->Set(0);
 
                 targetPivotPosition = -1; // do nothing
                 break;
@@ -82,7 +87,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(1);
                 backIntakeMotor->Set(1);
-                basketMotor->Set(1);
+                // basketMotor->Set(1);
                 
                 targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
                 break;
@@ -91,7 +96,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(-0.5);
                 backIntakeMotor->Set(-0.5);
-                basketMotor->Set(0);
+                // basketMotor->Set(0);
 
                 targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
                 break;
@@ -100,7 +105,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(-0.5);
                 backIntakeMotor->Set(-0.5);
-                basketMotor->Set(0);
+                // basketMotor->Set(0);
 
                 targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
                 break;

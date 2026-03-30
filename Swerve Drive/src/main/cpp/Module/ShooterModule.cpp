@@ -1,5 +1,6 @@
 #include "Modules/ShooterModule.h"
 #include "Constants.h"
+#include <iostream>
 
 namespace Modules
 {
@@ -10,6 +11,9 @@ namespace Modules
         shooterMotor->GetConfigurator().Apply(Constants::Shooter::shooterMotorCondiguration);
 
         shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
+
+        std::cout << "\n\n\n########## Distance Table ##########\nx: 0, y:" << shooingDistanceTable.Get(0).y << ", z:" << shooingDistanceTable.Get(0).z << "\nx: 1, y: "
+            << shooingDistanceTable.Get(20).y << ", z:" << shooingDistanceTable.Get(20).z << "\n\n";
     }
     ShooterModule::~ShooterModule()
     {
@@ -20,13 +24,15 @@ namespace Modules
     {
         Core::PiecewiseLinearFunctionXYZ::Output resualt = shooingDistanceTable.Get(distance);
 
-        shooterMotor->Set(resualt.y);
-        MoveHood(resualt.z);
+        // shooterMotor->Set(resualt.y);
+        MoveHood(distance);
         
         currentState = State::Shoot;
     }
     void ShooterModule::Stop()
     {
+        shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
+
         shooterMotor->Set(0);
         currentState = Idle;
     }
