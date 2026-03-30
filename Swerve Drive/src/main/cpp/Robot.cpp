@@ -60,9 +60,46 @@ void Robot::TeleopPeriodic()
 
     if (driver1.GetRawButtonPressed(7))
     {
-        std::cout << "1\n";
         swerveDrive->ResetYaw();
     }
+
+    if (driver1.GetRawAxis(-1)) // Right Trigger ################ Shoot 
+    {
+        intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        // TO;DO ADD DISTANCE ESTIMATE ################ ASHER
+        shooterModule->ShootAtDistance(0);
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawButton(-1)) // Right Bumper ################ Pass
+    {
+        intakeModule->UpdateState(intakeModule->Shooting);
+        funnelModule->UpdateState(funnelModule->Feed);
+        shooterModule->PassBall();
+
+        // TO;DO ADD AUTO TRACKING ################ GABE
+    }
+    else if (driver1.GetRawAxis(-1)) // Left Trigger ################ Intake 
+    {
+        intakeModule->UpdateState(intakeModule->Intaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else if (driver1.GetRawButton(-1)) // Left Bumper ################ Outake
+    {
+        intakeModule->UpdateState(intakeModule->Outaking);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+    else
+    {
+        intakeModule->UpdateState(intakeModule->Idle);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+
+
 }
 
 void Robot::TeleopExit() {}
