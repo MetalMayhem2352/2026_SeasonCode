@@ -28,8 +28,7 @@ namespace Constants
             .WithStatorCurrentLimit(40_A)
             .WithStatorCurrentLimitEnable(true)
         );
-    
-    inline constexpr char pigeonID = 24;
+
 
     namespace Turret
     {
@@ -54,7 +53,6 @@ namespace Constants
         );
         
     }
-    
 
     namespace Shooter
     {
@@ -67,14 +65,12 @@ namespace Constants
         inline constexpr double HOOD_MIN_DOWN_ANGLE = 0;
         inline constexpr double HOOD_MAX_UP_ANGLE = 20;
 
-        // Degrees: Position
+        // Hood Degrees: Servo Position
         static Core::PiecewiseLinearFunction HOOD_TABLE(
         {
             {HOOD_MIN_DOWN_ANGLE, HOOD_MIN_DOWN_POS},
             {HOOD_MAX_UP_ANGLE, HOOD_MAX_UP_POS}
         });
-
-
 
 
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration shooterMotorCondiguration =
@@ -83,13 +79,25 @@ namespace Constants
                 ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
-
         
         static std::string SHOOTING_DISTANCE_LOOKUP_TABLE_NAME = "ShooingDistanceLookupTable.json";
     }
 
     namespace Intake
     {
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration leftPivotMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive)
+        );
+        static constexpr ctre::phoenix6::configs::TalonFXConfiguration rightPivotMotorConfig =
+            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
+            .WithMotorOutput(
+                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
+                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        );
+        
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration frontIntakeMotorConfig =
             ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
             .WithMotorOutput(
@@ -110,10 +118,20 @@ namespace Constants
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
 
+        inline constexpr int LEFT_PIVOT_ID = 11; 
+        inline constexpr int RIGHT_PIVOT_ID = 12; 
+        inline constexpr int PIVOT_ENCODER_ID = 25; 
+
         inline constexpr int FRONT_INTAKE_ID = 8; 
         inline constexpr int BACK_INTAKE_ID = 9; 
-
         inline constexpr int BASKET_INTAKE_ID = 10; 
+
+
+        inline constexpr float UP_ENCODER_POSITION = 0.0; 
+        inline constexpr float DOWN_ENCODER_POSITION = 135.0f / 360; 
+
+        
+        static inline Core::PIDConfig PIVOT_PID_CONFIG(0.5, 0.5, 0, 0, 0);
     }
 
     namespace Funnel 
@@ -128,6 +146,7 @@ namespace Constants
         inline constexpr int FUNNEL_MOTOR_ID = 13;
     }
 
+    inline constexpr char pigeonID = 24;
     static std::string CANIVOUR_NAME = "Default Name";
     static std::string HOME_DIRECTORY = "/home/lvuser/";
 }

@@ -4,9 +4,9 @@
 #include "Core/PIDController.h"
 #include "Constants.h"
 
-#include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <frc/Timer.h>
+#include <frc/DutyCycleEncoder.h>
+
 
 namespace Modules
 {
@@ -32,6 +32,12 @@ namespace Modules
             ctre::phoenix6::hardware::TalonFX* backIntakeMotor;
             ctre::phoenix6::hardware::TalonFX* basketMotor;
 
+            Core::Timer* pivotPIDTimer;
+            Core::PIDController* pivotPIDController;
+            frc::DutyCycleEncoder pivotEncoder{Constants::Intake::PIVOT_ENCODER_ID};
+
+            float targetPivotPosition;
+
         public:
             
 
@@ -41,5 +47,8 @@ namespace Modules
             void Update();
             void UpdateState(State newState);
             State GetState();
+
+        private:
+        
     };
 }
