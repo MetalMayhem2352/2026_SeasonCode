@@ -4,6 +4,7 @@
 #include "Core/PIDController.h"
 #include "Constants.h"
 #include "Pathing/TunerConstants.h"
+#include "Pathing/Odometery.h"
 
 #include <core/LimelightHelpers.h>
 #include <ctre/phoenix6/TalonFX.hpp>
@@ -24,6 +25,8 @@ namespace Pathing
                 .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage)
                 .WithSteerRequestType(swerve::SteerRequestType::Position);
 
+            Odometry* odometry;
+
         public:
 
             CTRESwerveDrive();
@@ -32,6 +35,8 @@ namespace Pathing
             void Update();
             void Move(double x, double z, double rotation);
             void ResetYaw();
+
+            Odometry* GetOdometery();
         
     };
 }

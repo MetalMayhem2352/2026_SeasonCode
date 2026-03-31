@@ -24,7 +24,7 @@ namespace Modules
     {
         Core::PiecewiseLinearFunctionXYZ::Output resualt = shooingDistanceTable.Get(distance);
 
-        // shooterMotor->Set(resualt.y);
+        shooterMotor->Set(resualt.y);
         MoveHood(distance);
         
         currentState = State::Shoot;

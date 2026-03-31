@@ -16,6 +16,8 @@ Robot::Robot()
     intakeModule = new Modules::IntakeModule();
     shooterModule = new Modules::ShooterModule();
     turretModule = new Modules::TurretModule();
+
+    networkTableModule = new Modules::NetworkTableModule();
 }
 
 Robot::~Robot() 
@@ -26,6 +28,8 @@ Robot::~Robot()
     delete(intakeModule);
     delete(shooterModule);
     delete(turretModule);
+
+    delete(networkTableModule);
 }
 
 void Robot::RobotPeriodic() {
@@ -33,14 +37,19 @@ void Robot::RobotPeriodic() {
 
 void Robot::DisabledInit() {}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() 
+{
+    networkTableModule->Update();
+}
 
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() 
+{
+}
 
 void Robot::AutonomousExit() {}
 
@@ -51,12 +60,13 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() 
 {
     // Read joystick (example: left stick for translation, right X for rotation)
-    double x = driver1.GetRawAxis(0); // forward
+    double x = -driver1.GetRawAxis(0); // forward
     double y = -driver1.GetRawAxis(1);  // strafe
-    double rotation = driver1.GetRawAxis(4); // rotation input
+    double rotation = -driver1.GetRawAxis(4); // rotation input
 
     swerveDrive->Move(x, y, rotation);
-    GabeDrive();
+    
+    AsherDrive();
 }
 
 void Robot::TeleopExit() {}
@@ -65,10 +75,11 @@ void Robot::TestInit() {
 }
 
 void Robot::TestPeriodic() {
-    intakeModule->UpdateState(intakeModule->Intaking);
-    funnelModule->UpdateState(funnelModule->Feed);
-    shooterModule->ShootAtDistance(10);
-}   
+    // intakeModule->UpdateState(intakeModule->Intaking);
+    // funnelModule->UpdateState(funnelModule->Feed);
+    // shooterModule->ShootAtDistance(5);
+    intakeModule->Update();
+}
 
 void Robot::TestExit() {}
 
@@ -134,6 +145,26 @@ void Robot::AsherDrive()
         swerveDrive->ResetYaw();
     }
 
+    if (driver1.GetRawButton(5))
+    {
+        intakeModule->UpdateState(intakeModule->Intaking);
+    }
+    else if (driver1.GetRawAxis(3))
+    {
+        intakeModule->UpdateState(intakeModule->Shooting);
+        shooterModule->ShootAtDistance(5);
+        funnelModule->UpdateState(funnelModule->Feed);
+    }
+    else 
+    {
+        intakeModule->UpdateState(intakeModule->Idle);
+        funnelModule->UpdateState(funnelModule->Idle);
+        shooterModule->Stop();
+    }
+
+    turretModule->Track();
+
+    /*
     if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
     {
         // intakeModule->UpdateState(intakeModule->Shooting);
@@ -169,6 +200,9 @@ void Robot::AsherDrive()
         funnelModule->UpdateState(funnelModule->Idle);
         shooterModule->Stop();
     }
+*/
+
+    intakeModule->Update();
 }
 
 #ifndef RUNNING_FRC_TESTS

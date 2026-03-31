@@ -33,8 +33,8 @@ namespace Constants
     namespace Turret
     {
         inline constexpr int turretID = 14; 
-        static inline Core::PIDConfig TurretPIDConfig(0.6, 2, 0, 0, 0);
-        static inline Core::PIDConfig TurretPIDConfig2(0.12, 25, 0, 0, 0);
+        //static inline Core::PIDConfig TurretPIDConfig(0.6, 2, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig2(0.25, 20, 0, 0, 0);
         
         inline constexpr double MAX_ROTATION = 90;
         inline constexpr double MIN_ROTATION = -90;
@@ -119,8 +119,8 @@ namespace Constants
                 .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
 
-        inline constexpr int LEFT_PIVOT_ID = 11; 
-        inline constexpr int RIGHT_PIVOT_ID = 12; 
+        inline constexpr int LEFT_PIVOT_ID = 12; 
+        inline constexpr int RIGHT_PIVOT_ID = 11; 
         inline constexpr int PIVOT_ENCODER_ID = 0; 
 
         inline constexpr int FRONT_INTAKE_ID = 8; 
@@ -128,8 +128,8 @@ namespace Constants
         inline constexpr int BASKET_INTAKE_ID = 10; 
 
 
-        inline constexpr float UP_ENCODER_POSITION = 0.0; 
-        inline constexpr float DOWN_ENCODER_POSITION = 135.0f / 360; 
+        inline constexpr float UP_ENCODER_POSITION = 0.590; 
+        inline constexpr float DOWN_ENCODER_POSITION = 0.180; 
 
         
         static inline Core::PIDConfig PIVOT_PID_CONFIG(0.5, 0.5, 0, 0, 0);

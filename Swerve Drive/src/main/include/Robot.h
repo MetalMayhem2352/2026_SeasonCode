@@ -14,6 +14,7 @@
 #include "Modules/IntakeModule.h"
 #include "Modules/ShooterModule.h"
 #include "Modules/TurretModule.h"
+#include "Modules/NetworkTableModule.h"
 
 class Robot : public frc::TimedRobot 
 {
@@ -23,6 +24,8 @@ class Robot : public frc::TimedRobot
         Modules::IntakeModule* intakeModule;
         Modules::ShooterModule* shooterModule;
         Modules::TurretModule* turretModule;
+
+        Modules::NetworkTableModule* networkTableModule;
             
         frc::Joystick driver1{0};
     

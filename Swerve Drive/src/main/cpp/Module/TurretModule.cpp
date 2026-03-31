@@ -62,8 +62,8 @@ namespace Modules
 
 	void TurretModule::Update()
 	{      
-		std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-		tx = LimelightHelpers::getTX("limelight-main");  // Horizontal offset from crosshair to target in degrees
+		std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight-main");
+		tx = table->GetEntry("tx").GetDouble(0);  // Horizontal offset from crosshair to target in degrees
 		
 		limelight_Error = tx * angleoffset;
 		angleoffset = 0.05; // Calibrate the motor encoder value per degree
@@ -71,7 +71,7 @@ namespace Modules
   	
 	
 
-		hasTarget = LimelightHelpers::getTV("limelight"); // Do you have a valid target?
+		hasTarget = table->GetEntry("tv").GetDouble(0) > 0.5; // Do you have a valid target?
 		pidTimer->Update();
 		if (hasTarget)
 		{
@@ -98,7 +98,6 @@ namespace Modules
 	
 		currentpos = turret_motor->GetPosition().GetValue().value(); // Motors Encoder Value
 
-		std::cout << "encoder pose: " << turret_motor->GetPosition().GetValue().value() << '\n';
 	}
 	void TurretModule::turretIdle(){
 		turret_motor->Set(0);
@@ -108,9 +107,6 @@ namespace Modules
 	{
 		Update();
 
-		std::cout << "yaw :" << GetYaw() << "\n";
-		std::cout << "targetAngle :" << targetAngle << "\n";
-		std::cout << "tx :" << tx << "\n";
 		
 		// turret_motor->Set(PIDController->Calculate(currentpos, targetticks, pidTimer->GetDeltaTime()));
 		

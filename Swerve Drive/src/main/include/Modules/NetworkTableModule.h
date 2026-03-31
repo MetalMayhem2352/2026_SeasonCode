@@ -1,5 +1,11 @@
 #pragma once
 
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/DoubleTopic.h>
+#include <networktables/StringTopic.h>
+#include <networktables/BooleanTopic.h>
+
+
 namespace Modules
 {
     class NetworkTableModule
@@ -17,8 +23,12 @@ namespace Modules
         private:
             Programs usedPrograms;
 
+            std::shared_ptr<nt::NetworkTable> table;
+            nt::NetworkTableEntry testEntry;
+            nt::NetworkTableEntry test2Entry;
 
         public:
+            NetworkTableModule();
 
             void SetUsedPrograms(Programs usedPrograms);
 
