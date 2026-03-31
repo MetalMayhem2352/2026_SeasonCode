@@ -30,7 +30,7 @@ namespace Pathing
 
         // Limelight tables
         std::shared_ptr<nt::NetworkTable> m_ll4;   // limelight-main
-        std::shared_ptr<nt::NetworkTable> m_ll3;   // limelight-left
+        // std::shared_ptr<nt::NetworkTable> m_ll3;   // limelight-left
 
         // Internal helpers
         void ProcessLimelight(std::shared_ptr<nt::NetworkTable> table, bool isLL4);

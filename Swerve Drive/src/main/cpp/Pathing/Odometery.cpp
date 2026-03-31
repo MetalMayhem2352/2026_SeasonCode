@@ -13,7 +13,7 @@ namespace Pathing
         m_pigeon(pigeon)
     {
         m_ll4 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-main");
-        m_ll3 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-left");
+        // m_ll3 = nt::NetworkTableInstance::GetDefault().GetTable("limelight-left");
 
         m_currentPose = frc::Pose2d();
     }
@@ -31,7 +31,7 @@ namespace Pathing
 
         // Process both cameras
         ProcessLimelight(m_ll4, true);
-        ProcessLimelight(m_ll3, false);
+        // ProcessLimelight(m_ll3, false);
     }
 
     void Odometry::AutoInitializePose()
@@ -39,7 +39,7 @@ namespace Pathing
         static bool initialized = false;
         if (initialized) return;
 
-        auto arr = m_ll4->GetNumberArray("botpose_wpiblue", {});
+        auto arr = m_ll4->GetNumberArray("botpose_wpired", {});
         if (arr.size() < 7) return;
 
         if (arr[0] == 0.0 && arr[1] == 0.0) return;
@@ -80,7 +80,7 @@ namespace Pathing
         double tv = table->GetNumber("tv", 0.0);
         if (tv < 1.0) return;
 
-        auto botpose = table->GetNumberArray("botpose_wpiblue", {});
+        auto botpose = table->GetNumberArray("botpose_wpired", {});
         if (botpose.size() < 7) return;
 
         frc::Pose2d visionPose{

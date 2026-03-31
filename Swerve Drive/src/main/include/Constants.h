@@ -29,6 +29,7 @@ namespace Constants
             .WithStatorCurrentLimitEnable(true)
         );
 
+    static frc::Pose2d goalPosition(4.75_m, 4_m, frc::Rotation2d());
 
     namespace Turret
     {
@@ -130,6 +131,7 @@ namespace Constants
 
         inline constexpr float UP_ENCODER_POSITION = 0.590; 
         inline constexpr float DOWN_ENCODER_POSITION = 0.180; 
+        inline constexpr float HALF_ENCODER_POSITION = 0.38; 
 
         
         static inline Core::PIDConfig PIVOT_PID_CONFIG(0.5, 0.5, 0, 0, 0);
@@ -146,6 +148,7 @@ namespace Constants
 
         inline constexpr int FUNNEL_MOTOR_ID = 13;
     }
+
 
     inline constexpr char pigeonID = 24;
     static std::string CANIVOUR_NAME = "Default Name";

@@ -20,15 +20,20 @@ class Robot : public frc::TimedRobot
 {
     private:
         Pathing::CTRESwerveDrive* swerveDrive;
+        Pathing::Odometry* odometry;
+
         Modules::FunnelModule* funnelModule;
         Modules::IntakeModule* intakeModule;
         Modules::ShooterModule* shooterModule;
         Modules::TurretModule* turretModule;
 
         Modules::NetworkTableModule* networkTableModule;
-            
+
         frc::Joystick driver1{0};
-    
+
+        double goalDistance;
+        double goalAngle;
+        
     public:
         Robot();
         ~Robot();

@@ -19,11 +19,20 @@ namespace Modules
                 Intaking = 1,
                 Shooting = 2,
                 Outaking = 3,
+            };
+            
+            enum PivotState
+            {
+                IdleMotors = 0,
+                Up = 1,
+                Down = 2,
+                Half = 3,
             };  
         
         private:
 
             State currentState;
+            PivotState currentPivotState;
 
             ctre::phoenix6::hardware::TalonFX* leftPivotMotor;
             ctre::phoenix6::hardware::TalonFX* rightPivotMotor;
@@ -47,6 +56,9 @@ namespace Modules
             void Update();
             void UpdateState(State newState);
             State GetState();
+
+            void SetPivot(PivotState);
+            PivotState GetPivotState();
 
         private:
         

@@ -7,10 +7,13 @@
 #include <iostream>
 
 #include <frc2/command/CommandScheduler.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
+#include <memory>
 
 Robot::Robot() 
 {
     swerveDrive = new Pathing::CTRESwerveDrive();
+    odometry = swerveDrive->GetOdometery();
 
     funnelModule = new Modules::FunnelModule();
     intakeModule = new Modules::IntakeModule();
@@ -19,6 +22,7 @@ Robot::Robot()
 
     networkTableModule = new Modules::NetworkTableModule();
 }
+
 
 Robot::~Robot() 
 {
@@ -32,7 +36,15 @@ Robot::~Robot()
     delete(networkTableModule);
 }
 
-void Robot::RobotPeriodic() {
+int i = 0;
+void Robot::RobotPeriodic() 
+{
+    i++;
+
+    if (i % 25 == 0)
+    {
+        std::cout << "Robot Pos ### x:" << odometry->GetPose().X().value() << "; y:" << odometry->GetPose().Y().value() << "; roation:" << odometry->GetPose().Rotation().Degrees().value() << "\n";
+    }
 }
 
 void Robot::DisabledInit() {}
@@ -59,6 +71,11 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() 
 {
+    frc::Pose2d currentPosition = odometry->GetPose();
+    goalDistance = std::sqrt(std::pow(Constants::goalPosition.X().value() - currentPosition.X().value(), 2) + std::pow(Constants::goalPosition.Y().value() - currentPosition.Y().value(), 2));
+    
+    
+
     // Read joystick (example: left stick for translation, right X for rotation)
     double x = -driver1.GetRawAxis(0); // forward
     double y = -driver1.GetRawAxis(1);  // strafe
@@ -66,6 +83,8 @@ void Robot::TeleopPeriodic()
 
     swerveDrive->Move(x, y, rotation);
     
+    swerveDrive->Update();
+
     AsherDrive();
 }
 
@@ -145,38 +164,20 @@ void Robot::AsherDrive()
         swerveDrive->ResetYaw();
     }
 
-    if (driver1.GetRawButton(5))
-    {
-        intakeModule->UpdateState(intakeModule->Intaking);
-    }
-    else if (driver1.GetRawAxis(3))
-    {
-        intakeModule->UpdateState(intakeModule->Shooting);
-        shooterModule->ShootAtDistance(5);
-        funnelModule->UpdateState(funnelModule->Feed);
-    }
-    else 
-    {
-        intakeModule->UpdateState(intakeModule->Idle);
-        funnelModule->UpdateState(funnelModule->Idle);
-        shooterModule->Stop();
-    }
-
     turretModule->Track();
 
-    /*
+    
     if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
     {
-        // intakeModule->UpdateState(intakeModule->Shooting);
+        intakeModule->UpdateState(intakeModule->Shooting);
         funnelModule->UpdateState(funnelModule->Feed);
-        // TO;DO ADD DISTANCE ESTIMATE ################ ASHER
-        shooterModule->ShootAtDistance(0);
+        shooterModule->ShootAtDistance(goalDistance);
 
         // TO;DO ADD AUTO TRACKING ################ GABE
     }
     else if (driver1.GetRawButton(6)) // Right Bumper ################ Pass
     {
-        // intakeModule->UpdateState(intakeModule->Shooting);
+        intakeModule->UpdateState(intakeModule->Shooting);
         funnelModule->UpdateState(funnelModule->Feed);
         shooterModule->PassBall();
 
@@ -184,23 +185,35 @@ void Robot::AsherDrive()
     }
     else if (driver1.GetRawAxis(2)) // Left Trigger ################ Intake 
     {
-        // intakeModule->UpdateState(intakeModule->Intaking);
+        intakeModule->UpdateState(intakeModule->Intaking);
         funnelModule->UpdateState(funnelModule->Idle);
         shooterModule->Stop();
     }
     else if (driver1.GetRawButton(7)) // Left Bumper ################ Outake
     {
-        // intakeModule->UpdateState(intakeModule->Outaking);
+        intakeModule->UpdateState(intakeModule->Outaking);
         funnelModule->UpdateState(funnelModule->Idle);
         shooterModule->Stop();
     }
     else
     {
-        // intakeModule->UpdateState(intakeModule->Idle);
+        intakeModule->UpdateState(intakeModule->Idle);
         funnelModule->UpdateState(funnelModule->Idle);
         shooterModule->Stop();
     }
-*/
+
+    if (driver1.GetRawButtonPressed(4)) 
+    {
+        intakeModule->SetPivot(intakeModule->Up);
+    }
+    else if (driver1.GetRawButtonPressed(2))
+    {
+        intakeModule->SetPivot(intakeModule->Half);
+    }
+    else if (driver1.GetRawButtonPressed(1))
+    {
+        intakeModule->SetPivot(intakeModule->Down);
+    }
 
     intakeModule->Update();
 }

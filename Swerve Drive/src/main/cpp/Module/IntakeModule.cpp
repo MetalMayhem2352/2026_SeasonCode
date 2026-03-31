@@ -38,26 +38,24 @@ namespace Modules
     {
         pivotPIDTimer->Update();
 
-        if (currentState == Intaking || currentState == Outaking)
+        if (currentPivotState == Up)
+        {
+            targetPivotPosition = Constants::Intake::UP_ENCODER_POSITION;
+        }
+        else if (currentPivotState == Down)
         {
             targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
         }
-        else if (currentState == Shooting)
+        else if (currentPivotState == Half)
         {
-            targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
+            targetPivotPosition = Constants::Intake::HALF_ENCODER_POSITION;
         }
         else
         {
             targetPivotPosition = -1; // Idle
         }
-        
-        std::cout << "pivotEncoder: " << pivotEncoder.Get() << "\n";
-
-        
-        // leftPivotMotor->Set(0.5);
-        // rightPivotMotor->Set(-0.5);
-            
     
+
         if (targetPivotPosition != -1)
         {
             double pivotPower = pivotPIDController->Calculate(pivotEncoder.Get(), targetPivotPosition, pivotPIDTimer->GetDeltaTime());
@@ -70,14 +68,10 @@ namespace Modules
             leftPivotMotor->Set(0);
             rightPivotMotor->Set(0);
         }
-        
-        
-        
     }
 
     void IntakeModule::UpdateState(State newState)
     {
-        
         currentState = newState;
         switch (newState)
         {
@@ -86,20 +80,15 @@ namespace Modules
                 frontIntakeMotor->Set(0);
                 backIntakeMotor->Set(0);
                 basketMotor->Set(0);
-
-                targetPivotPosition = -1; // do nothing
+                
                 break;
             }
             case State::Intaking:
             {
-                 frontIntakeMotor->Set(1);
-                 backIntakeMotor->Set(1);
-                 basketMotor->Set(1);
-                 
-            
+                frontIntakeMotor->Set(1);
+                backIntakeMotor->Set(1);
+                basketMotor->Set(1);
                 
-                
-                targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
                 break;
             }
             case State::Shooting:
@@ -108,7 +97,6 @@ namespace Modules
                 backIntakeMotor->Set(0);
                 basketMotor->Set(0);
 
-                targetPivotPosition = Constants::Intake::UP_ENCODER_POSITION;
                 break;
             }
             case State::Outaking:
@@ -117,14 +105,23 @@ namespace Modules
                 backIntakeMotor->Set(-0.5);
                 basketMotor->Set(0);
 
-                targetPivotPosition = Constants::Intake::DOWN_ENCODER_POSITION;
                 break;
             }
         }   
     }
-
     IntakeModule::State IntakeModule::GetState()
     {
         return currentState;
     }
+    
+
+    void IntakeModule::SetPivot(PivotState pivotState)
+    {
+        currentPivotState = pivotState;
+    }
+    IntakeModule::PivotState IntakeModule::GetPivotState()
+    {
+        return currentPivotState;
+    }
+
 }
