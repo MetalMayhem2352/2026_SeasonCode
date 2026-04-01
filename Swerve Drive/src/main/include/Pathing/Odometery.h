@@ -40,6 +40,8 @@ namespace Pathing
         void UpdateVisionTrust();
 
         // State
+        
+        bool initialized = false;
         frc::Pose2d m_currentPose;
         double m_lastBumpTime = 0.0;
 
@@ -50,7 +52,7 @@ namespace Pathing
             double theta;
         };
 
-        VisionStdDevs m_ll4StdDevNormal{0.3, 0.3, 8.0};
+        VisionStdDevs m_ll4StdDevNormal{0.1, 0.1, 5};
         VisionStdDevs m_ll3StdDevNormal{0.6, 0.6, 12.0};
 
         VisionStdDevs m_highTrust{0.1, 0.1, 5.0};

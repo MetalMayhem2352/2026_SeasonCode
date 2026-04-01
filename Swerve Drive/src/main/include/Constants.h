@@ -7,6 +7,7 @@
 
 // FRC
 #include <ctre/phoenix6/core/CoreTalonFX.hpp>
+#include <frc/geometry/Pose2d.h>
 
 // C++
 #include "math.h"
@@ -29,7 +30,8 @@ namespace Constants
             .WithStatorCurrentLimitEnable(true)
         );
 
-    static frc::Pose2d goalPosition(4.75_m, 4_m, frc::Rotation2d());
+    static frc::Pose2d goalPosition(4.75_m, 4.25_m, frc::Rotation2d());
+    static frc::Pose2d zeroPosition(0_m, -2_m, frc::Rotation2d());
 
     namespace Turret
     {
@@ -61,11 +63,11 @@ namespace Constants
         inline constexpr int SHOOTER_ID = 15; 
         inline constexpr int HOOD_ID = 9;
 
-        inline constexpr double HOOD_MIN_DOWN_POS = 1;
-        inline constexpr double HOOD_MAX_UP_POS = 0.2;
+        inline constexpr float HOOD_MIN_DOWN_POS = 1;
+        inline constexpr float HOOD_MAX_UP_POS = 0.2;
         
-        inline constexpr double HOOD_MIN_DOWN_ANGLE = 0;
-        inline constexpr double HOOD_MAX_UP_ANGLE = 20;
+        inline constexpr float HOOD_MIN_DOWN_ANGLE = 0;
+        inline constexpr float HOOD_MAX_UP_ANGLE = 20;
 
         // Hood Degrees: Servo Position
         static Core::PiecewiseLinearFunction HOOD_TABLE(

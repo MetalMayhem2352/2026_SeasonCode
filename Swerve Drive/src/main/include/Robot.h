@@ -13,7 +13,7 @@
 #include "Modules/FunnelModule.h"
 #include "Modules/IntakeModule.h"
 #include "Modules/ShooterModule.h"
-#include "Modules/TurretModule.h"
+#include "Modules/NewTurretModule.h"
 #include "Modules/NetworkTableModule.h"
 
 class Robot : public frc::TimedRobot 
@@ -25,7 +25,7 @@ class Robot : public frc::TimedRobot
         Modules::FunnelModule* funnelModule;
         Modules::IntakeModule* intakeModule;
         Modules::ShooterModule* shooterModule;
-        Modules::TurretModule* turretModule;
+        Modules::NewTurretModule* turretModule;
 
         Modules::NetworkTableModule* networkTableModule;
 
@@ -33,6 +33,9 @@ class Robot : public frc::TimedRobot
 
         double goalDistance;
         double goalAngle;
+
+        Core::Timer* timer;
+        bool going;
         
     public:
         Robot();

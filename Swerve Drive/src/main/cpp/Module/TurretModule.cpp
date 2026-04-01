@@ -164,7 +164,7 @@ namespace Modules
 		}
 
 		double position = GetTurretPosition();
-		double error = targetPosition - position;
+		// double error = targetPosition - position;
 		double power = PIDController->Calculate(position, targetPosition, pidTimer->GetDeltaTime());
 		
 		turret_motor->Set(power);

@@ -20,7 +20,8 @@ namespace Pathing
     
     void CTRESwerveDrive::Move(double x, double z, double rotation)
     {
-        swerveDrive.SetControl(m_driveRequest.WithVelocityX(z * TunerConstants::kSpeedAt12Volts).WithVelocityY(x * TunerConstants::kSpeedAt12Volts).WithRotationalRate(rotation * TunerConstants::kRotationSpeedAt12Volts));
+        
+        swerveDrive.SetControl(m_driveRequest.WithVelocityX(z * 0.25 * TunerConstants::kSpeedAt12Volts).WithVelocityY(x * 0.25 * TunerConstants::kSpeedAt12Volts).WithRotationalRate(rotation * 0.25 * TunerConstants::kRotationSpeedAt12Volts));
     }
     
     void CTRESwerveDrive::ResetYaw()

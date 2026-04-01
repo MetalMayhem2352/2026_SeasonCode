@@ -2,6 +2,7 @@
 
 #include <wpi/json.h>
 #include <fstream>
+#include <iostream>
 
 namespace Core
 {
@@ -78,6 +79,7 @@ namespace Core
                 {"z", point.z}
             });
 
+                std::cout << "a: " << point.z << '\n';
         }
 
         std::ofstream file(path);

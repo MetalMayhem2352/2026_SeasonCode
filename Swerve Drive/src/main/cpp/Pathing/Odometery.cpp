@@ -36,7 +36,6 @@ namespace Pathing
 
     void Odometry::AutoInitializePose()
     {
-        static bool initialized = false;
         if (initialized) return;
 
         auto arr = m_ll4->GetNumberArray("botpose_wpired", {});
@@ -111,6 +110,7 @@ namespace Pathing
 
     void Odometry::ResetPose(const frc::Pose2d& pose)
     {
+        initialized = false;
         m_drivetrain->ResetPose(pose);
         m_currentPose = pose;
     }

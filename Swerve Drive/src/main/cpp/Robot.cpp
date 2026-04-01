@@ -18,9 +18,11 @@ Robot::Robot()
     funnelModule = new Modules::FunnelModule();
     intakeModule = new Modules::IntakeModule();
     shooterModule = new Modules::ShooterModule();
-    turretModule = new Modules::TurretModule();
+    turretModule = new Modules::NewTurretModule();
 
     networkTableModule = new Modules::NetworkTableModule();
+
+    timer = new Core::Timer();
 }
 
 
@@ -41,17 +43,19 @@ void Robot::RobotPeriodic()
 {
     i++;
 
-    if (i % 25 == 0)
+    if (i % 50 == 0)
     {
-        std::cout << "Robot Pos ### x:" << odometry->GetPose().X().value() << "; y:" << odometry->GetPose().Y().value() << "; roation:" << odometry->GetPose().Rotation().Degrees().value() << "\n";
+        std::cout << "goalDistance: " << (goalDistance) <<'\n';
     }
+
+    networkTableModule->Update();
 }
 
 void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() 
 {
-    networkTableModule->Update();
+    
 }
 
 void Robot::DisabledExit() {}
@@ -66,15 +70,17 @@ void Robot::AutonomousPeriodic()
 void Robot::AutonomousExit() {}
 
 void Robot::TeleopInit() {
-    
+    odometry->ResetPose(frc::Pose2d(2_m, 4_m, frc::Rotation2d(0_deg)));
 }
 
 void Robot::TeleopPeriodic() 
 {
     frc::Pose2d currentPosition = odometry->GetPose();
-    goalDistance = std::sqrt(std::pow(Constants::goalPosition.X().value() - currentPosition.X().value(), 2) + std::pow(Constants::goalPosition.Y().value() - currentPosition.Y().value(), 2));
+    double headingInRadians = currentPosition.Rotation().Radians().value();
+    // shooter is 9" back form the center. Use trig to add that 9" 
+    // frc::Pose2d shooerPosition(currentPosition.X() - (9_in * std::cos(headingInRadians)), currentPosition.Y() - (9_in * std::sin(headingInRadians)), currentPosition.Rotation());
     
-    
+    goalDistance = std::sqrt(std::pow(Constants::goalPosition.X().value() - currentPosition.X().value(), 2) + std::pow(Constants::goalPosition.Y().value() - currentPosition.Y().value(), 2)) * 1000 / 25.4;
 
     // Read joystick (example: left stick for translation, right X for rotation)
     double x = -driver1.GetRawAxis(0); // forward
@@ -84,6 +90,35 @@ void Robot::TeleopPeriodic()
     swerveDrive->Move(x, y, rotation);
     
     swerveDrive->Update();
+/*
+
+    if (driver1.GetRawButtonPressed(1))
+    {
+        timer->Reset();
+        shooterModule->ShootAtDistance(goalDistance);
+        going = true;
+    }
+    
+    if (going)
+    {
+        timer->Update();
+        if (timer->GetStartTime() > 3 && timer->GetStartTime() < 13)
+        {
+            funnelModule->UpdateState(funnelModule->Feed);
+        }
+        else if (timer->GetStartTime() > 13)
+        {
+            funnelModule->UpdateState(funnelModule->Idle);
+            shooterModule->Stop();
+            going = false;
+        }
+    }
+    
+    
+*/
+    turretModule->UpdateState(turretModule->Shoot);
+    turretModule->Update(odometry->GetPose(), frc::ChassisSpeeds(), x, y, rotation);
+
 
     AsherDrive();
 }
@@ -162,9 +197,9 @@ void Robot::AsherDrive()
     if (driver1.GetRawButtonPressed(7))
     {
         swerveDrive->ResetYaw();
+        odometry->ResetPose(frc::Pose2d(0.0_m, 0.0_m, frc::Rotation2d(0_deg)));
     }
 
-    turretModule->Track();
 
     
     if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
@@ -216,6 +251,7 @@ void Robot::AsherDrive()
     }
 
     intakeModule->Update();
+    
 }
 
 #ifndef RUNNING_FRC_TESTS

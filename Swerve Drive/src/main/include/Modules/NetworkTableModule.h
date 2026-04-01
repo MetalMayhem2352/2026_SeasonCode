@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/PiecewiseLinearFunctionXYZ.h"
+
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/DoubleTopic.h>
 #include <networktables/StringTopic.h>
@@ -24,9 +26,12 @@ namespace Modules
             Programs usedPrograms;
 
             std::shared_ptr<nt::NetworkTable> table;
-            nt::NetworkTableEntry testEntry;
-            nt::NetworkTableEntry test2Entry;
+            nt::NetworkTableEntry distanceEntery;
+            nt::NetworkTableEntry powerEntery;
+            nt::NetworkTableEntry hoodEntery;
+            nt::NetworkTableEntry saveEntery;
 
+            Core::PiecewiseLinearFunctionXYZ shooingDistanceTable;
         public:
             NetworkTableModule();
 

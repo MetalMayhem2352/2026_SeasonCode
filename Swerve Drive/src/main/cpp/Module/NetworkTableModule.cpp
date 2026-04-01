@@ -1,24 +1,34 @@
 #include "Modules/NetworkTableModule.h"
 
+#include "Constants.h"
+
 #include <iostream>
 
 namespace Modules
 {
        
     NetworkTableModule::NetworkTableModule()
+        // :shooingDistanceTable({{0, 0, 0}})
     {
+        // shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
+
+        shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
+
+
         nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
         
         inst.SetServerTeam(2352);
         inst.StartClient4("MyConsoleClient");
         
         std::shared_ptr<nt::NetworkTable> table = inst.GetTable("SmartDashboard");
-
         
-        table = inst.GetTable("limelight-main");
+        
+        table = inst.GetTable("SmartDashboard");
 
-        testEntry = table->GetEntry("tv");
-        test2Entry = table->GetEntry("Test2");
+        distanceEntery = table->GetEntry("distance");
+        powerEntery = table->GetEntry("power");
+        hoodEntery = table->GetEntry("hood");
+        saveEntery = table->GetEntry("save");
     }
     
     void NetworkTableModule::SetUsedPrograms(Programs usedPrograms)
@@ -28,7 +38,15 @@ namespace Modules
 
     void NetworkTableModule::Update()
     {
-        test2Entry.SetDouble(10.0);
+        if (saveEntery.GetBoolean(false) == true)
+        {
+            saveEntery.SetBoolean(false);
+
+            shooingDistanceTable.AddPoint(distanceEntery.GetDouble(-1), powerEntery.GetDouble(0), hoodEntery.GetDouble(1));
+            shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
+
+            std::cout << "distance: " << distanceEntery.GetDouble(-1) << "; power: " << powerEntery.GetDouble(0) << "; hood: " << hoodEntery.GetDouble(0) << '\n';
+        }
     }
 
     void NetworkTableModule::PIDProgram()

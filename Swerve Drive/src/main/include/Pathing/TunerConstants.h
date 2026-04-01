@@ -72,8 +72,8 @@ public:
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    static constexpr units::meters_per_second_t kSpeedAt12Volts = 5.85_mps;
-    static constexpr units::turns_per_second_t kRotationSpeedAt12Volts = 0.75_tps;
+    static constexpr units::meters_per_second_t kSpeedAt12Volts = 0.5_mps;
+    static constexpr units::turns_per_second_t kRotationSpeedAt12Volts = 0.2_tps;
 
 private:
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
