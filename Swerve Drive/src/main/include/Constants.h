@@ -63,8 +63,8 @@ namespace Constants
         inline constexpr int SHOOTER_ID = 15; 
         inline constexpr int HOOD_ID = 9;
 
-        inline constexpr float HOOD_MIN_DOWN_POS = 1;
-        inline constexpr float HOOD_MAX_UP_POS = 0.2;
+        inline constexpr float HOOD_MIN_DOWN_POS = 0;
+        inline constexpr float HOOD_MAX_UP_POS = 0.72;
         
         inline constexpr float HOOD_MIN_DOWN_ANGLE = 0;
         inline constexpr float HOOD_MAX_UP_ANGLE = 20;

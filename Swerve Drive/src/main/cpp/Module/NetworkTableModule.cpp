@@ -42,7 +42,9 @@ namespace Modules
         {
             saveEntery.SetBoolean(false);
 
-            shooingDistanceTable.AddPoint(distanceEntery.GetDouble(-1), powerEntery.GetDouble(0), hoodEntery.GetDouble(1));
+            double hoodPos = hoodEntery.GetDouble(1);
+
+            shooingDistanceTable.AddPoint(distanceEntery.GetDouble(-1), powerEntery.GetDouble(0), hoodPos);
             shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
 
             std::cout << "distance: " << distanceEntery.GetDouble(-1) << "; power: " << powerEntery.GetDouble(0) << "; hood: " << hoodEntery.GetDouble(0) << '\n';

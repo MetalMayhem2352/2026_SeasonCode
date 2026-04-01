@@ -20,7 +20,7 @@ namespace Modules
             };
         private:
 
-            frc::Servo hoodServo{9};
+            frc::Servo hoodServo{1};
             ctre::phoenix6::hardware::TalonFX* shooterMotor;
 
             State currentState;

@@ -20,8 +20,11 @@ namespace Modules
         delete(shooterMotor);
     }
     bool i;
+    int j = 0;
     void ShooterModule::ShootAtDistance(float distance)
     {
+        j++;
+
         shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
 
         Core::PiecewiseLinearFunctionXYZ::Output resualt = shooingDistanceTable.Get(distance);
@@ -31,9 +34,9 @@ namespace Modules
             i = true;
             std::cout << "Power: " << resualt.y << "; Hood: " << resualt.z << '\n';
         }
-        shooterMotor->Set(resualt.y);
         MoveHood(resualt.z);
         
+        shooterMotor->Set(resualt.y);
         currentState = State::Shoot;
     }
     void ShooterModule::Stop()
@@ -54,7 +57,13 @@ namespace Modules
     void ShooterModule::MoveHood(float angle)
     {
         angle = std::clamp<float>(angle, Constants::Shooter::HOOD_MIN_DOWN_ANGLE, Constants::Shooter::HOOD_MAX_UP_ANGLE);
-        hoodServo.Set(Constants::Shooter::HOOD_TABLE.Get(angle));
+        
+        double hoodPos = Constants::Shooter::HOOD_TABLE.Get(angle);
+        
+        std::cout << "Hood Angle: " << hoodPos << "\n";
+
+        hoodServo.Set(hoodPos);
+
     }
 
 

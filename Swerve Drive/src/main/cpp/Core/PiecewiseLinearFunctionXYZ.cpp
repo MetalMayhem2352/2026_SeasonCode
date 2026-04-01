@@ -13,6 +13,15 @@ namespace Core
     }
 
     void PiecewiseLinearFunctionXYZ::AddPoint(float x, float y, float z) {
+        for (int i = 0; i < points.size(); i++)
+        {
+            if (points[i].x == x)
+            {
+                points[i].y = y;
+                points[i].z = z;
+                return;
+            }
+        }
         points.push_back({ x, y, z });
         Sort();
     }
@@ -79,7 +88,7 @@ namespace Core
                 {"z", point.z}
             });
 
-                std::cout << "a: " << point.z << '\n';
+            std::cout << "A ###### x: " << point.x << "; y: " << point.y << "; point.y" << point.z << '\n';
         }
 
         std::ofstream file(path);
@@ -113,19 +122,19 @@ namespace Core
     }
 
     void PiecewiseLinearFunctionXYZ::Sort() {
+        // Remove duplicate x values
+        auto newEnd = std::unique(points.begin(), points.end(),
+            [](const Point& a, const Point& b) {
+                return std::abs(a.x - b.x) < 1;
+            });
+
+        points.erase(newEnd, points.end());
+        
         // Sort by X
         std::sort(points.begin(), points.end(),
             [](const Point& a, const Point& b) {
                 return a.x < b.x;
             });
-
-        // Remove duplicate x values
-        auto newEnd = std::unique(points.begin(), points.end(),
-            [](const Point& a, const Point& b) {
-                return a.x == b.x;
-            });
-
-        points.erase(newEnd, points.end());
     }
 
 }

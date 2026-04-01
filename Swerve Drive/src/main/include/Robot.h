@@ -30,6 +30,8 @@ class Robot : public frc::TimedRobot
         Modules::NetworkTableModule* networkTableModule;
 
         frc::Joystick driver1{0};
+        bool intakePivotToggle = false;
+        bool intakePivotTogglePressed = false;
 
         double goalDistance;
         double goalAngle;

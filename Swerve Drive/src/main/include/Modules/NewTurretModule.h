@@ -28,8 +28,7 @@ namespace Modules
 			Core::Timer* pidTimer;
 			Core::PIDController* PIDController;
 
-			double tx;
-			bool hasTarget;
+			double taregtDistance = 0;
 
 			ctre::phoenix6::hardware::TalonFX* turret_motor; 
 			
@@ -41,9 +40,13 @@ namespace Modules
 			void UpdateState(State newState);
             
             bool CanShoot();
-            double GetTurretPosition();
-        private:
+			double GetTargetDistance();
+			
+		private:
 			void Rotate(double angle);
+            
+			double GetTurretPosition();
 			double GetTargetPosition(frc::Pose2d targetPosition, frc::Pose2d robotPosition, frc::ChassisSpeeds velocity, double xInput, double zInput, double rotationInput);
+			void CalculateTargetDistance(frc::Pose2d targetPosition, frc::Pose2d robotPosition, frc::ChassisSpeeds velocity, double xInput, double zInput, double rotationInput);
 	};
 }
