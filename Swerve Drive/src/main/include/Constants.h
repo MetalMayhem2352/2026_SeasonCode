@@ -151,6 +151,15 @@ namespace Constants
         inline constexpr int FUNNEL_MOTOR_ID = 13;
     }
 
+    namespace Basket
+    {
+        inline constexpr char LEFT_SERVO_ID = 0;
+        inline constexpr char RIGHT_SERVO_ID = 8;
+        
+        inline constexpr float UP_POSITION = 0;
+        inline constexpr float DOWN_POSITION = 0.25;
+        inline constexpr float SWEEP_POSITION = 0.65;
+    }
 
     inline constexpr char pigeonID = 24;
     static std::string CANIVOUR_NAME = "Default Name";
