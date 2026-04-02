@@ -30,7 +30,6 @@ namespace Pathing
 
         // Limelight tables
         std::shared_ptr<nt::NetworkTable> m_ll4;   // limelight-main
-        // std::shared_ptr<nt::NetworkTable> m_ll3;   // limelight-left
 
         // Internal helpers
         void ProcessLimelight(std::shared_ptr<nt::NetworkTable> table, bool isLL4);
@@ -52,9 +51,28 @@ namespace Pathing
             double theta;
         };
 
-        VisionStdDevs m_ll4StdDevNormal{0.1, 0.1, 5};
-        VisionStdDevs m_ll3StdDevNormal{0.6, 0.6, 12.0};
+        VisionStdDevs m_ll4StdDevNormal{0.05, 0.05, 3};
 
         VisionStdDevs m_highTrust{0.1, 0.1, 5.0};
+
+
+        
+		// Bot pose READ ONLY
+		nt::NetworkTableEntry xBotPositionEntry;
+		nt::NetworkTableEntry zBotPositionEntry;
+		nt::NetworkTableEntry botHeadingEntry;
+
+		// Limelight READ ONLY
+		nt::NetworkTableEntry xLimelightPositionEntery;
+		nt::NetworkTableEntry zLimelightPositionEntery;
+		nt::NetworkTableEntry limelightHeadingEntery;
+
+		// Limelight Standerd Deviation READ WRITE
+		nt::NetworkTableEntry xStartedDeviationLimelightEntery;
+		nt::NetworkTableEntry yStartedDeviationLimelightEntery;
+		nt::NetworkTableEntry theadaStartedDeviationLimelightEntery;
+
+        
+		nt::NetworkTableEntry isBlueEntery;
     };
 }

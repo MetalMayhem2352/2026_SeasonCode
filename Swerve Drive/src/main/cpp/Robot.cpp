@@ -12,15 +12,21 @@
 
 Robot::Robot() 
 {
+    networkTableModule = new Modules::NetworkTableModule();
+
+    std::cout << "Test! " << networkTableModule->GetNetworkTable() << "\n";
+    
     swerveDrive = new Pathing::CTRESwerveDrive();
+
+    std::cout << "Test10! " <<  "\n";
     odometry = swerveDrive->GetOdometery();
 
     funnelModule = new Modules::FunnelModule();
     intakeModule = new Modules::IntakeModule();
     shooterModule = new Modules::ShooterModule();
     turretModule = new Modules::NewTurretModule();
+    basketModule = new Modules::BasketModule();
 
-    networkTableModule = new Modules::NetworkTableModule();
 
     timer = new Core::Timer();
 }
@@ -34,6 +40,7 @@ Robot::~Robot()
     delete(intakeModule);
     delete(shooterModule);
     delete(turretModule);
+    delete(basketModule);
 
     delete(networkTableModule);
 }
@@ -45,7 +52,7 @@ void Robot::RobotPeriodic()
 
     if (i % 50 == 0)
     {
-        std::cout << "goalDistance: " << (goalDistance) <<'\n';
+        //  std::cout << "goalDistance: " << (goalDistance) <<'\n';
     }
 
     networkTableModule->Update();
@@ -65,6 +72,7 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() 
 {
+    intakeModule->UpdateState(intakeModule->Intaking);
 }
 
 void Robot::AutonomousExit() {}
@@ -99,10 +107,7 @@ void Robot::TeleopPeriodic()
 
 
     intakeModule->Update();
-    turretModule->UpdateState(turretModule->Shoot);
     turretModule->Update(odometry->GetPose(), frc::ChassisSpeeds(), x, y, rotation);
-    
-
 }
 
 void Robot::TeleopExit() {}
@@ -130,15 +135,13 @@ void Robot::TestPeriodic()
     
     swerveDrive->Update();
 
-
-
     if (driver1.GetRawButton(1))
     {
         timer->Reset();
         shooterModule->ShootAtDistance(goalDistance);
-        going = true;
+        isPreparingShooting = true;
     }
-    if (going)
+    if (isPreparingShooting)
     {
         timer->Update();
         if (timer->GetStartTime() > 3 && timer->GetStartTime() < 10)
@@ -149,7 +152,7 @@ void Robot::TestPeriodic()
         {
             funnelModule->UpdateState(funnelModule->Idle);
             shooterModule->Stop();
-            going = false;
+            isPreparingShooting = false;
         }
     }
 }
@@ -159,24 +162,35 @@ void Robot::TestExit() {}
 
 void Robot::BryceDrive() 
 {
+    if (driver1.GetRawButtonPressed(3))
+    {
+        isPreparingShooting = true;
+    }
+
     
     // RIght Bottom Pattle: Intake Out
     if (driver1.GetPOV(90))
     {
         swerveDrive->ResetYaw();
+        odometry->ResetPose(frc::Pose2d(2_m, 4_m, frc::Rotation2d(0_deg)));
     }
 
     if (driver1.GetRawAxis(3)) // Right Trigger ################ Shoot 
     {
+        isPreparingShooting = false;
         intakeModule->UpdateState(intakeModule->Shooting);
         funnelModule->UpdateState(funnelModule->Feed);
-        shooterModule->ShootAtDistance(0);
+        shooterModule->ShootAtDistance(goalDistance);
+        
+        turretModule->UpdateState(turretModule->Shoot);
     }
     else if (driver1.GetRawButton(6)) // Right Bumper ################ Pass
     {
         intakeModule->UpdateState(intakeModule->Shooting);
         funnelModule->UpdateState(funnelModule->Feed);
         shooterModule->PassBall();
+
+        turretModule->UpdateState(turretModule->PassRight);
     }
     else if (driver1.GetRawAxis(2)) // Left Trigger ################ Intake 
     {
@@ -184,10 +198,10 @@ void Robot::BryceDrive()
         funnelModule->UpdateState(funnelModule->Idle);
         shooterModule->Stop();
     }
-    else if (driver1.GetRawButton(7)) // Left Bumper ################ Outake
+    else if (driver1.GetRawButton(5)) // Left Bumper ################ Outake
     {
         intakeModule->UpdateState(intakeModule->Outaking);
-        funnelModule->UpdateState(funnelModule->Idle);
+        funnelModule->UpdateState(funnelModule->Unjam);
         shooterModule->Stop();
     }
     else
@@ -197,12 +211,22 @@ void Robot::BryceDrive()
         shooterModule->Stop();
     }
 
+    if (driver1.GetRawButtonPressed(1))
+    {
+        armUp = !armUp;
+        if (armUp)
+        {
+            basketModule->UpdateState(basketModule->Up);
+        }
+        else
+        {
+            basketModule->UpdateState(basketModule->Down);
+        }
+    }
     
     if (driver1.GetRawButtonPressed(2)) 
     {
         intakePivotToggle = !intakePivotToggle;
-        intakeModule->SetPivot(intakeModule->Up);
-        
         intakePivotTogglePressed = true;
     }
 
@@ -222,6 +246,11 @@ void Robot::BryceDrive()
     {
         intakePivotTogglePressed = false;
         intakeModule->SetPivot(intakeModule->Up);
+    }
+
+    if (isPreparingShooting)
+    {
+        shooterModule->ShootAtDistance(goalDistance);
     }
 
 }
@@ -346,6 +375,21 @@ void Robot::AsherDrive()
 
     intakeModule->Update();
     
+}
+
+void Robot::SeccondDriveAim() 
+{   
+    double leftY = -driver2.GetRawAxis(1);
+
+    double rightX = driver2.GetRawAxis(4);
+    double rightY = -driver2.GetRawAxis(5);
+
+    double targetAngle = std::atan2(rightX, rightY);
+
+    double turretAngle = targetAngle - swerveDrive->GetYaw(); 
+
+    turretModule->Rotate(turretAngle);
+    shooterModule->MoveHood(10 + (leftY * 10));
 }
 
 #ifndef RUNNING_FRC_TESTS

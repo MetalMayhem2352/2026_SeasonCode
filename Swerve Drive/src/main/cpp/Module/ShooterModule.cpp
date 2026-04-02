@@ -6,6 +6,7 @@ namespace Modules
 {
     ShooterModule::ShooterModule()
     {
+
         shooterMotor = new ctre::phoenix6::hardware::TalonFX(Constants::Shooter::SHOOTER_ID, Constants::CANIVOUR_NAME);
 
         shooterMotor->GetConfigurator().Apply(Constants::Shooter::shooterMotorCondiguration);
@@ -14,34 +15,96 @@ namespace Modules
 
         std::cout << "\n\n\n########## Distance Table ##########\nx: 0, y:" << shooingDistanceTable.Get(0).y << ", z:" << shooingDistanceTable.Get(0).z << "\nx: 1, y: "
             << shooingDistanceTable.Get(20).y << ", z:" << shooingDistanceTable.Get(20).z << "\n\n";
+    
+
+        nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+        
+        inst.SetServerTeam(2352);
+        inst.StartClient4("MyConsoleClient");
+        
+        std::shared_ptr<nt::NetworkTable> networkTable = inst.GetTable("SmartDashboard");
+
+    
+        currentFlywheelPowerEntry = networkTable->GetEntry("flywheelPower");
+        currentFlywheelRPMEntry = networkTable->GetEntry("flywheelRPM");
+        flywheelSpeedModifierEntery = networkTable->GetEntry("flywheelSpeedModifier");
+
+        targetServoAngleEntry = networkTable->GetEntry("taregetServoAngle");
+        maxAngleEntery = networkTable->GetEntry("servoMinAngle");
+        minAngleEntery = networkTable->GetEntry("servoMaxAngle");
+        maxPosEntery = networkTable->GetEntry("maxPosEntery");
+        minPosEntery = networkTable->GetEntry("minPosEntery");
+        servoOffsetEntery = networkTable->GetEntry("servoOffset");
+
+        useShooterValuesEntery = networkTable->GetEntry("lockShooterValues");
+
+        currentFlywheelPowerEntry.SetDouble(0);
+        currentFlywheelRPMEntry.SetDouble(0);
+        flywheelSpeedModifierEntery.SetDouble(1);
+
+        targetServoAngleEntry.SetDouble(1);
+        maxAngleEntery.SetDouble(Constants::Shooter::HOOD_MAX_UP_ANGLE);
+        minAngleEntery.SetDouble(Constants::Shooter::HOOD_MIN_DOWN_ANGLE);
+        maxPosEntery.SetDouble(Constants::Shooter::HOOD_MAX_UP_POS);
+        minPosEntery.SetDouble(Constants::Shooter::HOOD_MIN_DOWN_POS);
+        servoOffsetEntery.SetDouble(0);
+        
+        useShooterValuesEntery.SetBoolean(false);
     }
     ShooterModule::~ShooterModule()
     {
         delete(shooterMotor);
     }
-    bool i;
-    int j = 0;
+    int i = 0;
     void ShooterModule::ShootAtDistance(float distance)
     {
-        j++;
-
+        i++;
         shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
 
         Core::PiecewiseLinearFunctionXYZ::Output resualt = shooingDistanceTable.Get(distance);
 
-        if (i == false)
-        {
-            i = true;
-            std::cout << "Power: " << resualt.y << "; Hood: " << resualt.z << '\n';
-        }
-        MoveHood(resualt.z);
+        double hoodAngle = resualt.z;
+        double servoOffset = 0;
+        double shooterPower = resualt.y;
         
-        shooterMotor->Set(resualt.y);
+        
+        if (useShooterValuesEntery.GetBoolean(false))
+        {
+            speedModifier = flywheelSpeedModifierEntery.GetDouble(1);
+            shooterPower = currentFlywheelPowerEntry.GetDouble(shooterPower);
+            
+            hoodAngle = targetServoAngleEntry.SetDouble(hoodAngle);
+            Constants::Shooter::HOOD_MAX_UP_ANGLE = maxAngleEntery.SetDouble(Constants::Shooter::HOOD_MAX_UP_ANGLE);
+            Constants::Shooter::HOOD_MIN_DOWN_ANGLE = minAngleEntery.SetDouble(Constants::Shooter::HOOD_MIN_DOWN_ANGLE);
+            Constants::Shooter::HOOD_MAX_UP_POS = maxPosEntery.SetDouble(Constants::Shooter::HOOD_MAX_UP_POS);
+            Constants::Shooter::HOOD_MIN_DOWN_POS = minPosEntery.SetDouble(Constants::Shooter::HOOD_MIN_DOWN_POS);
+
+            servoOffset = servoOffsetEntery.GetDouble(servoOffset);
+        }
+        else
+        {
+            speedModifier = 1;
+            hoodAngle = resualt.y;
+            servoOffset = 0;
+        }
+
+        if (i % 50 == 0)
+        {
+            std::cout << "Hood: " << hoodAngle << "\n";
+            std::cout << "shooterPower: " << (shooterPower * speedModifier) << "\n";
+        }
+        
+        MoveHood(hoodAngle);
+        
+        shooterMotor->Set(0.25);
         currentState = State::Shoot;
+
+
+        currentFlywheelPowerEntry.SetDouble(shooterPower);
+        currentFlywheelRPMEntry.SetDouble(shooterPower);
     }
     void ShooterModule::Stop()
     {
-        i = false;
         // shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
 
         shooterMotor->Set(0);
@@ -60,10 +123,7 @@ namespace Modules
         
         double hoodPos = Constants::Shooter::HOOD_TABLE.Get(angle);
         
-        std::cout << "Hood Angle: " << hoodPos << "\n";
-
         hoodServo.Set(hoodPos);
-
     }
 
 

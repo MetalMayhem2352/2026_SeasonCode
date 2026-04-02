@@ -63,11 +63,11 @@ namespace Constants
         inline constexpr int SHOOTER_ID = 15; 
         inline constexpr int HOOD_ID = 9;
 
-        inline constexpr float HOOD_MIN_DOWN_POS = 0;
-        inline constexpr float HOOD_MAX_UP_POS = 0.72;
+        static float HOOD_MIN_DOWN_POS = 0;
+        static float HOOD_MAX_UP_POS = 0.72;
         
-        inline constexpr float HOOD_MIN_DOWN_ANGLE = 0;
-        inline constexpr float HOOD_MAX_UP_ANGLE = 20;
+        static float HOOD_MIN_DOWN_ANGLE = 0;
+        static float HOOD_MAX_UP_ANGLE = 20;
 
         // Hood Degrees: Servo Position
         static Core::PiecewiseLinearFunction HOOD_TABLE(
@@ -153,12 +153,11 @@ namespace Constants
 
     namespace Basket
     {
-        inline constexpr char LEFT_SERVO_ID = 0;
-        inline constexpr char RIGHT_SERVO_ID = 8;
+        inline constexpr char LEFT_SERVO_ID = 8;
+        inline constexpr char RIGHT_SERVO_ID = 0;
         
-        inline constexpr float UP_POSITION = 0;
-        inline constexpr float DOWN_POSITION = 0.25;
-        inline constexpr float SWEEP_POSITION = 0.65;
+        inline constexpr float UP_POSITION = 0.2;
+        inline constexpr float DOWN_POSITION = 0.325;
     }
 
     inline constexpr char pigeonID = 24;

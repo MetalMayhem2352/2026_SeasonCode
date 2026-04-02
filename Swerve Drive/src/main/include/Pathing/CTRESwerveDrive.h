@@ -36,6 +36,8 @@ namespace Pathing
             void Move(double x, double z, double rotation);
             void ResetYaw();
 
+            double GetYaw();
+
             Odometry* GetOdometery();
         
     };

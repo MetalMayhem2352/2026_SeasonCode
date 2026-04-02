@@ -42,8 +42,8 @@ namespace Modules
             bool CanShoot();
 			double GetTargetDistance();
 			
-		private:
 			void Rotate(double angle);
+		private:
             
 			double GetTurretPosition();
 			double GetTargetPosition(frc::Pose2d targetPosition, frc::Pose2d robotPosition, frc::ChassisSpeeds velocity, double xInput, double zInput, double rotationInput);

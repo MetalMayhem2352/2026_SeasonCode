@@ -87,7 +87,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(1);
                 backIntakeMotor->Set(1);
-                basketMotor->Set(1);
+                basketMotor->Set(0);
                 
                 break;
             }
@@ -95,7 +95,7 @@ namespace Modules
             {
                 frontIntakeMotor->Set(0);
                 backIntakeMotor->Set(0);
-                basketMotor->Set(0);
+                basketMotor->Set(0.8);
 
                 break;
             }

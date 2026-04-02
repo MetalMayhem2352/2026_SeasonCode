@@ -15,6 +15,7 @@
 #include "Modules/ShooterModule.h"
 #include "Modules/NewTurretModule.h"
 #include "Modules/NetworkTableModule.h"
+#include "Modules/BasketModule.h"
 
 class Robot : public frc::TimedRobot 
 {
@@ -26,18 +27,22 @@ class Robot : public frc::TimedRobot
         Modules::IntakeModule* intakeModule;
         Modules::ShooterModule* shooterModule;
         Modules::NewTurretModule* turretModule;
+        Modules::BasketModule* basketModule;
 
         Modules::NetworkTableModule* networkTableModule;
 
         frc::Joystick driver1{0};
-        bool intakePivotToggle = false;
+        frc::Joystick driver2{1};
+        bool intakePivotToggle = true;
         bool intakePivotTogglePressed = false;
 
         double goalDistance;
         double goalAngle;
 
         Core::Timer* timer;
-        bool going;
+        bool isPreparingShooting;
+
+        bool armUp = true;
         
     public:
         Robot();
@@ -60,4 +65,5 @@ class Robot : public frc::TimedRobot
         void BryceDrive();
         void GabeDrive();
         void AsherDrive();
+        void SeccondDriveAim() ;
 };

@@ -14,22 +14,23 @@ namespace Modules
             {
                 Up = 0,
                 Down = 1,
-                Sweep = 2,
             };
         private:
 
             State currentState;
             
-            frc::Servo hoodServo{0};
-            frc::Servo right{8};
+            frc::Servo left{Constants::Basket::LEFT_SERVO_ID};
+            frc::Servo right{Constants::Basket::RIGHT_SERVO_ID};
         public:
             
-
             BasketModule();
             ~BasketModule();
 
             void UpdateState(State newState);
             State GetState();
+
+        private:
+            void Move(double posiiton);
             
     };
 }

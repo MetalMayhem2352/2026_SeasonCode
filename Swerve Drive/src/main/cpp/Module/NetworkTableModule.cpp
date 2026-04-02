@@ -21,9 +21,11 @@ namespace Modules
         inst.StartClient4("MyConsoleClient");
         
         std::shared_ptr<nt::NetworkTable> table = inst.GetTable("SmartDashboard");
+        tablePointer = table.get();
+
+        std::cout << "Table: " << table << "\n";
+        std::cout << "Table2: " << tablePointer << "\n";
         
-        
-        table = inst.GetTable("SmartDashboard");
 
         distanceEntery = table->GetEntry("distance");
         powerEntery = table->GetEntry("power");
@@ -49,6 +51,12 @@ namespace Modules
 
             std::cout << "distance: " << distanceEntery.GetDouble(-1) << "; power: " << powerEntery.GetDouble(0) << "; hood: " << hoodEntery.GetDouble(0) << '\n';
         }
+    }
+    
+    nt::NetworkTable* NetworkTableModule::GetNetworkTable()
+    {
+        std::cout << "table.get(): " << tablePointer << '\n';
+        return tablePointer;
     }
 
     void NetworkTableModule::PIDProgram()

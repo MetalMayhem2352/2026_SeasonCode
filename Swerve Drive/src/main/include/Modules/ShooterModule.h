@@ -6,6 +6,10 @@
 
 #include <frc/Servo.h>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <networktables/NetworkTable.h>
+
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
 
 namespace Modules
 {
@@ -28,6 +32,26 @@ namespace Modules
             // Distance (meters): Power: HoodAngle
             Core::PiecewiseLinearFunctionXYZ shooingDistanceTable;
 
+            double speedModifier = 1;
+            
+            // READ ONLY
+            nt::NetworkTableEntry currentFlywheelPowerEntry;
+            nt::NetworkTableEntry currentFlywheelRPMEntry;
+
+            // READ WRITE
+            nt::NetworkTableEntry targetServoPositionEntry;
+            nt::NetworkTableEntry targetServoAngleEntry;
+
+            // WRITE ONLY
+            nt::NetworkTableEntry flywheelSpeedModifierEntery;
+            nt::NetworkTableEntry maxAngleEntery;
+            nt::NetworkTableEntry minAngleEntery;
+            nt::NetworkTableEntry maxPosEntery;
+            nt::NetworkTableEntry minPosEntery;
+            nt::NetworkTableEntry servoOffsetEntery;
+
+            nt::NetworkTableEntry useShooterValuesEntery;
+
         public:
 
             ShooterModule();
@@ -39,9 +63,9 @@ namespace Modules
 
             State GetState();
 
+            void MoveHood(float angle);
         private:
             
-            void MoveHood(float angle);
         
     };
 }

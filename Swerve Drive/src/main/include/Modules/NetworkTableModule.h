@@ -25,6 +25,7 @@ namespace Modules
         private:
             Programs usedPrograms;
 
+            nt::NetworkTable* tablePointer;
             std::shared_ptr<nt::NetworkTable> table;
             nt::NetworkTableEntry distanceEntery;
             nt::NetworkTableEntry powerEntery;
@@ -38,6 +39,8 @@ namespace Modules
             void SetUsedPrograms(Programs usedPrograms);
 
             void Update();
+
+            nt::NetworkTable* GetNetworkTable();
 
         private:
             
