@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.4421112696148356,
+        "y": 6.913851640513553
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4421112696148355,
+        "y": 6.913851640513553
+      },
+      "isLocked": false,
+      "linkedName": "Grab End"
+    },
+    {
+      "anchor": {
+        "x": 2.8357631954350926,
+        "y": 4.830727532097005
+      },
+      "prevControl": {
+        "x": 2.0076890156918683,
+        "y": 5.400028530670471
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 151.6992442339937
+  },
+  "reversed": false,
+  "folder": "Test",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
