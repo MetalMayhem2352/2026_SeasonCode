@@ -6,7 +6,6 @@
 
 #include <frc/Servo.h>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <networktables/NetworkTable.h>
 
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>

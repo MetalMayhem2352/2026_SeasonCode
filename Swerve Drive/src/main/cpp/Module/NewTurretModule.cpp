@@ -10,6 +10,47 @@ namespace Modules
 		
 		pidTimer = new Core::Timer();
 		PIDController = new Core::PIDController(Constants::Turret::TurretPIDConfig2);
+
+		
+        nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+        
+        inst.SetServerTeam(2352);
+        inst.StartClient4("MyConsoleClient");
+        
+        std::shared_ptr<nt::NetworkTable> networkTable = inst.GetTable("SmartDashboard");
+
+
+		kP_Entry = networkTable->GetEntry("flywheelPower");
+        kPDeadzone_Entry = networkTable->GetEntry("flywheelRPM");
+        kI_Entry = networkTable->GetEntry("flywheelSpeedModifier");
+        kIActiveZone_Entry = networkTable->GetEntry("flywheelSpeedModifier");
+        kD_Entry = networkTable->GetEntry("flywheelSpeedModifier");
+
+        minAngleEntry = networkTable->GetEntry("taregetServoAngle");
+        maxAngleEntry = networkTable->GetEntry("servoMinAngle");
+        
+		targetAngleEntry = networkTable->GetEntry("servoMaxAngle");
+        
+		currentPositionEntry = networkTable->GetEntry("maxPosEntery");
+
+        currentVelocityModifierEntry = networkTable->GetEntry("minPosEntery");
+        predictedVelocityModifierEntry = networkTable->GetEntry("servoOffset");
+
+        // kP_Entry.SetDouble(0);
+        // kPDeadzone_Entry.SetDouble(0);
+        // kI_Entry.SetDouble(1);
+        // kIActiveZone_Entry.SetDouble(1);
+        // kD_Entry.SetDouble(1);
+
+        minAngleEntry.SetDouble(Constants::Turret::MIN_ROTATION);
+        maxAngleEntry.SetDouble(Constants::Turret::MAX_ROTATION);
+
+        targetAngleEntry.SetDouble(0);
+
+        currentPositionEntry.SetDouble(0);
+
+        currentVelocityModifierEntry.SetDouble(0);
+        predictedVelocityModifierEntry.SetDouble(0);
 	}
 
 	NewTurretModule::~NewTurretModule()

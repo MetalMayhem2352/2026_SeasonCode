@@ -8,6 +8,9 @@
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
+
 namespace Modules
 {
 	class NewTurretModule 
@@ -32,6 +35,27 @@ namespace Modules
 
 			ctre::phoenix6::hardware::TalonFX* turret_motor; 
 			
+			// PID Write
+			nt::NetworkTableEntry kP_Entry;
+			nt::NetworkTableEntry kPDeadzone_Entry;
+			nt::NetworkTableEntry kI_Entry;
+			nt::NetworkTableEntry kIActiveZone_Entry;
+			nt::NetworkTableEntry kD_Entry;
+
+			// Turret Positioning Read Write
+			nt::NetworkTableEntry minAngleEntry;
+			nt::NetworkTableEntry maxAngleEntry;
+
+			nt::NetworkTableEntry targetAngleEntry;
+
+			nt::NetworkTableEntry currentPositionEntry;
+
+			// Shoot and move
+			nt::NetworkTableEntry currentVelocityModifierEntry;
+			nt::NetworkTableEntry predictedVelocityModifierEntry;
+
+			nt::NetworkTableEntry saveEntry;
+
 		public:
 			NewTurretModule();
 			~NewTurretModule();
