@@ -20,21 +20,21 @@ namespace Modules
         std::shared_ptr<nt::NetworkTable> networkTable = inst.GetTable("SmartDashboard");
 
 
-		kP_Entry = networkTable->GetEntry("flywheelPower");
-        kPDeadzone_Entry = networkTable->GetEntry("flywheelRPM");
-        kI_Entry = networkTable->GetEntry("flywheelSpeedModifier");
-        kIActiveZone_Entry = networkTable->GetEntry("flywheelSpeedModifier");
-        kD_Entry = networkTable->GetEntry("flywheelSpeedModifier");
+		kP_Entry = networkTable->GetEntry("turret_kP");
+        kPDeadzone_Entry = networkTable->GetEntry("turret_kPDeadzone");
+        kI_Entry = networkTable->GetEntry("turret_kI");
+        kIActiveZone_Entry = networkTable->GetEntry("turret_kIActiveZone");
+        kD_Entry = networkTable->GetEntry("turret_kD");
 
-        minAngleEntry = networkTable->GetEntry("taregetServoAngle");
-        maxAngleEntry = networkTable->GetEntry("servoMinAngle");
+        minAngleEntry = networkTable->GetEntry("turretMinAngle");
+        maxAngleEntry = networkTable->GetEntry("turretMaxAngle");
         
-		targetAngleEntry = networkTable->GetEntry("servoMaxAngle");
+		targetAngleEntry = networkTable->GetEntry("taregtTurretAngle");
         
-		currentPositionEntry = networkTable->GetEntry("maxPosEntery");
+		currentPositionEntry = networkTable->GetEntry("currentTurrentPosition");
 
-        currentVelocityModifierEntry = networkTable->GetEntry("minPosEntery");
-        predictedVelocityModifierEntry = networkTable->GetEntry("servoOffset");
+        currentVelocityModifierEntry = networkTable->GetEntry("currentVelecoityModifier");
+        predictedVelocityModifierEntry = networkTable->GetEntry("predictedVelecoityModifier");
 
         // kP_Entry.SetDouble(0);
         // kPDeadzone_Entry.SetDouble(0);

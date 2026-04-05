@@ -28,7 +28,7 @@ namespace Modules
             funnelMotor->Set(0);
             break;
         case Feed:
-            funnelMotor->Set(0.25);
+            funnelMotor->Set(0.75);
             break;
         case Unjam:
             funnelMotor->Set(-0.5);

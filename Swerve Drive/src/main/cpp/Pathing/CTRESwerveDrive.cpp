@@ -22,13 +22,12 @@ namespace Pathing
     
     void CTRESwerveDrive::Move(double x, double z, double rotation)
     {
-        
         swerveDrive.SetControl(m_driveRequest.WithVelocityX(z * 0.8 * TunerConstants::kSpeedAt12Volts).WithVelocityY(x * 0.8 * TunerConstants::kSpeedAt12Volts).WithRotationalRate(rotation * 0.30 * TunerConstants::kRotationSpeedAt12Volts));
     }
     
     void CTRESwerveDrive::ResetYaw()
     {
-        swerveDrive.SeedFieldCentric();
+        swerveDrive.SeedFieldCentric(frc::Rotation2d(180_deg));
     }
     
     double CTRESwerveDrive::GetYaw()

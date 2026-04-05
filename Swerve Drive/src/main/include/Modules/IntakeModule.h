@@ -19,6 +19,7 @@ namespace Modules
                 Intaking = 1,
                 Shooting = 2,
                 Outaking = 3,
+                IntakeAndShoot = 4,
             };
             
             enum PivotState

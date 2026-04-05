@@ -26,7 +26,7 @@ namespace Constants
         )
         .WithCurrentLimits(
             ctre::phoenix6::configs::CurrentLimitsConfigs{}
-            .WithStatorCurrentLimit(40_A)
+            .WithStatorCurrentLimit(30_A)
             .WithStatorCurrentLimitEnable(true)
         );
 
@@ -37,14 +37,14 @@ namespace Constants
     {
         inline constexpr int turretID = 14; 
         //static inline Core::PIDConfig TurretPIDConfig(0.6, 2, 0, 0, 0);
-        static inline Core::PIDConfig TurretPIDConfig2(0.25, 20, 0, 0, 0);
+        static inline Core::PIDConfig TurretPIDConfig2(0.2, 20, 0, 0, 0.0);
         
         inline constexpr double MAX_ROTATION = 90;
         inline constexpr double MIN_ROTATION = -90;
         inline constexpr double TOLERANCE = 5;
         
-        inline constexpr double MAX_MOTOR_ENCODER_POSITION = 4.65;
-        inline constexpr double MIN_MOTOR_ENCODER_POSITION = -5.25;
+        inline constexpr double MAX_MOTOR_ENCODER_POSITION = 4.75;
+        inline constexpr double MIN_MOTOR_ENCODER_POSITION = -4.1;
 
         inline constexpr double MOTOR_TICKS_PER_DEGREE = (MAX_ROTATION - MIN_ROTATION) / (MAX_MOTOR_ENCODER_POSITION - MIN_MOTOR_ENCODER_POSITION);
 
@@ -64,7 +64,7 @@ namespace Constants
         inline constexpr int HOOD_ID = 9;
 
         static float HOOD_MIN_DOWN_POS = 0;
-        static float HOOD_MAX_UP_POS = 0.72;
+        static float HOOD_MAX_UP_POS = 0.65;
         
         static float HOOD_MIN_DOWN_ANGLE = 0;
         static float HOOD_MAX_UP_ANGLE = 20;
@@ -142,10 +142,20 @@ namespace Constants
     namespace Funnel 
     {
         static constexpr ctre::phoenix6::configs::TalonFXConfiguration funnelMotorConfig =
-            ctre::phoenix6::configs::TalonFXConfiguration{commonConfigs}
-            .WithMotorOutput(
-                ctre::phoenix6::configs::MotorOutputConfigs{commonConfigs.MotorOutput}
-                .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
+        ctre::phoenix6::configs::TalonFXConfiguration{}
+        .WithMotorOutput(
+            ctre::phoenix6::configs::MotorOutputConfigs{}
+            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast)
+        )
+        .WithCurrentLimits(
+            ctre::phoenix6::configs::CurrentLimitsConfigs{}
+            .WithStatorCurrentLimit(40_A)
+            .WithStatorCurrentLimitEnable(true)
+        )
+        .WithMotorOutput(
+            ctre::phoenix6::configs::MotorOutputConfigs{}
+            .WithNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast)
+            .WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive)
         );
 
         inline constexpr int FUNNEL_MOTOR_ID = 13;

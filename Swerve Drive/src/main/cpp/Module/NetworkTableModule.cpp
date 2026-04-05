@@ -23,10 +23,6 @@ namespace Modules
         std::shared_ptr<nt::NetworkTable> table = inst.GetTable("SmartDashboard");
         tablePointer = table.get();
 
-        std::cout << "Table: " << table << "\n";
-        std::cout << "Table2: " << tablePointer << "\n";
-        
-
         distanceEntery = table->GetEntry("distance");
         powerEntery = table->GetEntry("power");
         hoodEntery = table->GetEntry("hood");
@@ -48,14 +44,11 @@ namespace Modules
 
             shooingDistanceTable.AddPoint(distanceEntery.GetDouble(-1), powerEntery.GetDouble(0), hoodPos);
             shooingDistanceTable.SaveToFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
-
-            std::cout << "distance: " << distanceEntery.GetDouble(-1) << "; power: " << powerEntery.GetDouble(0) << "; hood: " << hoodEntery.GetDouble(0) << '\n';
         }
     }
     
     nt::NetworkTable* NetworkTableModule::GetNetworkTable()
     {
-        std::cout << "table.get(): " << tablePointer << '\n';
         return tablePointer;
     }
 

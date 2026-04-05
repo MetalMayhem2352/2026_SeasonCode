@@ -12,9 +12,6 @@ namespace Modules
         shooterMotor->GetConfigurator().Apply(Constants::Shooter::shooterMotorCondiguration);
 
         shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
-
-        std::cout << "\n\n\n########## Distance Table ##########\nx: 0, y:" << shooingDistanceTable.Get(0).y << ", z:" << shooingDistanceTable.Get(0).z << "\nx: 1, y: "
-            << shooingDistanceTable.Get(20).y << ", z:" << shooingDistanceTable.Get(20).z << "\n\n";
     
 
         nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
@@ -55,23 +52,21 @@ namespace Modules
     {
         delete(shooterMotor);
     }
-    int i = 0;
     void ShooterModule::ShootAtDistance(float distance)
     {
-        i++;
         shooingDistanceTable.LoadFromFile(Constants::HOME_DIRECTORY + Constants::Shooter::SHOOTING_DISTANCE_LOOKUP_TABLE_NAME);
 
         Core::PiecewiseLinearFunctionXYZ::Output resualt = shooingDistanceTable.Get(distance);
 
         double hoodAngle = resualt.z;
         double servoOffset = 0;
-        double shooterPower = resualt.y;
+        double shooterPower = distance;
         
         
         if (useShooterValuesEntery.GetBoolean(false))
         {
-            speedModifier = flywheelSpeedModifierEntery.GetDouble(1);
-            shooterPower = currentFlywheelPowerEntry.GetDouble(shooterPower);
+            // speedModifier = flywheelSpeedModifierEntery.GetDouble(1);
+            // shooterPower = currentFlywheelPowerEntry.GetDouble(shooterPower);
             
             hoodAngle = targetServoAngleEntry.SetDouble(hoodAngle);
             Constants::Shooter::HOOD_MAX_UP_ANGLE = maxAngleEntery.SetDouble(Constants::Shooter::HOOD_MAX_UP_ANGLE);
@@ -88,15 +83,10 @@ namespace Modules
             servoOffset = 0;
         }
 
-        if (i % 50 == 0)
-        {
-            std::cout << "Hood: " << hoodAngle << "\n";
-            std::cout << "shooterPower: " << (shooterPower * speedModifier) << "\n";
-        }
         
-        MoveHood(hoodAngle);
+        // MoveHood(hoodAngle);
         
-        shooterMotor->Set(0.25);
+        shooterMotor->Set(shooterPower);
         currentState = State::Shoot;
 
 

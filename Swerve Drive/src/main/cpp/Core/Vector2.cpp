@@ -135,7 +135,6 @@ namespace Core
     {
         if (other.x == 0.0 || other.y == 0.0) 
         {
-            std::cout << "ERROR! DIVISION BY ZERO!\n";
             return Vector2(x, y);
         }
         return Vector2(x / other.x, y / other.y);
@@ -144,7 +143,6 @@ namespace Core
     {
         if (other.x == 0.0 || other.y == 0.0) 
         {
-            std::cout << "ERROR! DIVISION BY ZERO!\n";
             return *this;
         }
         x /= other.x;
@@ -157,7 +155,6 @@ namespace Core
     {
         if (other.x == 0.0 || other.y == 0.0) 
         {
-            std::cout << "ERROR! MODULUS BY ZERO!\n";
             return Vector2(x, y);
         }
         return Vector2(std::fmod(x, other.x), std::fmod(y, other.y));
@@ -167,7 +164,6 @@ namespace Core
     {
         if (other.x == 0.0 || other.y == 0.0) 
         {
-            std::cout << "ERROR! MODULUS BY ZERO!\n";
             return *this;
         }
         x = std::fmod(x, other.x);
@@ -213,7 +209,6 @@ namespace Core
     {
         if (scalar == 0.0) 
         {
-            std::cout << "ERROR! DIVISION BY ZERO!\n";
             return Vector2(x, y);
         }
         return Vector2(x / scalar, y / scalar);
@@ -222,7 +217,6 @@ namespace Core
     {
         if (scalar == 0.0) 
         {
-            std::cout << "ERROR! DIVISION BY ZERO!\n";
             return *this;
         }
         x /= scalar;
@@ -234,7 +228,6 @@ namespace Core
     {
         if (scalar == 0.0) 
         {
-            std::cout << "ERROR! MODULUS BY ZERO!\n";
             return Vector2(x, y);
         }
         return Vector2(std::fmod(x, scalar), std::fmod(y, scalar));
@@ -243,7 +236,6 @@ namespace Core
     {
         if (scalar == 0.0) 
         {
-            std::cout << "ERROR! MODULUS BY ZERO!\n";
             return *this;
         }
         x = std::fmod(x, scalar);

@@ -26,7 +26,6 @@ namespace Pathing
 
 
         xBotPositionEntry = table->GetEntry("xBotPosition");
-        std::cout << "Test6! " << table << "\n";
         zBotPositionEntry = table->GetEntry("yBotPosition");
         botHeadingEntry = table->GetEntry("botHeading");
 
@@ -72,7 +71,7 @@ namespace Pathing
         
         xBotPositionEntry.SetDouble(m_currentPose.Y().value());
         zBotPositionEntry.SetDouble(m_currentPose.X().value());
-        botHeadingEntry.SetDouble(m_currentPose.Rotation().Degrees().value());
+        botHeadingEntry.SetDouble(m_drivetrain->GetPigeon2().GetYaw().GetValue().value());
     }
 
     void Odometry::AutoInitializePose()
@@ -132,16 +131,16 @@ namespace Pathing
         double latencyMs = botpose[6];
         double timestamp = frc::Timer::GetFPGATimestamp().value() - latencyMs / 1000.0;
 
-        m_drivetrain->SetVisionMeasurementStdDevs(
-            {m_ll4StdDevNormal.x, m_ll4StdDevNormal.y, m_ll4StdDevNormal.theta});
+        // m_drivetrain->SetVisionMeasurementStdDevs({m_ll4StdDevNormal.x, m_ll4StdDevNormal.y, m_ll4StdDevNormal.theta});
 
-        m_drivetrain->AddVisionMeasurement(visionPose, units::second_t(timestamp));
+        // m_drivetrain->AddVisionMeasurement(visionPose, units::second_t(timestamp));
 
         
         
-        xBotPositionEntry.SetDouble(botpose[0]);
-        zBotPositionEntry.SetDouble(botpose[1]);
-        botHeadingEntry.SetDouble(botpose[5]);
+        
+        xLimelightPositionEntery.SetDouble(botpose[0]);
+        zLimelightPositionEntery.SetDouble(botpose[1]);
+        limelightHeadingEntery.SetDouble(botpose[5]);
     }
 
     frc::Pose2d Odometry::GetPose() const

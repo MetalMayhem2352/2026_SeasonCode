@@ -107,6 +107,14 @@ namespace Modules
 
                 break;
             }
+            case State::IntakeAndShoot:
+            {
+                frontIntakeMotor->Set(0.75);
+                 backIntakeMotor->Set(0.75);
+                basketMotor->Set(0.8);
+
+                break;
+            }
         }   
     }
     IntakeModule::State IntakeModule::GetState()

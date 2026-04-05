@@ -88,7 +88,6 @@ namespace Core
                 {"z", point.z}
             });
 
-            std::cout << "A ###### x: " << point.x << "; y: " << point.y << "; point.y" << point.z << '\n';
         }
 
         std::ofstream file(path);

@@ -7,6 +7,8 @@
 #include <frc/TimedRobot.h>
 #include <optional>
 #include <frc/Joystick.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Pathing/CTRESwerveDrive.h"
 
@@ -17,6 +19,7 @@
 #include "Modules/NetworkTableModule.h"
 #include "Modules/BasketModule.h"
 
+
 class Robot : public frc::TimedRobot 
 {
     private:
@@ -26,7 +29,7 @@ class Robot : public frc::TimedRobot
         Modules::FunnelModule* funnelModule;
         Modules::IntakeModule* intakeModule;
         Modules::ShooterModule* shooterModule;
-        Modules::NewTurretModule* turretModule;
+        // Modules::NewTurretModule* turretModule;
         Modules::BasketModule* basketModule;
 
         Modules::NetworkTableModule* networkTableModule;
@@ -41,9 +44,31 @@ class Robot : public frc::TimedRobot
 
         Core::Timer* timer;
         bool isPreparingShooting;
-
+        bool isShooting;
+        
         bool armUp = true;
         
+
+        Core::Timer* autoTimer;
+
+        double targetTurretAngle;
+
+        double shooterPower = 0.6;
+
+        double x;
+        double y;
+        double rotation;
+
+
+
+        
+        frc::SendableChooser<std::string> m_chooser;
+        const std::string kAutoNameDefault = "Default";
+        const std::string kAutoNameTrench = "Trench";
+        const std::string kAutoNameBump = "Bump";
+        const std::string kAutoNameHub = "Hub";
+        std::string m_autoSelected;
+
     public:
         Robot();
         ~Robot();
@@ -65,5 +90,12 @@ class Robot : public frc::TimedRobot
         void BryceDrive();
         void GabeDrive();
         void AsherDrive();
-        void SeccondDriveAim() ;
+        void SeccondDriveAim();
+
+        void Test2();
+
+
+        void BumpAuto();
+        void TrenchAuto();
+        void HubAuto();
 };
